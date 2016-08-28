@@ -1,0 +1,16 @@
+.editor {
+   
+    height: 400px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+
+.inner {
+    position: absolute;
+      z-index: 199;
+
+}
+
