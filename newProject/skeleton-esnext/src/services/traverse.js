@@ -31,21 +31,19 @@ publish(event, payload) {
     }
   traverse(code){
     let info={
-     NumberOfFunction : 0
+     NumberOfFunction : 0,
+     FunctionDeclaration: []
 
     }
           this.est.traverse(code,  {
             enter:  function  (node,  parent)  {
-                  if  (node.type  ==  'BlockStatement') {
-                       console.log(node);
+                  if  (node.type  ==  'FunctionDeclaration') {
+                    info.FunctionDeclaration.push(node);
         }
             },
             leave:  function  (node,  parent)  {
-          //  console.log('leave')
                   if  (node.type  ==  'FunctionDeclaration'){
-                    // this.event.pusblish('onInterpreterRequest', node);
                      info.NumberOfFunction =   info.NumberOfFunction + 1; 
-                     console.log(node)
 
             }
         }

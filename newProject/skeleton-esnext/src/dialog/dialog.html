@@ -1,0 +1,17 @@
+<template>
+    <require from = "./dialog.css"></require>
+  <ai-dialog>
+    <ai-dialog-body>
+      <h2>Edit first name</h2>
+      <h4>${infoSign.FunctionDeclaration[0].params[0].name}</h4>
+      <h4>${infoSign.FunctionDeclaration[0].params[1].name}</h4>
+
+    </ai-dialog-body>
+
+    <ai-dialog-footer>
+      <button click.trigger="controller.cancel()">Cancel</button>
+      <button click.trigger="controller.ok(person)">Ok</button>
+      <button click.delegate= "oks()">here</button>
+    </ai-dialog-footer>
+  </ai-dialog>
+</template>
