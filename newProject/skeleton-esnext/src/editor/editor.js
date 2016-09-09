@@ -1,8 +1,8 @@
 
 import {EventAggregator} from 'aurelia-event-aggregator'
 import {inject} from 'aurelia-framework'
-
-@inject(EventAggregator)
+import {Run} from '../servicesBootstrapper/run'
+@inject(EventAggregator,Run)
 export class Editor {
 
     constructor(event) {
@@ -23,9 +23,10 @@ export class Editor {
     }
 
     publish() {
+
         let flag = true;
-        this.session.on('change',
-            () => {
+        this.editor.renderer.on('afterRender',
+          (e,render) => {
                 this.onError();
                 //   console.error(this.NoError);
                 if (flag) {
@@ -34,18 +35,23 @@ export class Editor {
                         () => {
                             //   console.log(' if x = 3 and y = 5 the the result equals to ')
                             let code = this.session.getValue();//+ 'add(3,5);';
+                            let payload = {
+                                code : code,
+                                render: render
+                            }
                             if (this.NoError) {
-                                this.event.publish('OnEditorChanged', code);
+                                this.event.publish('OnEditorChanged', payload);
                             }
                             flag = true;
                         }, 2000)
                 }
             });
-
+                  console.info("ready");
         this.event.publish('onEditorReady', this.editor);
-        this.editor.renderer.on("afterRender", (e,render)=> {
-            this.event.publish("onSignRequest",render);
-        });
+        this.editor.on("gutterclick", (e) => {
+             const payload = e.getDocumentPosition().row+1;
+             this.event.publish("onDialogRequest", payload);
+        })
 
     }
 

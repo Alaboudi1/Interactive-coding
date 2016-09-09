@@ -1,30 +1,31 @@
 
-import {DialogController} from 'aurelia-dialog';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {inject} from 'aurelia-framework';
+import {DialogController} from 'aurelia-dialog';
 
-@inject(DialogController, EventAggregator)
+@inject(EventAggregator, DialogController)
 export class Dialog {
 
-    constructor(controller, event) {
-        this.controller = controller;
-        this.event = event;
-        this.infoSign;
-        this.subscribe();
-    }
+  constructor(event, controller) {
+    this.event = event;
+    this.controller = controller;
+    this.infoSign;
+
+  }
+
+  submit() {
+     const types = this.infoSign[0].params.filter(item => item.selectedType !== undefined);
+       if(types.length){
+
+               this.event.publish('onTestRequest', this.infoSign);
+       }else{
+         window.alert('Please select types first');
+       }
+  }
 
 
+  activate(infoSign) {
+    this.infoSign = infoSign;
+  }
 
-    activate(){
-      console.log(this.infoSign)
-    }
-
-     subscribe() {
-        this.event.subscribe('onTraverseEnds', (payload) => {
-                console.log(payload)
-
-                this.infoSign = payload;
-
-        });
-     }
 }

@@ -1,17 +1,31 @@
 <template>
-    <require from = "./dialog.css"></require>
+  <require from="./dialog.css"></require>
   <ai-dialog>
     <ai-dialog-body>
-      <h2>Edit first name</h2>
-      <h4>${infoSign.FunctionDeclaration[0].params[0].name}</h4>
-      <h4>${infoSign.FunctionDeclaration[0].params[1].name}</h4>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-12">
+            <h2>Choose your function's pramaters type</h2>
+          </div>
+        </div>
+        <div class="row" repeat.for="param of infoSign[0].params">
+          <div class="col-sm-2">
 
+            <h4>${param.name}</h4>
+            <select class="selectpicker" value.bind="param.selectedType">
+      <option selected='true' disabled='true'></option>
+      <option>Number</option>
+      <option>String</option>
+      <option>Object</option>
+      </select>
+          </div>
+        </div>
+      </div>
     </ai-dialog-body>
-
     <ai-dialog-footer>
-      <button click.trigger="controller.cancel()">Cancel</button>
-      <button click.trigger="controller.ok(person)">Ok</button>
-      <button click.delegate= "oks()">here</button>
+      <button click.trigger="controller.cancel()" class="btn btn-danger">Cancel</button>
+      <!--<button click.trigger="controller.ok(person)">Ok</button>-->
+      <button click.trigger="submit()" class="btn btn-success" disabled.bind='type.length'>Test</button>
     </ai-dialog-footer>
   </ai-dialog>
 </template>
