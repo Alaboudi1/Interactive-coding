@@ -46,19 +46,32 @@ export class Test {
         });
 
         this.event.subscribe('onTestRequest', payload=>{
-                const first=faker.random.number({
-                        min:-100,
-                        max: 100
-                    });
-                    const second=faker.random.number({
-                        min:-100,
-                        max: 100
-                    });
+                const TestCases = [];
+                let data;
+                let value;
+                let param; 
+                for(let i =0; i<10 ; i++){
+                     data={};
+                     value =[]
+                     data.params = "(";
+                    for(let j=0; j < payload[0].params.length; j++){
+                      param = faker.random.number({
+                        min:-10,
+                        max: 10
+                    })
+                    value.push(param);
+                    data.value=value; 
+                        data.params += j+1 == payload[0].params.length ? `${param}`: `${param},`;
+                    }
+                    data.params+=")";
+                
 
-                    console.log(`x=${first} y=${second} =>`)
+             const code = `${this.editor.getSession().getValue()} ${payload[0].id.name} ${data.params};` 
+             data.result= eval(code);
+             TestCases.push(data)
+           }
+                      console.log(TestCases)
 
-             const code = `${this.editor.getSession().getValue()} ${payload[0].id.name}(${first} , ${second});` 
-             console.log(eval(code));
-        });
+       });
     }
 }
