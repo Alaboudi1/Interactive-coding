@@ -18,12 +18,12 @@ export class Dialog {
 
   submit() {
     const types = this.infoSign[0].params.filter(item => item.selectedType !== undefined);
-    if (types.length) {
+    // if (types.length) {
 
       this.event.publish('onTestRequest', this.infoSign);
-    } else {
-      window.alert('Please select types first');
-    }
+    // } else {
+    //   window.alert('Please select types first');
+    // }
 
   }
 
@@ -50,5 +50,10 @@ export class Dialog {
     warning(index) {
     console.log(index);
     this.testCases[index].class= 'warning';
+  }
+
+
+  save(){
+    this.event.publish("onTestResultSaveRequest", this.testCases); 
   }
 }

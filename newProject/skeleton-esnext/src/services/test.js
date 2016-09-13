@@ -9,6 +9,8 @@ export class Test {
     constructor(event, dialogService) {
         this.event = event;
         this.dialogService = dialogService;
+        this.testCasesCollection= new Map();
+        console.log(this.testCasesCollection);
     }
 
 
@@ -25,8 +27,10 @@ export class Test {
                const line = payload;
                const info = this.infoSign.FunctionDeclaration.filter(item => 
                               item.loc.start.line === line
-               );           
-                     console.log(info)
+               );
+                     if(this.testCasesCollection.get(info[0].id.name)){
+                         console.log("page2")
+                     }
                 this.dialogService.openAndYieldController({ viewModel: Dialog, model: info }).then(controller => {
                     // Note you get here when the dialog is opened, and you are able to close dialog  
                     // Promise for the result is stored in controller.result property
@@ -66,13 +70,21 @@ export class Test {
                     data.params+=")";
                 
 
-             const code = `${this.editor.getSession().getValue()} ${payload[0].id.name} ${data.params};` 
-             data.result= eval(code);
+             data.code = `${this.editor.getSession().getValue()} ${payload[0].id.name} ${data.params};` 
+             data.result= this.execute(data.code);
              testCases.push(data)
            }
-            console.log(testCases);
+            testCases.id= payload[0].id.name;
             this.event.publish("onTestReady", testCases);
-
+            
        });
+         this.event.subscribe('onTestResultSaveRequest', (payload) => {
+        this.testCasesCollection.set(payload.id, payload); 
+//        console.log(this.testCasesCollection);
+    });
+    }
+
+    execute(code){
+        return eval(code);
     }
 }
