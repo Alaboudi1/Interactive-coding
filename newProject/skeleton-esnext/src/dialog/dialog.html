@@ -1,6 +1,6 @@
 <template>
   <require from="./dialog.css"></require>
-  <ai-dialog>
+  <ai-dialog if.bind="page==1">
     <ai-dialog-body>
       <div class="container-fluid">
         <div class="row">
@@ -27,5 +27,53 @@
       <!--<button click.trigger="controller.ok(person)">Ok</button>-->
       <button click.trigger="submit()" class="btn btn-success" disabled.bind='type.length'>Test</button>
     </ai-dialog-footer>
+  </ai-dialog>
+
+  <ai-dialog if.bind= "page==2">
+    <ai-dalog-body>
+  
+         <div class="container-fluid">
+  <h2>Basic Table</h2>
+  <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>            
+  <table class="table">
+    <thead>
+      <tr>
+        <th repeat.for="param of infoSign[0].params">${param.name}</th>
+        <th>output</th>
+        <th>confirm</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr repeat.for="test of testCases" class="${test.class}">
+        <td repeat.for="value of test.value">${value}</td>
+        
+        <td>${test.result}</td>
+        <td >
+           <button type="button" class="btn btn-success btn-xs" click.trigger="ok($index)">
+          <span class="glyphicon glyphicon-ok-sign"></span> OK
+        </button>
+
+        <button type="button" class="btn btn-danger btn-xs" click.trigger="danger($index)">
+          <span class="glyphicon glyphicon-remove-sign"></span> wrong</button>
+
+             <button type="button" class="btn btn-warning btn-xs" click.trigger="warning($index)">
+          <span class="glyphicon glyphicon-trash"></span> irrelevant</button>
+          
+          </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+    </ai-dalog-body>
+
+    <ai-dialog-footer>
+  <ai-dialog-footer>
+      <button click.trigger="controller.cancel()" class="btn btn-danger">Cancel</button>
+      <!--<button click.trigger="controller.ok(person)">Ok</button>-->
+      <button click.trigger="submit()" class="btn btn-success" disabled.bind='type.length'>Test</button>
+    </ai-dialog-footer>
+    </ai-dialog-footer>
+
   </ai-dialog>
 </template>

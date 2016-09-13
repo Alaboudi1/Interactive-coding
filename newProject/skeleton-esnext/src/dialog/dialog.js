@@ -10,22 +10,45 @@ export class Dialog {
     this.event = event;
     this.controller = controller;
     this.infoSign;
-
+    this.page = 1;
+    //  this.testCases = [];
+    // this.testCase.value = this.value;
+    this.subscribe();
   }
 
   submit() {
-     const types = this.infoSign[0].params.filter(item => item.selectedType !== undefined);
-       if(types.length){
+    const types = this.infoSign[0].params.filter(item => item.selectedType !== undefined);
+    if (types.length) {
 
-               this.event.publish('onTestRequest', this.infoSign);
-       }else{
-         window.alert('Please select types first');
-       }
+      this.event.publish('onTestRequest', this.infoSign);
+    } else {
+      window.alert('Please select types first');
+    }
+
   }
 
 
   activate(infoSign) {
     this.infoSign = infoSign;
   }
+  subscribe() {
+    this.event.subscribe("onTestReady", payload => {
+      this.testCases = payload;
+      this.page = 2;
 
+    })
+  }
+
+  ok(index) {
+    console.log(index);
+    this.testCases[index].class= 'success';
+  }
+    danger(index) {
+    console.log(index);
+    this.testCases[index].class= 'danger';
+  }
+    warning(index) {
+    console.log(index);
+    this.testCases[index].class= 'warning';
+  }
 }

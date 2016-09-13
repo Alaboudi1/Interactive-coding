@@ -46,7 +46,7 @@ export class Test {
         });
 
         this.event.subscribe('onTestRequest', payload=>{
-                const TestCases = [];
+                const testCases = [];
                 let data;
                 let value;
                 let param; 
@@ -68,9 +68,10 @@ export class Test {
 
              const code = `${this.editor.getSession().getValue()} ${payload[0].id.name} ${data.params};` 
              data.result= eval(code);
-             TestCases.push(data)
+             testCases.push(data)
            }
-                      console.log(TestCases)
+            console.log(testCases);
+            this.event.publish("onTestReady", testCases);
 
        });
     }

@@ -33,8 +33,7 @@ export class Editor {
                     flag = false;
                     setTimeout(
                         () => {
-                            //   console.log(' if x = 3 and y = 5 the the result equals to ')
-                            let code = this.session.getValue();//+ 'add(3,5);';
+                            let code = this.session.getValue();
                             let payload = {
                                 code : code,
                                 render: render
@@ -54,7 +53,7 @@ export class Editor {
         })
 
     }
-
+    
     onError() {
         let event = this.event;
         this.session.on("changeAnnotation", _ => {
