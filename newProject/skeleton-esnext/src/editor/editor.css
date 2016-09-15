@@ -21,3 +21,11 @@ span.widget.stack-message {
       border-radius: 1px;
       pointer-events: auto;
     }
+
+.ace_gutter-cell.ace_breakpoint{ 
+   background :red;
+}
+.sucess {
+     background :green;
+     background-repeat: no-repeat;
+}

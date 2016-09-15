@@ -14,13 +14,14 @@ export class Dialog {
     //  this.testCases = [];
     // this.testCase.value = this.value;
     this.subscribe();
+    
   }
 
   submit() {
     const types = this.infoSign[0].params.filter(item => item.selectedType !== undefined);
     // if (types.length) {
 
-      this.event.publish('onTestRequest', this.infoSign);
+    this.event.publish('onTestRequest', this.infoSign);
     // } else {
     //   window.alert('Please select types first');
     // }
@@ -29,8 +30,14 @@ export class Dialog {
 
 
   activate(infoSign) {
-    this.infoSign = infoSign;
+    if (infoSign.testCasesExists) {
+      this.testCases = infoSign.testCasesExists;
+      this.page = 3;
+    }
+    this.infoSign= infoSign.metaData;
   }
+
+  
   subscribe() {
     this.event.subscribe("onTestReady", payload => {
       this.testCases = payload;
@@ -41,19 +48,19 @@ export class Dialog {
 
   ok(index) {
     console.log(index);
-    this.testCases[index].class= 'success';
+    this.testCases[index].class = 'success';
   }
-    danger(index) {
+  danger(index) {
     console.log(index);
-    this.testCases[index].class= 'danger';
+    this.testCases[index].class = 'danger';
   }
-    warning(index) {
+  warning(index) {
     console.log(index);
-    this.testCases[index].class= 'warning';
+    this.testCases[index].class = 'warning';
   }
 
 
-  save(){
-    this.event.publish("onTestResultSaveRequest", this.testCases); 
+  save() {
+    this.event.publish("onTestResultSaveRequest", this.testCases);
   }
 }

@@ -2,12 +2,11 @@
 import {EventAggregator} from 'aurelia-event-aggregator'
 import {inject} from 'aurelia-framework'
 import {Run} from '../servicesBootstrapper/run'
-@inject(EventAggregator,Run)
+@inject(EventAggregator, Run)
 export class Editor {
 
     constructor(event) {
         this.event = event;
-        this.subscribe();
     }
     attached() {
         this.editor = ace.edit("editor");
@@ -19,6 +18,7 @@ export class Editor {
             return x+y;
         }`)
         this.NoError = false;
+        this.subscribe();
         this.publish();
     }
 
@@ -26,7 +26,7 @@ export class Editor {
 
         let flag = true;
         this.editor.renderer.on('afterRender',
-          (e,render) => {
+            (e, render) => {
                 this.onError();
                 //   console.error(this.NoError);
                 if (flag) {
@@ -35,25 +35,27 @@ export class Editor {
                         () => {
                             let code = this.session.getValue();
                             let payload = {
-                                code : code,
+                                code: code,
                                 render: render
                             }
                             if (this.NoError) {
                                 this.event.publish('OnEditorChanged', payload);
+                                this.editor.session.clearBreakpoints();
+
                             }
                             flag = true;
                         }, 2000)
                 }
             });
-                  console.info("ready");
+        console.info("ready");
         this.event.publish('onEditorReady', this.editor);
         this.editor.on("gutterclick", (e) => {
-             const payload = e.getDocumentPosition().row+1;
-             this.event.publish("onDialogRequest", payload);
+            const payload = e.getDocumentPosition().row + 1;
+            this.event.publish("onDialogRequest", payload);
         })
 
     }
-    
+
     onError() {
         let event = this.event;
         this.session.on("changeAnnotation", _ => {
@@ -71,6 +73,22 @@ export class Editor {
     }
 
     subscribe() {
+
+
+        this.editor.on("gutterclick", e => {
+            var target = e.domEvent.target;
+            if (target.className.indexOf("ace_gutter-cell") == -1)
+                return;
+            if (!this.editor.isFocused())
+                return;
+            if (e.clientX > 25 + target.getBoundingClientRect().left)
+                return;
+
+
+
+            var row = e.getDocumentPosition().row;
+            this.editor.session.setBreakpoint(row, "sucess");
+        });
 
         this.event.subscribe('onError', (NoError) => {
             //    console.log(`subscribe ${NoError}`)

@@ -20,18 +20,21 @@ export class Test {
     });
         this.event.subscribe('onTraverseEnds', (payload) => {
             this.infoSign = payload;
-            console.log(payload)
-
+             if(this.testCasesCollection.size){
+                 this.ensureTest();
+             }
         });
+
         this.event.subscribe('onDialogRequest', (payload) => {
                const line = payload;
-               const info = this.infoSign.FunctionDeclaration.filter(item => 
+               let code={}
+               code.metaData = this.infoSign.FunctionDeclaration.filter(item => 
                               item.loc.start.line === line
                );
-                     if(this.testCasesCollection.get(info[0].id.name)){
-                         console.log("page2")
-                     }
-                this.dialogService.openAndYieldController({ viewModel: Dialog, model: info }).then(controller => {
+                  code.testCasesExists =this.testCasesCollection.get(code.metaData[0].id.name);
+                     
+                     
+                this.dialogService.openAndYieldController({ viewModel: Dialog, model: code }).then(controller => {
                     // Note you get here when the dialog is opened, and you are able to close dialog  
                     // Promise for the result is stored in controller.result property
                     controller.result.then((response) => {
@@ -42,7 +45,7 @@ export class Test {
                             console.log('bad');
                         }
                              
-                    })
+                    });
 
 
                 });
@@ -86,5 +89,22 @@ export class Test {
 
     execute(code){
         return eval(code);
+    }
+
+    ensureTest(){
+        let newCode;
+        for(const [key , testCases] of this.testCasesCollection){
+             newCode = `${this.editor.getSession().getValue()} ${key}` 
+            console.log();
+            this.testevery(testCases, newCode);
+           
+        }
+    }
+
+    testevery(testCases,newCode){
+         for (let item of testCases){
+                console.log (item.result === this.execute(`${newCode} ${item.params}`))
+
+            }
     }
 }

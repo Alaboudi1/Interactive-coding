@@ -76,4 +76,42 @@
     </ai-dialog-footer>
 
   </ai-dialog>
+
+
+
+  
+  <ai-dialog if.bind= "page==3">
+    <ai-dalog-body>
+  
+         <div class="container-fluid">
+  <h2>Basic Table</h2>
+  <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>            
+  <table class="table">
+    <thead>
+      <tr>
+        <th repeat.for="param of infoSign[0].params">${param.name}</th>
+        <th>output</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr repeat.for="test of testCases" class="${test.class}">
+        <td repeat.for="value of test.value">${value}</td>
+        
+        <td>${test.result}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+    </ai-dalog-body>
+
+    <ai-dialog-footer>
+  <ai-dialog-footer>
+      <button click.trigger="controller.ok(person)">Ok</button>
+    </ai-dialog-footer>
+    </ai-dialog-footer>
+
+  </ai-dialog>
+
+
 </template>
