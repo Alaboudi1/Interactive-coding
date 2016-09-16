@@ -93,18 +93,24 @@ export class Test {
 
     ensureTest(){
         let newCode;
+        let errors= new Map();
         for(const [key , testCases] of this.testCasesCollection){
              newCode = `${this.editor.getSession().getValue()} ${key}` 
             console.log();
-            this.testevery(testCases, newCode);
-           
+            errors.set(key,this.testevery(testCases, newCode));  
         }
+                
+        this.event.publish('onTestEnsureEnds', errors);
     }
 
     testevery(testCases,newCode){
+        let error= true;
+        let errorCount =0;
          for (let item of testCases){
-                console.log (item.result === this.execute(`${newCode} ${item.params}`))
-
+                error= item.result === this.execute(`${newCode} ${item.params}`);
+                if(!error)
+                   errorCount;
             }
+            return errorCount;
     }
 }

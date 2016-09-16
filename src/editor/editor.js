@@ -40,7 +40,7 @@ export class Editor {
                             }
                             if (this.NoError) {
                                 this.event.publish('OnEditorChanged', payload);
-                                this.editor.session.clearBreakpoints();
+                             //   this.editor.session.clearBreakpoints();
 
                             }
                             flag = true;
@@ -74,20 +74,14 @@ export class Editor {
 
     subscribe() {
 
+        this.event.subscribe('onTestEnsureEnds', errors => {
 
-        this.editor.on("gutterclick", e => {
-            var target = e.domEvent.target;
-            if (target.className.indexOf("ace_gutter-cell") == -1)
-                return;
-            if (!this.editor.isFocused())
-                return;
-            if (e.clientX > 25 + target.getBoundingClientRect().left)
-                return;
+            if (!errors.get("add"))
+                this.editor.session.setBreakpoint(0, "sucess");
+            else {
+                this.editor.session.setBreakpoint(0);
 
-
-
-            var row = e.getDocumentPosition().row;
-            this.editor.session.setBreakpoint(row, "sucess");
+            }
         });
 
         this.event.subscribe('onError', (NoError) => {
