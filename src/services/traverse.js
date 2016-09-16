@@ -31,7 +31,7 @@ publish(event, payload) {
     }
   traverse(code){
     let info={
-     NumberOfFunction : 0,
+     Functioninfo : [],
      FunctionDeclaration: []
 
     }
@@ -43,7 +43,10 @@ publish(event, payload) {
             },
             leave:  function  (node,  parent)  {
                   if  (node.type  ==  'FunctionDeclaration'){
-                     info.NumberOfFunction =   info.NumberOfFunction + 1; 
+                     info.Functioninfo.push({
+                            id: node.id.name,
+                            location: node.loc
+                     }); 
 
             }
         }

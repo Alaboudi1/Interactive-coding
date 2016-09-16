@@ -74,16 +74,7 @@ export class Editor {
 
     subscribe() {
 
-        this.event.subscribe('onTestEnsureEnds', errors => {
-
-            if (!errors.get("add"))
-                this.editor.session.setBreakpoint(0, "sucess");
-            else {
-                this.editor.session.setBreakpoint(0);
-
-            }
-        });
-
+       
         this.event.subscribe('onError', (NoError) => {
             //    console.log(`subscribe ${NoError}`)
             this.NoError = NoError;
