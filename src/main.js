@@ -4,7 +4,7 @@ import $ from 'bootstrap';
 export function configure(aurelia) {
   aurelia.use
     .standardConfiguration()
-    .developmentLogging()
+   // .developmentLogging()
     .plugin('aurelia-dialog');
 
   //Uncomment the line below to enable animation.

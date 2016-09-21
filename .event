@@ -1,0 +1,51 @@
+
+life-coding
+{
+  OnEditorChanged{
+    publish: editor,
+    subscribe: [Parser],
+    payload: {
+              code: editor.value,
+              render: editor.render // may not be used in 
+             }
+  }
+
+  onEditorReady{
+    publish: editor,
+    subscribe:[],
+    payload:{
+           editor: this.editor
+            }
+  }
+  onDialogRequest{
+    publish: editor,
+    subscribers:[]
+    payload:{
+             gutterRow: getDocumentPosition().row + 1
+            }
+  }
+   onError{
+     publish: editor,
+     subscribers:[editor],
+     payload:{
+               NoError: boolean
+             }
+           }  
+    astReady{
+      publish:Parser,
+      subscribers:[Traverse],
+      payload:{
+               tree: astTree
+              }
+           }
+     onTraverseEnds{
+       publish:Traverse,
+       subscribers:[test,infoSign],
+       payload:{
+                traverse: main data structure in the application conatin Functioninfo and FunctionDeclaration 
+               }
+
+     }      
+
+            
+}

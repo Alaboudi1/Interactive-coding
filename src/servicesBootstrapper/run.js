@@ -12,7 +12,7 @@ export class Run {
     constructor(parser, traverse, interpreter, infoSign,test) {
         parser.subscribe();
         traverse.subscribe();
-        interpreter.subscribe();
+      //  interpreter.subscribe();
         infoSign.subscribe();
         test.subscribe();
         

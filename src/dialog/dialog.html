@@ -8,7 +8,7 @@
             <h2>Choose your function's pramaters type</h2>
           </div>
         </div>
-        <div class="row" repeat.for="param of infoSign[0].params">
+        <div class="row" repeat.for="param of functionInfo.params">
           <div class="col-sm-2">
 
             <h4>${param.name}</h4>
@@ -38,14 +38,14 @@
   <table class="table">
     <thead>
       <tr>
-        <th repeat.for="param of infoSign[0].params">${param.name}</th>
+        <th repeat.for="param of functionInfo.params">${param.name}</th>
         <th>output</th>
         <th>confirm</th>
       </tr>
     </thead>
     <tbody>
       <tr repeat.for="test of testCases" class="${test.class}">
-        <td repeat.for="value of test.value">${value}</td>
+        <td repeat.for="param of test.paramsAsValue">${param}</td>
         
         <td>${test.result}</td>
         <td >
@@ -71,7 +71,7 @@
   <ai-dialog-footer>
       <button click.trigger="controller.cancel()" class="btn btn-danger">Cancel</button>
       <!--<button click.trigger="controller.ok(person)">Ok</button>-->
-      <button class="btn btn-success" disabled.bind='type.length' click.delegate="save()">Save</button>
+      <button class="btn btn-success" disabled.bind='type.length' click.delegate="controller.ok(testCases)">Save</button>
     </ai-dialog-footer>
     </ai-dialog-footer>
 
@@ -89,14 +89,14 @@
   <table class="table">
     <thead>
       <tr>
-        <th repeat.for="param of infoSign[0].params">${param.name}</th>
+        <th repeat.for="param of functionInfo.params">${param.name}</th>
         <th>output</th>
       </tr>
     </thead>
     <tbody>
       <tr repeat.for="test of testCases" class="${test.class}">
-        <td repeat.for="value of test.value">${value}</td>
-        
+        <td repeat.for="value of test.paramsAsValue">${value}</td>
+    
         <td>${test.result}</td>
       </tr>
     </tbody>
@@ -107,7 +107,7 @@
 
     <ai-dialog-footer>
   <ai-dialog-footer>
-      <button click.trigger="controller.ok(person)">Ok</button>
+      <button click.trigger="controller.cancel()">Ok</button>
     </ai-dialog-footer>
     </ai-dialog-footer>
 

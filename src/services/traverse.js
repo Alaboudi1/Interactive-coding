@@ -15,42 +15,39 @@ export class Traverse {
   subscribe() {
 
     this.event.subscribe('astReady', (payload) => {
-      let info =  this.traverse(payload);
-      this.publish('onTraverseEnds', info);
+       console.log("leak")
+      let functionsInfoMap = this.traverse(payload.tree);
+      this.publish('onTraverseEnds', {functionsInfoMap:functionsInfoMap, code:payload.code});
     });
   }
 
-publish(event, payload) {
+  publish(event, payload) {
 
-        switch (event) {
+    switch (event) {
 
-            case 'onTraverseEnds':
-                this.event.publish('onTraverseEnds', payload)
-                break;
-        }
+      case 'onTraverseEnds':
+        this.event.publish('onTraverseEnds', payload)
+        break;
     }
-  traverse(code){
-    let info={
-     Functioninfo : [],
-     FunctionDeclaration: []
+  }
+  traverse(code) {
 
-    }
-          this.est.traverse(code,  {
-            enter:  function  (node,  parent)  {
-                  if  (node.type  ==  'FunctionDeclaration') {
-                    info.FunctionDeclaration.push(node);
+     let functionInfo = new Map();
+   
+    this.est.traverse(code, {
+      enter: function (node, parent) {
+        if (node.type == 'FunctionDeclaration') {
+          functionInfo.set(node.loc.start.line-1,
+          {
+            name:node.id.name,
+            location: node.loc.start.line-1,
+            params:node.params,
+            testCases:[]
+          });
         }
-            },
-            leave:  function  (node,  parent)  {
-                  if  (node.type  ==  'FunctionDeclaration'){
-                     info.Functioninfo.push({
-                            id: node.id.name,
-                            location: node.loc
-                     }); 
-
-            }
-        }
-      });
-      return info;
+      },
+ 
+    });
+    return functionInfo;
   }
 }

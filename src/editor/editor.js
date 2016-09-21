@@ -14,56 +14,76 @@ export class Editor {
         this.editor.setTheme("ace/theme/chrome");
         this.editor.getSession().setMode("ace/mode/javascript");
         this.session = this.editor.getSession();
-        this.session.setValue(`function add (x,y){
+        this.session.setValue(
+            `function add (x,y){
             return x+y;
-        }`)
+        }
+        
+        function remove (x,y){
+            return x-y;
+        }   
+        
+        function g (g){
+            return g;
+        }  
+        
+        function oddOreven(f){
+            if(f%2 ===0){
+                return "even";
+            }
+            else{
+                return "odd";
+            }
+        }  `)
         this.NoError = false;
-        this.subscribe();
         this.publish();
+        this.subscribe();
+
+
     }
 
+
     publish() {
+        this.event.publish('onEditorReady', this.editor);
+
 
         let flag = true;
-        this.editor.renderer.on('afterRender',
-            (e, render) => {
+        this.editor.session.on('change',
+            () => {
                 this.onError();
-                //   console.error(this.NoError);
                 if (flag) {
                     flag = false;
-                    setTimeout(
-                        () => {
-                            let code = this.session.getValue();
-                            let payload = {
-                                code: code,
-                                render: render
-                            }
-                            if (this.NoError) {
-                                this.event.publish('OnEditorChanged', payload);
-                             //   this.editor.session.clearBreakpoints();
-
-                            }
-                            flag = true;
-                        }, 2000)
+                    setTimeout(_ => {
+                        const code = this.session.getValue();
+                        const payload = {
+                            code: code,
+                        }
+                        if (this.NoError) {
+                            this.event.publish('onEditorChanged', payload);
+                        }
+                        flag = true;
+                    }, 1000)
                 }
             });
-        console.info("ready");
-        this.event.publish('onEditorReady', this.editor);
-        this.editor.on("gutterclick", (e) => {
-            const payload = e.getDocumentPosition().row + 1;
-            this.event.publish("onDialogRequest", payload);
-        })
 
+
+
+        this.editor.on("gutterclick", e => {
+            const payload = e.getDocumentPosition().row;
+            this.event.publish("onDialogRequest", payload);
+        });
+          setTimeout(_=>{
+        this.event.publish('onEditorChanged', {code:this.editor.getValue()});}, 800);
     }
 
     onError() {
-        let event = this.event;
+        const event = this.event;
         this.session.on("changeAnnotation", _ => {
             let NoError = true;
             const annot = this.session.getAnnotations();
             for (let key in annot) {
                 if (annot.hasOwnProperty(key)) {
-                    NoError = false;
+                    NoError = !NoError;
                     break;
                 }
             }
@@ -73,12 +93,22 @@ export class Editor {
     }
 
     subscribe() {
+        this.event.subscribe('onError', payload => {
+            this.NoError = payload;
+        });
 
-       
-        this.event.subscribe('onError', (NoError) => {
-            //    console.log(`subscribe ${NoError}`)
-            this.NoError = NoError;
-        })
+        this.event.subscribe("setBreakpointRequest", payload => {
+            this.session.clearBreakpoints();
+            console.log(payload);
+
+            for (let sign of payload)
+                this.session.setBreakpoint(sign.location , sign.cssClass);
+        });
+
+        this.event.subscribe("setAnnotations", payload => {
+            console.log(payload);
+            this.session.setAnnotations(payload);
+
+        });
     }
-
 }
