@@ -15,19 +15,23 @@ export class Editor {
         this.editor.getSession().setMode("ace/mode/javascript");
         this.session = this.editor.getSession();
         this.session.setValue(
-            `function add (x,y){
+        `function add (x,y){
             return x+y;
         }
         
-        function remove (x,y){
+    function remove (x,y){
             return x-y;
         }   
         
-        function g (g){
-            return g;
+   function getSmallestElement (g){
+        var small = g[0];
+        for(var i=1; i< g.length; i++){
+            if(small > g[i])
+              small = g[i];
+        }
+            return small; 
         }  
-        
-        function oddOreven(f){
+    function oddOreven(f){
             if(f%2 ===0){
                 return "even";
             }
@@ -69,11 +73,17 @@ export class Editor {
 
 
         this.editor.on("gutterclick", e => {
-            const payload = e.getDocumentPosition().row;
-            this.event.publish("onDialogRequest", payload);
+            const row = e.getDocumentPosition().row;
+          try{
+            const func=this.editor.session.doc.getAllLines()[row].trim(); // get function foo (x,y) without space 
+            const funcName = /^function\s+([\w\$]+)\s*\(/.exec(func.toString())[1]; //get function name
+            this.event.publish("onDialogRequest", funcName);
+        } catch(e){
+            console.log("This is not a function")
+        }
         });
           setTimeout(_=>{
-        this.event.publish('onEditorChanged', {code:this.editor.getValue()});}, 800);
+        this.event.publish('onEditorChanged', {code:this.editor.getValue()});}, 2000);
     }
 
     onError() {
@@ -101,8 +111,9 @@ export class Editor {
             this.session.clearBreakpoints();
             console.log(payload);
 
-            for (let sign of payload)
-                this.session.setBreakpoint(sign.location , sign.cssClass);
+            for (let [key, value] of payload)
+                if(value.sign.testCasesCount)
+                this.session.setBreakpoint(value.location , value.sign.cssClass);
         });
 
         this.event.subscribe("setAnnotations", payload => {
