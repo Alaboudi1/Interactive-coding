@@ -1,17 +1,17 @@
-import {inject} from 'aurelia-framework'
-import  {EventAggregator} from 'aurelia-event-aggregator'
+import {inject} from 'aurelia-framework';
+import  {EventAggregator} from 'aurelia-event-aggregator';
 
 @inject(EventAggregator)
 export class Interpreter {
 
-    constructor(EventAggregator) {
-        this.event = EventAggregator;
-    }
+  constructor(eventAggregator) {
+    this.event = eventAggregator;
+  }
 
-    subscribe(){
-        this.event.subscribe('onInterpreterRequest', (payload) =>{
-            
-            
-        })
-    }
+  subscribe() {
+    this.event.subscribe('onInterpreterRequest', (payload) =>{
+
+
+    });
+  }
 }

@@ -1,6 +1,6 @@
-import {inject} from 'aurelia-framework'
+import {inject} from 'aurelia-framework';
 import estraverse from 'estraverse';
-import {EventAggregator} from 'aurelia-event-aggregator'
+import {EventAggregator} from 'aurelia-event-aggregator';
 
 @inject(EventAggregator)
 
@@ -13,7 +13,6 @@ export class Traverse {
   }
 
   subscribe() {
-
     this.event.subscribe('astReady', (payload) => {
       const code = payload.code;
       this.functionsInfoMap = this.traverse(payload.tree, code, this.functionsInfoMap);
@@ -22,27 +21,28 @@ export class Traverse {
   }
 
   publish(event, payload) {
-
     switch (event) {
 
-      case 'onTraverseEnds':
-        this.event.publish('onTraverseEnds', payload)
-        break;
+    case 'onTraverseEnds':
+      this.event.publish('onTraverseEnds', payload);
+      break;
+    default:
+      break;
     }
   }
   traverse(tree, code, existingFunctionsInfoMap) {
-
     let newFunctionsInfoMap = new Map();
     let funcInfo;
-    let testCases
+    let testCases;
     this.est.traverse(tree, {
-      enter: function (node, parent) {
-        if (node.type == 'FunctionDeclaration') {
-           funcInfo = existingFunctionsInfoMap.get(node.id.name);
-           testCases = [];
-          if(funcInfo){
-            if(funcInfo.testCases.length)
-                 testCases = funcInfo.testCases;
+      enter: function(node, parent) {
+        if (node.type === 'FunctionDeclaration') {
+          funcInfo = existingFunctionsInfoMap.get(node.id.name);
+          testCases = [];
+          if (funcInfo) {
+            if (funcInfo.testCases.length) {
+              testCases = funcInfo.testCases;
+            }
           }
           newFunctionsInfoMap.set(node.id.name,
             {
