@@ -22,18 +22,21 @@ span.widget.stack-message {
       pointer-events: auto;
     }
 
-.ace_gutter-cell.ace_breakpoint{ 
-   background :red;
+.warning{ 
+   cursor:pointer;
+   background-repeat: no-repeat;
 }
 .noError {
     background: lightgreen;
     background-repeat: no-repeat;
     border-radius: 20px 0px 0px 20px; 
     box-shadow: 0px 0px 1px 1px green;
+    cursor:pointer;
      }
 .error {
     background: #FF8C8C;
     background-repeat: no-repeat;
     border-radius: 20px 0px 0px 20px; 
     box-shadow: 0px 0px 1px 1px red inset; 
+    cursor:pointer;
 }

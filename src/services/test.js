@@ -11,74 +11,68 @@ export class Test {
     this.dialogService = dialogService;
     this.testCasesCollection = new Map();
   }
-
-
-  subscribe() {
-    this.event.subscribe('onTraverseEnds', (payload) => {
-      this.functionsInfoMap = payload;
-      this.ensureTest(this.functionsInfoMap);
-    });
-
-    this.event.subscribe('onDialogRequest', (funcName) => {
-      let functionInfo = this.functionsInfoMap.get(funcName);
-      this.dialogService.openAndYieldController({ viewModel: Dialog, model: functionInfo }).then(controller => {
-                // Note you get here when the dialog is opened, and you are able to close dialog
-                // Promise for the result is stored in controller.result property
-        controller.result.then((response) => {
-          if (!response.wasCancelled) {
-            this.testCasesSave(response.output);
-            this.ensureTest(this.functionsInfoMap);
-          }
-        });
+  onTraverseEnds(Map) {
+    this.functionsInfoMap = Map;
+    this.ensureTest(this.functionsInfoMap);
+  }
+  onDialogRequest(funcName) {
+    let functionInfo = this.functionsInfoMap.get(funcName);
+    this.dialogService.openAndYieldController({ viewModel: Dialog, model: functionInfo })
+      .then(controller => {
+        controller.result
+      .then((response) => {
+        if (!response.wasCancelled) {
+          this.testCasesSave(response.output);
+          this.ensureTest(this.functionsInfoMap);
+        }
       });
-    });
-
-    this.event.subscribe('onTestRequest', functionInfo => {
-      let data;
-      let paramsAsValue;
-      let param;
-      let testCases = [];
-      let testingCode;
-      for (let i = 0; i < 10; i++) {
-        data = {};
-        paramsAsValue = [];
-        data.paramsAsString = '(';
-        for (let j = 0; j < functionInfo.params.length; j++) {
-          switch (functionInfo.params[j].selectedType) {
-          case 'Number': {
-            param = this.fakeNumber();
-            break;
-          }
-          case 'String': {
-            param = `"${this.fakeString()}"`;
-            break;
-          }
-          case 'Boolean': {
-            param = this.fakeBoolean();
-            break;
-          }
-          default:
-            param = this.fakeArray(functionInfo.params[j].selectedType, 5);
-          }
-          paramsAsValue.push(param);
-          data.paramsAsValue = paramsAsValue;
-          data.paramsAsString += j + 1 === functionInfo.params.length ? `${param}` : `${param},`;
+      });
+  }
+  onTestRequest(functionInfo) { //TODO refactoring needed
+    let data;
+    let paramsAsValue;
+    let param;
+    let testCases = [];
+    let testingCode;
+    for (let i = 0; i < 10; i++) {
+      data = {};
+      paramsAsValue = [];
+      data.paramsAsString = '(';
+      for (let j = 0; j < functionInfo.params.length; j++) {
+        switch (functionInfo.params[j].selectedType) {
+        case 'Number': {
+          param = this.fakeNumber();
+          break;
         }
-        data.paramsAsString += ')';
-        if (param.length) {
-          let arrayName = this.fakeString();
-          testingCode = `var ${arrayName} = [ ${param} ]; ${functionInfo.name} (${arrayName})`;
-        } else {
-          testingCode = ` ${functionInfo.name} ${data.paramsAsString};`;
+        case 'String': {
+          param = `"${this.fakeString()}"`;
+          break;
         }
-        data.testingCode = testingCode;
-        data.result = data.expected = this.execute(`${functionInfo.code} ${testingCode}`);
-        testingCode = '';
-        testCases.push(data);
+        case 'Boolean': {
+          param = this.fakeBoolean();
+          break;
+        }
+        default:
+          param = this.fakeArray(functionInfo.params[j].selectedType, 5);
+        }
+        paramsAsValue.push(param);
+        data.paramsAsValue = paramsAsValue;
+        data.paramsAsString += j + 1 === functionInfo.params.length ? `${param}` : `${param},`;
       }
-      testCases.name = functionInfo.name;
-      this.event.publish('onTestReady', testCases);
-    });
+      data.paramsAsString += ')';
+      if (param.length) {
+        let arrayName = this.fakeString();
+        testingCode = `var ${arrayName} = [ ${param} ]; ${functionInfo.name} (${arrayName})`;
+      } else {
+        testingCode = ` ${functionInfo.name} ${data.paramsAsString};`;
+      }
+      data.testingCode = testingCode;
+      data.result = data.expected = this.execute(`${functionInfo.code} ${testingCode}`);
+      testingCode = '';
+      testCases.push(data);
+    }
+    testCases.name = functionInfo.name;
+    this.event.publish('onTestReady', testCases);
   }
 
   execute(code) {
@@ -132,5 +126,11 @@ export class Test {
       }
     }
     return fakeArray;
+  }
+
+  subscribe() {
+    this.event.subscribe('onTraverseEnds', payload=>{this.onTraverseEnds(payload);});
+    this.event.subscribe('onDialogRequest', payload=>{this.onDialogRequest(payload);});
+    this.event.subscribe('onTestRequest', payload=>{this.onTestRequest(payload);});
   }
 }

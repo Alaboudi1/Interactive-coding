@@ -10,8 +10,11 @@ export class Interpreter {
 
   subscribe() {
     this.event.subscribe('onInterpreterRequest', (payload) =>{
-
-
+      this.publish(payload);
     });
   }
+  publish(payload) {
+    this.event.publish('test', payload);
+  }
+
 }

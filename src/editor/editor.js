@@ -1,4 +1,3 @@
-
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {inject} from 'aurelia-framework';
 import {Run} from '../servicesBootstrapper/run';
@@ -15,24 +14,38 @@ export class Editor {
     this.editor.getSession().setMode('ace/mode/javascript');
     this.session = this.editor.getSession();
     this.session.setValue(
-    `function add (x,y){
-            return x+y;
+            ` 
+         
+     function add (numberX,numberY){
+            return numberX+numberY;
         }
         
-    function remove (x,y){
-            return x-y;
-        }   
-        
-   function getSmallestElement (g){
-        var small = g[0];
-        for(var i=1; i< g.length; i++){
-            if(small > g[i])
-              small = g[i];
+      function bubbleSort(a){
+        var swapped;
+        do {
+            swapped = false;
+            for (var i=0; i < a.length-1; i++) {
+                if (a[i] > a[i+1]) {
+                    var temp = a[i];
+                    a[i] = a[i+1];
+                    a[i+1] = temp;
+                    swapped = true;
+                }
+            }
+        }while (swapped);
+         return a;
+       }
+
+     function getSmallestElement (arrayOfNumbers){
+        var small = arrayOfNumbers[0];
+        for(var i=1; i< arrayOfNumbers.length; i++){
+            if(small > arrayOfNumbers[i])
+              small = arrayOfNumbers[i];
         }
             return small; 
         }  
-    function oddOreven(f){
-            if(f%2 ===0){
+    function oddOreven(numberA){
+            if(numberA%2 ===0){
                 return "even";
             }
             else{
@@ -43,6 +56,7 @@ export class Editor {
     this.publish();
     this.subscribe();
   }
+
 
   publish() {
     this.event.publish('onEditorReady', this.editor);
@@ -74,12 +88,12 @@ export class Editor {
         const func = this.editor.session.doc.getAllLines()[row].trim(); // get function foo (x,y) without space
         const funcName = /^function\s+([\w\$]+)\s*\(/.exec(func.toString())[1]; //get function name
         this.event.publish('onDialogRequest', funcName);
-      } catch (error) {
+      } catch (exception) {
         return;
       }
     });
-    setTimeout(_=>{
-      this.event.publish('onEditorChanged', {code: this.editor.getValue()});
+    setTimeout(_ => {
+      this.event.publish('onEditorChanged', { code: this.editor.getValue() });
     }, 2000);
   }
 
@@ -109,8 +123,11 @@ export class Editor {
       this.session.clearBreakpoints();
 
       for (let [key, value] of payload)              {
-        if (value.sign.testCasesCount)                {
+        if (value.sign.testCasesCount) {
           this.session.setBreakpoint(value.location, value.sign.cssClass);
+        }
+        else {
+          this.session.setBreakpoint(value.location, 'warning');
         }
       }
     });

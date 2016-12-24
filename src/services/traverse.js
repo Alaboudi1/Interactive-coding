@@ -12,23 +12,11 @@ export class Traverse {
     this.functionsInfoMap = new Map();
   }
 
-  subscribe() {
-    this.event.subscribe('astReady', (payload) => {
-      const code = payload.code;
-      this.functionsInfoMap = this.traverse(payload.tree, code, this.functionsInfoMap);
-      this.publish('onTraverseEnds', this.functionsInfoMap);
-    });
-  }
-
-  publish(event, payload) {
-    switch (event) {
-
-    case 'onTraverseEnds':
-      this.event.publish('onTraverseEnds', payload);
-      break;
-    default:
-      break;
-    }
+  astReady(payload) {
+    const code = payload.code;
+    const tree = payload.tree;
+    this.functionsInfoMap = this.traverse(tree, code, this.functionsInfoMap);
+    this.publish('onTraverseEnds', this.functionsInfoMap);
   }
   traverse(tree, code, existingFunctionsInfoMap) {
     let newFunctionsInfoMap = new Map();
@@ -56,5 +44,18 @@ export class Traverse {
       }
     });
     return newFunctionsInfoMap;
+  }
+  subscribe() {
+    this.event.subscribe('astReady', (payload)=>{this.astReady(payload);});
+  }
+  publish(event, payload) {
+    switch (event) {
+
+    case 'onTraverseEnds':
+      this.event.publish('onTraverseEnds', payload);
+      break;
+    default:
+      break;
+    }
   }
 }

@@ -34,21 +34,14 @@ export class InfoSign {
       annotstions.push(newAnno);
     }
     this.publish('setAnnotations', annotstions);
-      //  this.event.publish('setAnnotations', annotstions)
   }
-
-
+  onTestEnsureEnds(functionsInfoMap) {
+    let loclFunctionsInfoMap = this.createTestStatus(functionsInfoMap);
+    this.attachTestSign(loclFunctionsInfoMap);
+    this.publish('setBreakpointRequest', loclFunctionsInfoMap);
+  }
   subscribe() {
-        // this.event.subscribe('onTraverseEnds', (payload) => {
-        //         this.infoSign = payload;
-        // });
-
-
-    this.event.subscribe('onTestEnsureEnds', functionsInfoMap => {
-      let loclFunctionsInfoMap = this.createTestStatus(functionsInfoMap);
-      this.attachTestSign(loclFunctionsInfoMap);
-      this.publish('setBreakpointRequest', loclFunctionsInfoMap);
-    });
+    this.event.subscribe('onTestEnsureEnds', payload=>{this.onTestEnsureEnds(payload);});
   }
   createTestStatus(functionsInfoMap) {
     let errorCount = 0;
