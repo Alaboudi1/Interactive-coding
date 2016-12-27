@@ -40,3 +40,14 @@
 //     expect(sut.router.routes).toContain({ route: 'child-router', name: 'child-router', moduleId: 'child-router', nav: true, title: 'Child Router' });
 //   });
 // });
+import {Test} from '../../src/services/test';
+import {EventAggregator} from 'aurelia-event-aggregator';
+
+describe('the behavior of test module ', () => {
+  const event = new EventAggregator();
+  const test = new Test(event);
+  it('should', done =>{
+
+  });
+});
+

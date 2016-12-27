@@ -36,9 +36,9 @@ export class InfoSign {
     this.publish('setAnnotations', annotstions);
   }
   onTestEnsureEnds(functionsInfoMap) {
-    let loclFunctionsInfoMap = this.createTestStatus(functionsInfoMap);
-    this.attachTestSign(loclFunctionsInfoMap);
-    this.publish('setBreakpointRequest', loclFunctionsInfoMap);
+    this.createTestStatus(functionsInfoMap);
+    this.attachTestSign(functionsInfoMap);
+    this.publish('setBreakpointRequest', functionsInfoMap);
   }
   subscribe() {
     this.event.subscribe('onTestEnsureEnds', payload=>{this.onTestEnsureEnds(payload);});
@@ -48,7 +48,7 @@ export class InfoSign {
     let testCasesCount = 0;
     let sign = {};
     let cssClass = 'noError';
-    for (let [functionName, value] of functionsInfoMap) {
+    for (let [key, value] of functionsInfoMap) {
       for (let result of value.testCases) {
         testCasesCount++;
         if (!result.NoError) {

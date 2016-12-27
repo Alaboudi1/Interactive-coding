@@ -1,6 +1,6 @@
-import {inject} from 'aurelia-framework';
+import { inject } from 'aurelia-framework';
 import estraverse from 'estraverse';
-import {EventAggregator} from 'aurelia-event-aggregator';
+import { EventAggregator } from 'aurelia-event-aggregator';
 
 @inject(EventAggregator)
 
@@ -30,6 +30,7 @@ export class Traverse {
           if (funcInfo) {
             if (funcInfo.testCases.length) {
               testCases = funcInfo.testCases;
+              node.params = funcInfo.params;
             }
           }
           newFunctionsInfoMap.set(node.id.name,
@@ -46,7 +47,7 @@ export class Traverse {
     return newFunctionsInfoMap;
   }
   subscribe() {
-    this.event.subscribe('astReady', (payload)=>{this.astReady(payload);});
+    this.event.subscribe('astReady', (payload) => { this.astReady(payload); });
   }
   publish(event, payload) {
     switch (event) {
