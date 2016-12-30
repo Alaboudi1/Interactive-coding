@@ -13,7 +13,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr repeat.for="test of testCases" class="${test.class}">
+            <tr repeat.for="test of testCases" class="${test.status}">
               <td repeat.for="param of test.paramsAsValue">${param}</td>
               <td>${test.result}</td>
               <td>
@@ -33,7 +33,6 @@
     <ai-dialog-footer>
       <ai-dialog-footer>
         <button click.trigger="controller.cancel()" class="btn btn-danger">Cancel</button>
-        <!--<button click.trigger="controller.ok(person)">Ok</button>-->
         <button class="btn btn-success" disabled.bind='type.length' click.delegate="controller.ok(testCases)">Save</button>
       </ai-dialog-footer>
     </ai-dialog-footer>

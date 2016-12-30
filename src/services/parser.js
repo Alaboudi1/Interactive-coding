@@ -9,12 +9,12 @@ export class Parser {
     this.event = eventAggregator;
     this.esprima = esp;
   }
-  onEditorChanged(payload) {
-    let tree = this.esprima.parse(payload.code, { range: true, loc: true });
-    this.publish('astReady', {tree: tree, code: payload.code});
+  parseThe(code) {
+    let tree = this.esprima.parse(code, { range: true, loc: true });
+    this.publish('astReady', {tree, code});
   }
   subscribe() {
-    this.event.subscribe('onEditorChanged', payload=>{this.onEditorChanged(payload);});
+    this.event.subscribe('onEditorChanged', code=>{this.parseThe(code);});
   }
 
   publish(event, payload) {

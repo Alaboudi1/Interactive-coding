@@ -6,17 +6,9 @@ life-coding
     subscribe: [Parser],
     payload: {
               code: editor.value,
-              render: editor.render // may not be used in 
              }
   }
 
-  onEditorReady{
-    publish: editor,
-    subscribe:[],
-    payload:{
-           editor: this.editor
-            }
-  }
   onDialogRequest{
     publish: editor,
     subscribers:[]

@@ -51,7 +51,7 @@ export class InfoSign {
     for (let [key, value] of functionsInfoMap) {
       for (let result of value.testCases) {
         testCasesCount++;
-        if (!result.NoError) {
+        if (!result.pass) {
           cssClass = 'error';
           errorCount++;
         }
@@ -77,7 +77,7 @@ export class InfoSign {
       this.event.publish('setAnnotations', payload);
       break;
     case 'setBreakpointRequest':
-      this.event.publish('setBreakpointRequest', payload);
+      this.event.publish('onSetBreakpointRequest', payload);
       break;
     default:
       break;

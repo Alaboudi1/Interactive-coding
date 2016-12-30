@@ -13,10 +13,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr repeat.for="test of testCases" class="${test.NoError ? 'success': 'danger'}">
+            <tr repeat.for="test of testCases" class="${test.pass ? 'success': 'danger'}">
               <td repeat.for="value of test.paramsAsValue">${value}</td>
               <td>${test.result}</td>
-              <td>${test.expected}</td>
+              <td>${test.expectedResult}</td>
             </tr>
           </tbody>
         </table>

@@ -6,16 +6,14 @@ import {InfoSign} from '../services/info-sign';
 import {Test} from '../services/test';
 
 
-@inject(Parser, Traverse, Interpreter, InfoSign,Test)
+@inject(Parser, Traverse, Interpreter, InfoSign, Test)
 export class Run {
 
-    constructor(parser, traverse, interpreter, infoSign,test) {
-        parser.subscribe();
-        traverse.subscribe();
-      //  interpreter.subscribe();
-        infoSign.subscribe();
-        test.subscribe();
-        
-    }
+  constructor(parser, traverse, interpreter, infoSign, test) {
+    parser.subscribe();
+    traverse.subscribe();
+    infoSign.subscribe();
+    test.subscribe();
+  }
 
 }

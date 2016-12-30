@@ -11,16 +11,10 @@ export class Dialog {
     this.controller = controller;
     this.functionInfo;
     this.page = 1;
-    //  this.testCases = [];
-    // this.testCase.value = this.value;
     this.subscribe();
   }
   submit() {
-    // if (types.length) {
     this.event.publish('onTestRequest', this.functionInfo);
-    // } else {
-    //   window.alert('Please select types first');
-    // }
   }
   activate(functionInfo) {
     if (functionInfo.testCases.length) {
@@ -37,13 +31,13 @@ export class Dialog {
     });
   }
   ok(index) {
-    this.testCases[index].class = 'success';
+    this.testCases[index].status = 'success';
   }
   danger(index) {
-    this.testCases[index].class = 'danger';
+    this.testCases[index].status = 'danger';
   }
   warning(index) {
-    this.testCases[index].class = 'warning';
+    this.testCases[index].status = 'warning';
   }
   save() {
 

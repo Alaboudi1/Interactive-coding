@@ -1,6 +1,6 @@
-import {EventAggregator} from 'aurelia-event-aggregator';
-import {inject} from 'aurelia-framework';
-import {Run} from '../servicesBootstrapper/run';
+import { EventAggregator } from 'aurelia-event-aggregator';
+import { inject } from 'aurelia-framework';
+import { Run } from '../servicesBootstrapper/run';
 @inject(EventAggregator, Run)
 export class Editor {
 
@@ -14,7 +14,7 @@ export class Editor {
     this.editor.getSession().setMode('ace/mode/javascript');
     this.session = this.editor.getSession();
     this.session.setValue(
-            ` 
+      ` 
          
      function add (numberX,numberY){
             return numberX+numberY;
@@ -52,88 +52,59 @@ export class Editor {
                 return "odd";
             }
         }  `);
-    this.NoError = false;
-    this.publish();
+    this.flag = true;
     this.subscribe();
+    setTimeout(_ => {this.publishCode();}, 1000);
   }
 
-
-  publish() {
-    this.event.publish('onEditorReady', this.editor);
-
-
-    let flag = true;
-    this.editor.session.on('change',
-            () => {
-              this.onError();
-              if (flag) {
-                flag = false;
-                setTimeout(_ => {
-                  const code = this.session.getValue();
-                  const payload = {
-                    code: code
-                  };
-                  if (this.NoError) {
-                    this.event.publish('onEditorChanged', payload);
-                  }
-                  flag = true;
-                }, 1000);
-              }
-            });
-
-
-    this.editor.on('gutterclick', e => {
-      const row = e.getDocumentPosition().row;
-      try {
-        const func = this.editor.session.doc.getAllLines()[row].trim(); // get function foo (x,y) without space
-        const funcName = /^function\s+([\w\$]+)\s*\(/.exec(func.toString())[1]; //get function name
-        this.event.publish('onDialogRequest', funcName);
-      } catch (exception) {
-        return;
-      }
-    });
-    setTimeout(_ => {
-      this.event.publish('onEditorChanged', { code: this.editor.getValue() });
-    }, 2000);
+  publishCode() {
+    const code = this.session.getValue();
+    if (this.hasNoError) {
+      this.event.publish('onEditorChanged', code);
+    }
+    this.flag = true;
   }
-
+  onEditorChange() {
+    if (this.flag) {
+      this.flag = false;
+      setTimeout(_ => {this.publishCode();}, 1000);
+    }
+  }
   onError() {
-    const event = this.event;
-    this.session.on('changeAnnotation', _ => {
-      let NoError = true;
-      const annot = this.session.getAnnotations();
-      for (let key in annot) {
-        if (annot.hasOwnProperty(key)) {
-          NoError = !NoError;
-          break;
-        }
+    this.hasNoError = true;
+    const annot = this.session.getAnnotations();
+    for (let elem of annot) {
+      if (elem.type !== 'warning') {
+        this.hasNoError = false;
+        break;
       }
-      if (this.NoError !== NoError)              {
-        event.publish('onError', NoError);
-      }
-    });
+    }
   }
-
-  subscribe() {
-    this.event.subscribe('onError', payload => {
-      this.NoError = payload;
-    });
-
-    this.event.subscribe('setBreakpointRequest', payload => {
-      this.session.clearBreakpoints();
-
-      for (let [key, value] of payload)              {
-        if (value.sign.testCasesCount) {
-          this.session.setBreakpoint(value.location, value.sign.cssClass);
-        }
-        else {
-          this.session.setBreakpoint(value.location, 'warning');
-        }
+  onSetBreakpointRequest(signs) {
+    this.session.clearBreakpoints();
+    for (let [_, status] of signs) {
+      if (status.sign.testCasesCount) {
+        this.session.setBreakpoint(status.location, status.sign.cssClass);
+      } else {
+        this.session.setBreakpoint(status.location, 'warning');
       }
-    });
-
-    this.event.subscribe('setAnnotations', payload => {
-      this.session.setAnnotations(payload);
-    });
+    }
+  }
+  onGutterclick(click) {
+    const row = click.getDocumentPosition().row;
+    try {
+      const func = this.editor.session.doc.getAllLines()[row].trim(); // get function foo (x,y) without space
+      const funcName = /^function\s+([\w\$]+)\s*\(/.exec(func.toString())[1]; //get function name
+      this.event.publish('onDialogRequest', funcName);
+    } catch (exception) {
+      return;
+    }
+  }
+  subscribe() {
+    this.session.on('changeAnnotation', _ => { this.onError(); });
+    this.event.subscribe('onSetBreakpointRequest', signs => { this.onSetBreakpointRequest(signs); });
+    this.event.subscribe('setAnnotations', annot => {this.session.setAnnotations(annot);});
+    this.editor.session.on('change', _ => {this.onEditorChange();});
+    this.editor.on('gutterclick', click => {this.onGutterclick(click);});
   }
 }

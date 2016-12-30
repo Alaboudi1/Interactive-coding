@@ -46,9 +46,9 @@ export class Test {
         paramsAsValue.push(param);
         data.paramsAsValue = paramsAsValue;
         data.paramsAsString += j + 1 === func.params.length ? `${param}` : `${param},`;
-        data.paramsAsString += ')';
-        this.testCall(param, func, data, testCases);
       }
+      data.paramsAsString += ')';
+      this.testCall(param, func, data, testCases);
     }
     this.event.publish('onTestReady', testCases);
   }
@@ -62,7 +62,7 @@ export class Test {
       testingCode = ` ${func.name} ${data.paramsAsString};`;
     }
     data.testingCode = testingCode;
-    data.result = data.expected = this.execute(`${func.code} ${testingCode}`);
+    data.result = data.expectedResult = this.execute(`${func.code} ${testingCode}`);
     testingCode = '';
     testCases.push(data);
     testCases.name = func.name;
@@ -103,9 +103,9 @@ export class Test {
       for (let item of value.testCases) {
         item.result = this.execute(`${value.code} ${item.testingCode}`);
         if (value.params[0].selectedType === 'Array of Numbers' && Array.isArray(item.result)) {
-          item.NoError = item.expected.join('') === item.result.join('');
+          item.pass = item.expectedResult.join('') === item.result.join('');
         } else {
-          item.NoError = item.expected === item.result;
+          item.pass = item.expectedResult === item.result;
         }
       }
     }
