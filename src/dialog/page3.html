@@ -24,7 +24,8 @@
     </ai-dalog-body>
     <ai-dialog-footer>
       <ai-dialog-footer>
-        <button click.trigger="controller.cancel()">Ok</button>
+        <button class="btn btn-danger" click.delegate="reset()">Reset</button>
+        <button class="btn btn-success" click.trigger="controller.cancel()">Ok</button>
       </ai-dialog-footer>
     </ai-dialog-footer>
   </ai-dialog>

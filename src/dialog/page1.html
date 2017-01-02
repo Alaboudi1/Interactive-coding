@@ -7,7 +7,7 @@
             <h2>Choose your function's pramaters type</h2>
           </div>
         </div>
-        <div class="row" repeat.for="param of functionInfo.params">
+        <div class="row" repeat.for="param of functionObject.params">
           <div class="col-sm-2">
             <h4>${param.name}</h4>
             <select class="selectpicker" value.bind="param.selectedType">

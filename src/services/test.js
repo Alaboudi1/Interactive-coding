@@ -9,80 +9,66 @@ export class Test {
   constructor(event, dialogService) {
     this.event = event;
     this.dialogService = dialogService;
-    this.testCasesCollection = new Map();
+    this.mainMap;
   }
 
-  onTraverseEnds(Map) {
-    this.functionsInfoMap = Map;
-    this.ensureTest(this.functionsInfoMap);
-  }
-
-  onDialogRequest(funcName) {
-    let functionInfo = this.functionsInfoMap.get(funcName);
-    this.dialogService.openAndYieldController({ viewModel: Dialog, model: functionInfo })
+  onDialogRequest(functionName) {
+    let functionObject = this.mainMap.get(functionName);
+    this.dialogService.openAndYieldController({ viewModel: Dialog, model: functionObject })
       .then(controller => {
         controller.result
           .then((response) => {
             if (!response.wasCancelled) {
-              this.testCasesSave(response.output);
-              this.ensureTest(this.functionsInfoMap);
+              response.output.track = true;
+              this.ensureTest(this.mainMap);
             }
           });
       });
   }
 
-  onTestRequest(func) { //TODO refactoring needed
-    let data;
-    let paramsAsValue;
-    let param;
-    let testCases = [];
-
-    for (let i = 0; i < 10; i++) {
-      data = {};
-      paramsAsValue = [];
-      data.paramsAsString = '(';
-      for (let j = 0; j < func.params.length; j++) {
-        param = this.paramters(func.params[j].selectedType);
-        paramsAsValue.push(param);
-        data.paramsAsValue = paramsAsValue;
-        data.paramsAsString += j + 1 === func.params.length ? `${param}` : `${param},`;
+  createTest(functionObject) {
+    let paramValue;
+    for (let testCase of functionObject.testCases) {
+      for (let param of functionObject.params) {
+        paramValue = this.generateValueForParamters(param.selectedType);
+        testCase.paramsValue.push(paramValue);
       }
-      data.paramsAsString += ')';
-      this.testCall(param, func, data, testCases);
     }
-    this.event.publish('onTestReady', testCases);
+    this.executeTest(functionObject);
+    this.event.publish('onTestReady', functionObject);
   }
 
-  testCall(param, func, data, testCases) {
-    let testingCode;
-    if (param.length) {
-      let arrayName = this.fakeString();
-      testingCode = `var ${arrayName} = [ ${param} ]; ${func.name} (${arrayName})`;
-    } else {
-      testingCode = ` ${func.name} ${data.paramsAsString};`;
+  executeTest(functionObject) {
+    for (let testCase of functionObject.testCases) {
+      for (let paramsValue of testCase.paramsValue) {
+        if (Array.isArray(paramsValue)) {
+          const arrayName = this.fakeString();
+          testCase.testCaseCode += `var ${arrayName} = [ ${paramsValue.toString()} ];`;
+          testCase.paramsName.push(`${arrayName}`);
+        } else {
+          testCase.paramsName.push(`${paramsValue}`);
+        }
+      }
+      testCase.testCaseCode +=  `${functionObject.name}(${testCase.paramsName.toString()})`;
+      testCase.expectedResult = this.execute(`${functionObject.code} ${testCase.testCaseCode}`);
     }
-    data.testingCode = testingCode;
-    data.result = data.expectedResult = this.execute(`${func.code} ${testingCode}`);
-    testingCode = '';
-    testCases.push(data);
-    testCases.name = func.name;
   }
 
-  paramters(type) {
+  generateValueForParamters(type) {
     let param;
     switch (type) {
     case 'Number': {
-      param = this.fakeNumber();
-      break;
-    }
+        param = this.fakeNumber();
+        break;
+      }
     case 'String': {
-      param = `"${this.fakeString()}"`;
-      break;
-    }
+        param = `"${this.fakeString()}"`;
+        break;
+      }
     case 'Boolean': {
-      param = this.fakeBoolean();
-      break;
-    }
+        param = this.fakeBoolean();
+        break;
+      }
     default:
       param = this.fakeArray(type, 5);
     }
@@ -93,24 +79,25 @@ export class Test {
     return eval(code);
   }
 
-  testCasesSave(testCases) {
-    let functionInfo = this.functionsInfoMap.get(testCases.name);
-    functionInfo.testCases = testCases; // it adds it to the functionsInfoMap as well since it is a pointer mutable data structure.
-  }
-
-  ensureTest(functionsInfoMap) {
-    for (let [key, value] of functionsInfoMap) {
-      for (let item of value.testCases) {
-        item.result = this.execute(`${value.code} ${item.testingCode}`);
-        if (value.params[0].selectedType === 'Array of Numbers' && Array.isArray(item.result)) {
-          item.pass = item.expectedResult.join('') === item.result.join('');
-        } else {
-          item.pass = item.expectedResult === item.result;
-        }
+  ensureTest(mainMap) {
+    for (let [_, functionObject] of mainMap) {
+      if (functionObject.track) {
+        this.executeEnsureTest(functionObject);
       }
     }
+    this.mainMap = mainMap;
+    this.event.publish('onTestEnsureEnds', mainMap);
+  }
 
-    this.event.publish('onTestEnsureEnds', functionsInfoMap);
+  executeEnsureTest(functionObject) {
+    for (let testCase of functionObject.testCases) {
+      testCase.result = this.execute(`${functionObject.code} ${testCase.testCaseCode}`);
+      if (Array.isArray(testCase.result)) {
+        testCase.pass = testCase.expectedResult.join('') === testCase.result.join('');
+      } else {
+        testCase.pass = testCase.expectedResult === testCase.result;
+      }
+    }
   }
 
   fakeNumber() {
@@ -133,17 +120,17 @@ export class Test {
     for (let i = 0; i < index; i++) {
       switch (type) {
       case 'Array of Numbers': {
-        fakeArray.push(this.fakeNumber());
-        break;
-      }
+          fakeArray.push(this.fakeNumber());
+          break;
+        }
       case 'Array of Strings': {
-        fakeArray.push(`"${this.fakeString()}"`);
-        break;
-      }
+          fakeArray.push(`"${this.fakeString()}"`);
+          break;
+        }
       case 'Array of Booleans': {
-        fakeArray.push(this.fakeBoolean());
-        break;
-      }
+          fakeArray.push(this.fakeBoolean());
+          break;
+        }
       default:
         break;
       }
@@ -152,8 +139,8 @@ export class Test {
   }
 
   subscribe() {
-    this.event.subscribe('onTraverseEnds', payload => { this.onTraverseEnds(payload); });
-    this.event.subscribe('onDialogRequest', payload => { this.onDialogRequest(payload); });
-    this.event.subscribe('onTestRequest', payload => { this.onTestRequest(payload); });
+    this.event.subscribe('onTraverseEnds', mainMap => { this.ensureTest(mainMap); });
+    this.event.subscribe('onDialogRequest', functionName => { this.onDialogRequest(functionName); });
+    this.event.subscribe('onTestCreateRequest', functionObject => { this.createTest(functionObject); });
   }
 }

@@ -1,50 +1,60 @@
 import { inject } from 'aurelia-framework';
 import estraverse from 'estraverse';
 import { EventAggregator } from 'aurelia-event-aggregator';
+import { Schema } from '../resources/schema';
 
-@inject(EventAggregator)
+@inject(EventAggregator, Schema)
 
 export class Traverse {
 
-  constructor(eventAggregator) {
+  constructor(eventAggregator, schema) {
     this.event = eventAggregator;
     this.est = estraverse;
-    this.functionsInfoMap = new Map();
+    this.schema = schema;
+    this.mainMap = this.schema.getMainMap();
+    this.NumberOfTestCases = 10;
   }
 
   astReady(payload) {
     const code = payload.code;
     const tree = payload.tree;
-    this.functionsInfoMap = this.traverse(tree, code, this.functionsInfoMap);
-    this.publish('onTraverseEnds', this.functionsInfoMap);
+    this.mainMap = this.traverse(tree, code, this);
+    this.publish('onTraverseEnds', this.mainMap);
   }
-  traverse(tree, code, existingFunctionsInfoMap) {
-    let newFunctionsInfoMap = new Map();
-    let funcInfo;
-    let testCases;
+  traverse(tree, code, _) {
+    const localMap = _.schema.getMainMap();
     this.est.traverse(tree, {
-      enter: function(node, parent) {
+      enter: (node, parent) => {
         if (node.type === 'FunctionDeclaration') {
-          funcInfo = existingFunctionsInfoMap.get(node.id.name);
-          testCases = [];
-          if (funcInfo) {
-            if (funcInfo.testCases.length) {
-              testCases = funcInfo.testCases;
-              node.params = funcInfo.params;
-            }
+          let newSign = _.schema.getSignObject();
+          let localFunctionObject = _.mainMap.get(node.id.name) ||  _.schema.getFunctionObject();
+          localFunctionObject.code = code;
+          localFunctionObject.location = node.loc.start.line - 1;
+          localFunctionObject.sign = newSign;
+
+          if (!localFunctionObject.track) {
+            localFunctionObject.testCases = _.testCasesFactory(_.NumberOfTestCases);
+            localFunctionObject.params =  _.paramFactory(node.params);
+            localFunctionObject.name = node.id.name;
           }
-          newFunctionsInfoMap.set(node.id.name,
-            {
-              code,
-              name: node.id.name,
-              location: node.loc.start.line - 1,
-              params: node.params,
-              testCases
-            });
+          localMap.set(node.id.name, localFunctionObject);
         }
       }
     });
-    return newFunctionsInfoMap;
+    return localMap;
+  }
+
+  paramFactory(newParams) {
+    return  newParams.map( param => {
+      return this.schema.getParamObject(param.name, param.selectedType);
+    });
+  }
+  testCasesFactory(number) {
+    const localTestCases = [];
+    for (let i = 0; i < number; i++) {
+      localTestCases.push(this.schema.getTestCaseObject(i));
+    }
+    return localTestCases;
   }
   subscribe() {
     this.event.subscribe('astReady', (payload) => { this.astReady(payload); });

@@ -44,17 +44,10 @@ export class Editor {
         }
             return small; 
         }  
-    function oddOreven(numberA){
-            if(numberA%2 ===0){
-                return "even";
-            }
-            else{
-                return "odd";
-            }
-        }  `);
+   `);
     this.flag = true;
     this.subscribe();
-    setTimeout(_ => {this.publishCode();}, 1000);
+    setTimeout(_ => {this.publishCode();}, 2000);
   }
 
   publishCode() {
@@ -70,11 +63,11 @@ export class Editor {
       setTimeout(_ => {this.publishCode();}, 1000);
     }
   }
-  onError() {
+  checkError() {
     this.hasNoError = true;
     const annot = this.session.getAnnotations();
     for (let elem of annot) {
-      if (elem.type !== 'warning') {
+      if (elem.type === 'error') {
         this.hasNoError = false;
         break;
       }
@@ -101,9 +94,10 @@ export class Editor {
     }
   }
   subscribe() {
-    this.session.on('changeAnnotation', _ => { this.onError(); });
+    this.session.on('changeAnnotation', _ => { this.checkError(); });
     this.event.subscribe('onSetBreakpointRequest', signs => { this.onSetBreakpointRequest(signs); });
     this.event.subscribe('setAnnotations', annot => {this.session.setAnnotations(annot);});
+    this.event.subscribe('onRefershRequest', _ => {this.publishCode();});
     this.editor.session.on('change', _ => {this.onEditorChange();});
     this.editor.on('gutterclick', click => {this.onGutterclick(click);});
   }

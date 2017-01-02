@@ -7,25 +7,25 @@ export class InfoSign {
     this.event = eventAggregator;
     this.infoSign;
   }
-  attachTestSign(localFunctionsInfoMap) {
+  attachTestSign(mainMap) {
     let annotstions = [];
     let newAnno = {};
-    for (let [key, value] of localFunctionsInfoMap) {
-      if (value.sign.testCasesCount) {
+    for (let [functionName, functionObject] of mainMap) {
+      if (functionObject.sign.testCasesCount) {
         let message;
-        message = value.sign.errorCount ? `${value.sign.errorCount} out of ${value.sign.testCasesCount} test cases Fail` :
-                    `All the ${value.sign.testCasesCount} test cases Pass`;
+        message = functionObject.sign.errorCount ? `${functionObject.sign.errorCount} out of ${functionObject.sign.testCasesCount} test cases Fail` :
+                    `All the ${functionObject.sign.testCasesCount} test cases Pass`;
         newAnno = {
-          row: value.location,
+          row: functionObject.location,
           column: 1,
           text: message,
           type: 'info' // also warning and information
         };
-      }            else {
+      } else {
         let message;
-        message = `Function ${key} has not been exercised yet`;
+        message = `Function ${functionName} has not been exercised yet`;
         newAnno = {
-          row: value.location,
+          row: functionObject.location,
           column: 1,
           text: message,
           type: 'warning' // also warning and information
@@ -35,41 +35,31 @@ export class InfoSign {
     }
     this.publish('setAnnotations', annotstions);
   }
-  onTestEnsureEnds(functionsInfoMap) {
-    this.createTestStatus(functionsInfoMap);
-    this.attachTestSign(functionsInfoMap);
-    this.publish('setBreakpointRequest', functionsInfoMap);
+  onTestEnsureEnds(mainMap) {
+    this.createTestStatus(mainMap);
+    this.attachTestSign(mainMap);
+    this.publish('setBreakpointRequest', mainMap);
   }
   subscribe() {
-    this.event.subscribe('onTestEnsureEnds', payload=>{this.onTestEnsureEnds(payload);});
+    this.event.subscribe('onTestEnsureEnds', mainMap=>{this.onTestEnsureEnds(mainMap);});
   }
-  createTestStatus(functionsInfoMap) {
-    let errorCount = 0;
-    let testCasesCount = 0;
-    let sign = {};
-    let cssClass = 'noError';
-    for (let [key, value] of functionsInfoMap) {
-      for (let result of value.testCases) {
-        testCasesCount++;
-        if (!result.pass) {
-          cssClass = 'error';
-          errorCount++;
-        }
+  createTestStatus(mainMap) {
+    for (let [_, functionObject] of mainMap) {
+      if (functionObject.track) {
+        this.createTestIndicator(functionObject);
       }
-      sign = {
-        errorCount: errorCount,
-        testCasesCount: testCasesCount,
-        cssClass
-      };
-      errorCount = 0;
-      testCasesCount = 0;
-      cssClass = 'noError';
-      value.sign = sign;
-      sign = {};
     }
-    return functionsInfoMap;
   }
 
+  createTestIndicator(functionObject) {
+    for (let testcase of functionObject.testCases) {
+      functionObject.sign.testCasesCount++;
+      if (!testcase.pass) {
+        functionObject.sign.cssClass = 'error';
+        functionObject.sign.errorCount++;
+      }
+    }
+  }
 
   publish(event, payload) {
     switch (event) {

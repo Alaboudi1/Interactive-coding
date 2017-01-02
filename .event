@@ -32,9 +32,9 @@ life-coding
            }
      onTraverseEnds{
        publish:Traverse,
-       subscribers:[test,infoSign],
+       subscribers:[test],
        payload:{
-                traverse: main data structure in the application conatin Functioninfo and FunctionDeclaration 
+                traverse: main data structure. Please see schema.js for more details on this.
                }
 
      }      

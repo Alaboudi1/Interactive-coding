@@ -9,24 +9,24 @@ export class Dialog {
   constructor(event, controller) {
     this.event = event;
     this.controller = controller;
-    this.functionInfo;
+    this.functionObject;
     this.page = 1;
     this.subscribe();
   }
   submit() {
-    this.event.publish('onTestRequest', this.functionInfo);
+    this.event.publish('onTestCreateRequest', this.functionObject);
   }
-  activate(functionInfo) {
-    if (functionInfo.testCases.length) {
+  activate(functionObject) {
+    if (functionObject.track) {
       this.page = 3;
     }
-    this.functionInfo = functionInfo;
-    this.testCases = functionInfo.testCases;
+    this.functionObject = functionObject;
+    this.testCases = functionObject.testCases;
   }
 
   subscribe() {
-    this.event.subscribe('onTestReady', payload => {
-      this.testCases = payload;
+    this.event.subscribe('onTestReady', functionObject => {
+      this.functionObject = functionObject;
       this.page = 2;
     });
   }
@@ -39,7 +39,9 @@ export class Dialog {
   warning(index) {
     this.testCases[index].status = 'warning';
   }
-  save() {
-
+  reset() {
+    this.functionObject.track = false;
+    this.event.publish('onRefershRequest');
+    this.controller.cancel();
   }
 }

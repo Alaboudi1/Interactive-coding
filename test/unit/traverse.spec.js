@@ -5,9 +5,9 @@ import {code, tree} from '../../test/unit/mockModule';
 describe('the behavior of traverse module', ()=>{
   const event = new EventAggregator();
   const traverse = new Traverse(event);
+  traverse.subscribe();
 
   it('should traverse the input code and publish a map object with code,name,params,location and testCases properties', done=>{
-    traverse.subscribe();
     event.subscribe('onTraverseEnds', map=>{
       expect(map.get('helloWorld').code).toBe(code);
       expect(map.get('helloWorld').name).toBe(tree.body[0].id.name);
@@ -19,7 +19,6 @@ describe('the behavior of traverse module', ()=>{
   });
 
   it('should keep the test cases added by the user', done =>{
-    traverse.subscribe();
     let firstTime = true;
     event.subscribe('onTraverseEnds', map=>{
       if (firstTime) {
