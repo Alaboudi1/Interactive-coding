@@ -1,17 +1,14 @@
 import { inject } from 'aurelia-framework';
 import estraverse from 'estraverse';
 import { EventAggregator } from 'aurelia-event-aggregator';
-import { Schema } from '../resources/schema';
 
-@inject(EventAggregator, Schema)
+@inject(EventAggregator)
 
 export class Traverse {
 
-  constructor(eventAggregator, schema) {
+  constructor(eventAggregator) {
     this.event = eventAggregator;
     this.est = estraverse;
-    this.schema = schema;
-    this.mainMap = this.schema.getMainMap();
     this.NumberOfTestCases = 10;
   }
 
@@ -56,8 +53,10 @@ export class Traverse {
     }
     return localTestCases;
   }
-  subscribe() {
-    this.event.subscribe('astReady', (payload) => { this.astReady(payload); });
+  subscribe(schema) {
+    this.schema = schema;
+    this.mainMap = this.schema.getMainMap();
+    this.event.subscribe('astReady', (payload) => {this.astReady(payload); });
   }
   publish(event, payload) {
     switch (event) {

@@ -11,7 +11,7 @@ export class InfoSign {
     let annotstions = [];
     let newAnno = {};
     for (let [functionName, functionObject] of mainMap) {
-      if (functionObject.sign.testCasesCount) {
+      if (functionObject.track) {
         let message;
         message = functionObject.sign.errorCount ? `${functionObject.sign.errorCount} out of ${functionObject.sign.testCasesCount} test cases Fail` :
                     `All the ${functionObject.sign.testCasesCount} test cases Pass`;
@@ -40,9 +40,7 @@ export class InfoSign {
     this.attachTestSign(mainMap);
     this.publish('setBreakpointRequest', mainMap);
   }
-  subscribe() {
-    this.event.subscribe('onTestEnsureEnds', mainMap=>{this.onTestEnsureEnds(mainMap);});
-  }
+
   createTestStatus(mainMap) {
     for (let [_, functionObject] of mainMap) {
       if (functionObject.track) {
@@ -61,6 +59,9 @@ export class InfoSign {
     }
   }
 
+  subscribe() {
+    this.event.subscribe('onTestEnsureEnds', mainMap=>{this.onTestEnsureEnds(mainMap);});
+  }
   publish(event, payload) {
     switch (event) {
     case 'setAnnotations':

@@ -26,7 +26,7 @@ export class Test {
       });
   }
 
-  createTest(functionObject) {
+  createParamsValue(functionObject) {
     let paramValue;
     for (let testCase of functionObject.testCases) {
       for (let param of functionObject.params) {
@@ -34,11 +34,11 @@ export class Test {
         testCase.paramsValue.push(paramValue);
       }
     }
-    this.executeTest(functionObject);
-    this.event.publish('onTestReady', functionObject);
+    this.createTestCases(functionObject);
+    this.publish('onTestReady', functionObject);
   }
 
-  executeTest(functionObject) {
+  createTestCases(functionObject) {
     for (let testCase of functionObject.testCases) {
       for (let paramsValue of testCase.paramsValue) {
         if (Array.isArray(paramsValue)) {
@@ -49,7 +49,7 @@ export class Test {
           testCase.paramsName.push(`${paramsValue}`);
         }
       }
-      testCase.testCaseCode +=  `${functionObject.name}(${testCase.paramsName.toString()})`;
+      testCase.testCaseCode += `${functionObject.name}(${testCase.paramsName.toString()})`;
       testCase.expectedResult = this.execute(`${functionObject.code} ${testCase.testCaseCode}`);
     }
   }
@@ -58,17 +58,17 @@ export class Test {
     let param;
     switch (type) {
     case 'Number': {
-        param = this.fakeNumber();
-        break;
-      }
+      param = this.fakeNumber();
+      break;
+    }
     case 'String': {
-        param = `"${this.fakeString()}"`;
-        break;
-      }
+      param = `"${this.fakeString()}"`;
+      break;
+    }
     case 'Boolean': {
-        param = this.fakeBoolean();
-        break;
-      }
+      param = this.fakeBoolean();
+      break;
+    }
     default:
       param = this.fakeArray(type, 5);
     }
@@ -86,16 +86,16 @@ export class Test {
       }
     }
     this.mainMap = mainMap;
-    this.event.publish('onTestEnsureEnds', mainMap);
+    this.publish('onTestEnsureEnds', mainMap);
   }
 
   executeEnsureTest(functionObject) {
     for (let testCase of functionObject.testCases) {
-      testCase.result = this.execute(`${functionObject.code} ${testCase.testCaseCode}`);
+      testCase.actualResult = this.execute(`${functionObject.code} ${testCase.testCaseCode}`);
       if (Array.isArray(testCase.result)) {
-        testCase.pass = testCase.expectedResult.join('') === testCase.result.join('');
+        testCase.pass = testCase.expectedResult.join('') === testCase.actualResult.join('');
       } else {
-        testCase.pass = testCase.expectedResult === testCase.result;
+        testCase.pass = testCase.expectedResult === testCase.actualResult;
       }
     }
   }
@@ -120,17 +120,17 @@ export class Test {
     for (let i = 0; i < index; i++) {
       switch (type) {
       case 'Array of Numbers': {
-          fakeArray.push(this.fakeNumber());
-          break;
-        }
+        fakeArray.push(this.fakeNumber());
+        break;
+      }
       case 'Array of Strings': {
-          fakeArray.push(`"${this.fakeString()}"`);
-          break;
-        }
+        fakeArray.push(`"${this.fakeString()}"`);
+        break;
+      }
       case 'Array of Booleans': {
-          fakeArray.push(this.fakeBoolean());
-          break;
-        }
+        fakeArray.push(this.fakeBoolean());
+        break;
+      }
       default:
         break;
       }
@@ -141,6 +141,19 @@ export class Test {
   subscribe() {
     this.event.subscribe('onTraverseEnds', mainMap => { this.ensureTest(mainMap); });
     this.event.subscribe('onDialogRequest', functionName => { this.onDialogRequest(functionName); });
-    this.event.subscribe('onTestCreateRequest', functionObject => { this.createTest(functionObject); });
+    this.event.subscribe('onTestCreateRequest', functionObject => { this.createParamsValue(functionObject); });
+  }
+
+  publish(event, payload) {
+    switch (event) {
+    case 'onTestEnsureEnds':
+      this.event.publish('onTestEnsureEnds', payload);
+      break;
+    case 'onTestReady':
+      this.event.publish('onTestReady', payload);
+      break;
+    default:
+      break;
+    }
   }
 }

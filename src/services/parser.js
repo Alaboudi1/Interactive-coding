@@ -5,12 +5,11 @@ import {EventAggregator} from 'aurelia-event-aggregator';
 @inject(EventAggregator, esprima)
 export class Parser {
 
-  constructor(eventAggregator, esp) {
+  constructor(eventAggregator) {
     this.event = eventAggregator;
-    this.esprima = esp;
   }
   parseThe(code) {
-    let tree = this.esprima.parse(code, { range: true, loc: true });
+    let tree = esprima.parse(code, { range: true, loc: true });
     this.publish('astReady', {tree, code});
   }
   subscribe() {

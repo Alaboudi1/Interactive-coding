@@ -2,7 +2,7 @@
 
 export class Schema {
 
-
+  constructor() {}
   getMainMap() {
     return new Map();
   }

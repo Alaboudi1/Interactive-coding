@@ -1,13 +1,40 @@
 
-  const code = 'function helloWorld(message){return message;};}';
-  const tree = {
+const code = 'function helloWorld(message){return message;}';
+const tree =
+  {
+    'range': [
+      0,
+      45
+    ],
+    'loc': {
+      'start': {
+        'line': 1,
+        'column': 0
+      },
+      'end': {
+        'line': 1,
+        'column': 45
+      }
+    },
     'type': 'Program',
     'body': [
       {
+        'range': [
+          0,
+          45
+        ],
+        'loc': {
+          'start': {
+            'line': 1,
+            'column': 0
+          },
+          'end': {
+            'line': 1,
+            'column': 45
+          }
+        },
         'type': 'FunctionDeclaration',
         'id': {
-          'type': 'Identifier',
-          'name': 'helloWorld',
           'range': [
             9,
             19
@@ -21,12 +48,12 @@
               'line': 1,
               'column': 19
             }
-          }
+          },
+          'type': 'Identifier',
+          'name': 'helloWorld'
         },
         'params': [
           {
-            'type': 'Identifier',
-            'name': 'message',
             'range': [
               20,
               27
@@ -40,51 +67,18 @@
                 'line': 1,
                 'column': 27
               }
-            }
+            },
+            'type': 'Identifier',
+            'name': 'message'
           }
         ],
+        'defaults': [
+
+        ],
         'body': {
-          'type': 'BlockStatement',
-          'body': [
-            {
-              'type': 'ReturnStatement',
-              'argument': {
-                'type': 'Identifier',
-                'name': 'message',
-                'range': [
-                  47,
-                  54
-                ],
-                'loc': {
-                  'start': {
-                    'line': 2,
-                    'column': 16
-                  },
-                  'end': {
-                    'line': 2,
-                    'column': 23
-                  }
-                }
-              },
-              'range': [
-                40,
-                55
-              ],
-              'loc': {
-                'start': {
-                  'line': 2,
-                  'column': 9
-                },
-                'end': {
-                  'line': 2,
-                  'column': 24
-                }
-              }
-            }
-          ],
           'range': [
             28,
-            65
+            45
           ],
           'loc': {
             'start': {
@@ -92,45 +86,53 @@
               'column': 28
             },
             'end': {
-              'line': 3,
-              'column': 8
+              'line': 1,
+              'column': 45
             }
-          }
+          },
+          'type': 'BlockStatement',
+          'body': [
+            {
+              'range': [
+                29,
+                44
+              ],
+              'loc': {
+                'start': {
+                  'line': 1,
+                  'column': 29
+                },
+                'end': {
+                  'line': 1,
+                  'column': 44
+                }
+              },
+              'type': 'ReturnStatement',
+              'argument': {
+                'range': [
+                  36,
+                  43
+                ],
+                'loc': {
+                  'start': {
+                    'line': 1,
+                    'column': 36
+                  },
+                  'end': {
+                    'line': 1,
+                    'column': 43
+                  }
+                },
+                'type': 'Identifier',
+                'name': 'message'
+              }
+            }
+          ]
         },
         'generator': false,
-        'expression': false,
-        'range': [
-          0,
-          65
-        ],
-        'loc': {
-          'start': {
-            'line': 1,
-            'column': 0
-          },
-          'end': {
-            'line': 3,
-            'column': 8
-          }
-        }
+        'expression': false
       }
     ],
-    'sourceType': 'script',
-    'range': [
-      0,
-      65
-    ],
-    'loc': {
-      'start': {
-        'line': 1,
-        'column': 0
-      },
-      'end': {
-        'line': 3,
-        'column': 8
-      }
-    }
+    'sourceType': 'script'
   };
-
-
-  export {code, tree};
+export { code, tree };
