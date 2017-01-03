@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - '6.0.0'
+before_install:
+  - npm install -g jspm
+  - npm install -g gulp
+before_script:
+  - jspm -v
+  - jspm install
+  - npm install
+script: 
+  - npm run test
+
