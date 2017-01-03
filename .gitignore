@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Logs
 logs
 *.log
@@ -35,3 +36,15 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+=======
+node_modules
+jspm_packages
+bower_components
+.idea
+.DS_STORE
+/dist
+build/reports
+coverage
+test/e2e/dist
+/export
+>>>>>>> e4461c8a3082109463e915e2794a11976cec7d50

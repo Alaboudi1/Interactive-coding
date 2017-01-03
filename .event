@@ -1,0 +1,43 @@
+
+life-coding
+{
+  OnEditorChanged{
+    publish: editor,
+    subscribe: [Parser],
+    payload: {
+              code: editor.value,
+             }
+  }
+
+  onDialogRequest{
+    publish: editor,
+    subscribers:[]
+    payload:{
+             gutterRow: getDocumentPosition().row + 1
+            }
+  }
+   onError{
+     publish: editor,
+     subscribers:[editor],
+     payload:{
+               NoError: boolean
+             }
+           }  
+    astReady{
+      publish:Parser,
+      subscribers:[Traverse],
+      payload:{
+               tree: astTree
+              }
+           }
+     onTraverseEnds{
+       publish:Traverse,
+       subscribers:[test],
+       payload:{
+                traverse: main data structure. Please see schema.js for more details on this.
+               }
+
+     }      
+
+            
+}

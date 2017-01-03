@@ -1,0 +1,32 @@
+<template>
+  <ai-dialog>
+    <ai-dialog-body>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-12">
+            <h2>Choose your function's pramaters type</h2>
+          </div>
+        </div>
+        <div class="row" repeat.for="param of functionObject.params">
+          <div class="col-sm-2">
+            <h4>${param.name}</h4>
+            <select class="selectpicker" value.bind="param.selectedType">
+          <option selected='true' disabled='true'></option>
+          <option>Number</option>
+          <option>String</option>
+          <option>Boolean</option>
+          <option>Array of Numbers</option>
+          <option>Array of Strings</option>
+          <option>Array of Booleans</option>
+      </select>
+          </div>
+        </div>
+      </div>
+    </ai-dialog-body>
+    <ai-dialog-footer>
+      <button click.trigger="controller.cancel()" class="btn btn-danger">Cancel</button>
+      <!--<button click.trigger="controller.ok(person)">Ok</button>-->
+      <button click.trigger="submit()" class="btn btn-success" disabled.bind='type.length'>Test</button>
+    </ai-dialog-footer>
+  </ai-dialog>
+</template>

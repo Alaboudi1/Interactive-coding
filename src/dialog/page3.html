@@ -1,0 +1,32 @@
+<template>
+  <ai-dialog>
+    <ai-dalog-body>
+      <div class="container-fluid">
+        <h2>Basic Table</h2>
+        <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th repeat.for="param of functionObject.params">${param.name}</th>
+              <th>output</th>
+              <th>expected</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr repeat.for="test of testCases" class="${test.pass ? 'success': 'danger'}">
+              <td repeat.for="param of test.paramsValue">${param}</td>
+              <td>${test.actualResult}</td>
+              <td>${test.expectedResult}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ai-dalog-body>
+    <ai-dialog-footer>
+      <ai-dialog-footer>
+        <button class="btn btn-danger" click.delegate="reset()">Reset</button>
+        <button class="btn btn-success" click.trigger="controller.cancel()">Ok</button>
+      </ai-dialog-footer>
+    </ai-dialog-footer>
+  </ai-dialog>
+</template>
