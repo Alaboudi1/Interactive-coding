@@ -1,9 +1,7 @@
 // Karma configuration
 // Generated on Fri Dec 05 2014 16:49:29 GMT-0500 (EST)
 
-
-
-let configuration = config => {
+module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -41,7 +39,7 @@ let configuration = config => {
     'babelPreprocessor': {
       options: {
         sourceMap: 'inline',
-        presets: ['es2015-loose', 'stage-1'],
+        presets: [ 'es2015-loose', 'stage-1'],
         plugins: [
           'syntax-flow',
           'transform-decorators-legacy',
@@ -70,20 +68,10 @@ let configuration = config => {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['Firefox'],
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false,
-    customLaunchers: {
-      Chrome_travis_ci: {
-        base: 'Chrome',
-        flags: ['--no-sandbox']
-      }
-    }
+    singleRun: false
   });
 };
-if (process.env.TRAVIS) {
-  configuration.browsers = ['Chrome_travis_ci'];
-}
-module.exports = configuration;
