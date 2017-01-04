@@ -1,8 +1,8 @@
+addons:
+  firefox: 'latest-beta'
 language: node_js
 node_js:
   - 'v7.2.1'
-addons:
-  firefox: "51.0"
 before_install:
   - npm install -g jspm
   - npm install -g gulp
