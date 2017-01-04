@@ -76,7 +76,7 @@ describe('the behavior of test module regarding executing test cases ', () => {
       done();
     });
     event.publish('onTraverseEnds', mainMap);
-  });
+  }, 5000);
 
   it('should execute the test and faills it if the expectedResult != actualResult', done => {
     let localObj = mainMap.get('helloWorld');
@@ -88,7 +88,7 @@ describe('the behavior of test module regarding executing test cases ', () => {
     });
     event.publish('onTraverseEnds', mainMap);
   });
-});
+}, 5000);
 
 describe('the behavior of test module regarding creating test cases', () => {
   let  event;
@@ -119,7 +119,7 @@ describe('the behavior of test module regarding creating test cases', () => {
       done();
     });
     event.publish('onTestCreateRequest', functionObject);
-  });
+  }, 5000);
 
   it(`should populate testCaseCode, paramsName, expectedResult, paramsValue properties when the selectedType is 
       Array of Numbers`, done =>{
@@ -132,7 +132,7 @@ describe('the behavior of test module regarding creating test cases', () => {
       done();
     });
     event.publish('onTestCreateRequest', functionObject);
-  });
+  }, 5000);
 
   it(`should populate testCaseCode, paramsName, expectedResult, paramsValue properties when the selectedType is 
       Array of Boolean`, done =>{
@@ -145,7 +145,7 @@ describe('the behavior of test module regarding creating test cases', () => {
       done();
     });
     event.publish('onTestCreateRequest', functionObject);
-  });
+  }, 5000);
 
   it(`should populate testCaseCode, paramsName, expectedResult, paramsValue properties when the selectedType is 
       String`, done =>{
@@ -158,7 +158,7 @@ describe('the behavior of test module regarding creating test cases', () => {
       done();
     });
     event.publish('onTestCreateRequest', functionObject);
-  });
+  }, 5000);
 
 
   it(`should populate testCaseCode, paramsName, expectedResult, paramsValue properties when the selectedType is 
@@ -172,7 +172,7 @@ describe('the behavior of test module regarding creating test cases', () => {
       done();
     });
     event.publish('onTestCreateRequest', functionObject);
-  });
+  }, 5000);
 
   it(`should populate testCaseCode, paramsName, expectedResult, paramsValue properties when the selectedType is 
       Boolean`, done =>{
@@ -185,6 +185,6 @@ describe('the behavior of test module regarding creating test cases', () => {
       done();
     });
     event.publish('onTestCreateRequest', functionObject);
-  });
+  }, 5000);
 });
 
