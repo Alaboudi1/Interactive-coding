@@ -73,8 +73,7 @@ describe('the behavior of test module regarding executing test cases ', () => {
       localObj.testCases[0].expectedResult = 'this is a test';
       event.subscribe('onTestEnsureEnds', map => {
         expect(map.get('helloWorld').testCases[0].pass).toBe(true);
-                      done();
-
+        done();
       });
       event.publish('onTraverseEnds', mainMap);
 
@@ -88,7 +87,7 @@ describe('the behavior of test module regarding executing test cases ', () => {
       //   expect(map.get('helloWorld').testCases[0].pass).toBe(false);
       // }); 
       event.publish('onTraverseEnds', mainMap);
-              done();
+      done();
 
     }, 1000);
   }, );
@@ -112,81 +111,81 @@ describe('the behavior of test module regarding executing test cases ', () => {
 
     it(`should populate testCaseCode, paramsName, expectedResult, paramsValue properties when the selectedType is 
       Array of String`, done => {
-      functionObject.params[0].selectedType = 'Array of Strings';
-      functionObject.params[0].name = 'message';
-      event.subscribe('onTestReady', localObj => {
-        expect(localObj.testCases[0].paramsName.length).toBe(1);
-        expect(localObj.testCases[0].testCaseCode).toContain(localObj.name);
-        expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0].map(x => x.slice(1, -1)));
-        done();
-      });
-      event.publish('onTestCreateRequest', functionObject);
-    }, 1000);
+        functionObject.params[0].selectedType = 'Array of Strings';
+        functionObject.params[0].name = 'message';
+        event.subscribe('onTestReady', localObj => {
+          expect(localObj.testCases[0].paramsName.length).toBe(1);
+          expect(localObj.testCases[0].testCaseCode).toContain(localObj.name);
+          expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0].map(x => x.slice(1, -1)));
+          done();
+        });
+        event.publish('onTestCreateRequest', functionObject);
+      }, 1000);
 
     it(`should populate testCaseCode, paramsName, expectedResult, paramsValue properties when the selectedType is 
       Array of Numbers`, done => {
-      functionObject.params[0].selectedType = 'Array of Numbers';
-      functionObject.params[0].name = 'message';
-      event.subscribe('onTestReady', localObj => {
-        expect(localObj.testCases[0].paramsName.length).toBe(1);
-        expect(localObj.testCases[0].testCaseCode).toContain(localObj.name);
-        expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0]);
-        done();
-      });
-      event.publish('onTestCreateRequest', functionObject);
-    }, 1000);
+        functionObject.params[0].selectedType = 'Array of Numbers';
+        functionObject.params[0].name = 'message';
+        event.subscribe('onTestReady', localObj => {
+          expect(localObj.testCases[0].paramsName.length).toBe(1);
+          expect(localObj.testCases[0].testCaseCode).toContain(localObj.name);
+          expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0]);
+          done();
+        });
+        event.publish('onTestCreateRequest', functionObject);
+      }, 1000);
 
     it(`should populate testCaseCode, paramsName, expectedResult, paramsValue properties when the selectedType is 
       Array of Boolean`, done => {
-      functionObject.params[0].selectedType = 'Array of Boolean';
-      functionObject.params[0].name = 'message';
-      event.subscribe('onTestReady', localObj => {
-        expect(localObj.testCases[0].paramsName.length).toBe(1);
-        expect(localObj.testCases[0].testCaseCode).toContain(localObj.name);
-        expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0]);
-        done();
-      });
-      event.publish('onTestCreateRequest', functionObject);
-    }, 10000);
+        functionObject.params[0].selectedType = 'Array of Boolean';
+        functionObject.params[0].name = 'message';
+        event.subscribe('onTestReady', localObj => {
+          expect(localObj.testCases[0].paramsName.length).toBe(1);
+          expect(localObj.testCases[0].testCaseCode).toContain(localObj.name);
+          expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0]);
+          done();
+        });
+        event.publish('onTestCreateRequest', functionObject);
+      }, 10000);
 
     it(`should populate testCaseCode, paramsName, expectedResult, paramsValue properties when the selectedType is 
       String`, done => {
-      functionObject.params[0].selectedType = 'String';
-      functionObject.params[0].name = 'message';
-      event.subscribe('onTestReady', localObj => {
-        expect(localObj.testCases[0].paramsName.length).toBe(1);
-        expect(localObj.testCases[0].testCaseCode).toContain(localObj.name);
-        expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0].slice(1, -1));
-        done();
-      });
-      event.publish('onTestCreateRequest', functionObject);
-    }, 10000);
+        functionObject.params[0].selectedType = 'String';
+        functionObject.params[0].name = 'message';
+        event.subscribe('onTestReady', localObj => {
+          expect(localObj.testCases[0].paramsName.length).toBe(1);
+          expect(localObj.testCases[0].testCaseCode).toContain(localObj.name);
+          expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0].slice(1, -1));
+          done();
+        });
+        event.publish('onTestCreateRequest', functionObject);
+      }, 10000);
 
 
     it(`should populate testCaseCode, paramsName, expectedResult, paramsValue properties when the selectedType is 
       Number`, done => {
-      functionObject.params[0].selectedType = 'Number';
-      functionObject.params[0].name = 'message';
-      event.subscribe('onTestReady', localObj => {
-        expect(localObj.testCases[0].paramsName.length).toBe(1);
-        expect(localObj.testCases[0].testCaseCode).toContain(localObj.name);
-        expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0]);
-        done();
-      });
-      event.publish('onTestCreateRequest', functionObject);
-    }, 10000);
+        functionObject.params[0].selectedType = 'Number';
+        functionObject.params[0].name = 'message';
+        event.subscribe('onTestReady', localObj => {
+          expect(localObj.testCases[0].paramsName.length).toBe(1);
+          expect(localObj.testCases[0].testCaseCode).toContain(localObj.name);
+          expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0]);
+          done();
+        });
+        event.publish('onTestCreateRequest', functionObject);
+      }, 10000);
 
     it(`should populate testCaseCode, paramsName, expectedResult, paramsValue properties when the selectedType is 
       Boolean`, done => {
-      functionObject.params[0].selectedType = 'Boolean';
-      functionObject.params[0].name = 'message';
-      event.subscribe('onTestReady', localObj => {
-        expect(localObj.testCases[0].paramsName.length).toBe(1);
-        expect(localObj.testCases[0].testCaseCode).toContain(localObj.name);
-        expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0]);
-        done();
-      });
-      event.publish('onTestCreateRequest', functionObject);
-    }, 10000);
+        functionObject.params[0].selectedType = 'Boolean';
+        functionObject.params[0].name = 'message';
+        event.subscribe('onTestReady', localObj => {
+          expect(localObj.testCases[0].paramsName.length).toBe(1);
+          expect(localObj.testCases[0].testCaseCode).toContain(localObj.name);
+          expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0]);
+          done();
+        });
+        event.publish('onTestCreateRequest', functionObject);
+      }, 10000);
   });
 });
