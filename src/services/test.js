@@ -80,16 +80,16 @@ export class Test {
   }
 
   ensureTest(mainMap) {
-    // for (let functionObject of mainMap.values()) {
-    //   if (functionObject.track) {
-    //     this.executeEnsureTest(functionObject);
-    //   }
-    // }
+    for (let functionObject of mainMap.values()) {
+      if (functionObject.track) {
+        // this.executeEnsureTest(functionObject);
+      }
+    }
     // this.mainMap = mainMap;
     mainMap.get('helloWorld').testCases[0].pass = true;
     this.publish('onTestEnsureEnds', mainMap);
   }
-
+ 
   executeEnsureTest(functionObject) {
     for (let testCase of functionObject.testCases) {
       // testCase.actualResult = this.execute(`${functionObject.code} ${testCase.testCaseCode}`);
