@@ -1,46 +1,3 @@
-// import {ChildRouter} from '../../src/child-router';
-
-// class RouterStub {
-//   configure(handler) {
-//     handler(this);
-//   }
-
-//   map(routes) {
-//     this.routes = routes;
-//   }
-// }
-
-// describe('the Child Router module', () => {
-//   var sut;
-//   var mockedRouter;
-
-//   beforeEach(() => {
-//     mockedRouter = new RouterStub();
-//     sut = new ChildRouter();
-//     sut.configureRouter(mockedRouter, mockedRouter);
-//   });
-
-//   it('contains a router property', () => {
-//     expect(sut.router).toBeDefined();
-//   });
-
-//   it('configures the heading', () => {
-//     expect(sut.heading).toEqual('Child Router');
-//   });
-
-//   it('should have a welcome route', () => {
-//     expect(sut.router.routes).toContain({ route: ['', 'welcome'], name: 'welcome',  moduleId: 'welcome', nav: true, title: 'Welcome' });
-//   });
-
-//   it('should have a users route', () => {
-//     expect(sut.router.routes).toContain({ route: 'users', name: 'users', moduleId: 'users', nav: true, title: 'Github Users' });
-//   });
-
-//   it('should have a child router route', () => {
-//     expect(sut.router.routes).toContain({ route: 'child-router', name: 'child-router', moduleId: 'child-router', nav: true, title: 'Child Router' });
-//   });
-// });
-
 import { Test } from '../../src/services/test';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { Schema } from '../../src/resources/schema';
@@ -78,16 +35,16 @@ describe('the behavior of test module regarding executing test cases ', () => {
       event.publish('onTraverseEnds', mainMap);
     }, 1000);
 
-    // it('should execute the test and faills it if the expectedResult != actualResult', done => {
-    //   let localObj = mainMap.get('helloWorld');
-    //   localObj.testCases[0].testCaseCode = 'helloWorld("this is not a test");';
-    //   localObj.testCases[0].expectedResult = 'this is a test';
-    //   event.subscribe('onTestEnsureEnds', map => {
-    //     expect(map.get('helloWorld').testCases[0].pass).toBe(false);
-    //     done();
-    //   });
-    //   event.publish('onTraverseEnds', mainMap);
-    // }, 1000);
+    it('should execute the test and faills it if the expectedResult != actualResult', done => {
+      let localObj = mainMap.get('helloWorld');
+      localObj.testCases[0].testCaseCode = 'helloWorld("this is not a test");';
+      localObj.testCases[0].expectedResult = 'this is a test';
+      event.subscribe('onTestEnsureEnds', map => {
+        expect(map.get('helloWorld').testCases[0].pass).toBe(false);
+        done();
+      });
+      event.publish('onTraverseEnds', mainMap);
+    }, 1000);
   }, );
   describe('regarding creating test cases', () => {
     let event;

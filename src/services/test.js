@@ -82,23 +82,21 @@ export class Test {
   ensureTest(mainMap) {
     for (let functionObject of mainMap.values()) {
       if (functionObject.track) {
-        // this.executeEnsureTest(functionObject);
+        this.executeEnsureTest(functionObject);
       }
     }
-    // this.mainMap = mainMap;
-    mainMap.get('helloWorld').testCases[0].pass = true;
+    this.mainMap = mainMap;
     this.publish('onTestEnsureEnds', mainMap);
   }
- 
+
   executeEnsureTest(functionObject) {
     for (let testCase of functionObject.testCases) {
-      // testCase.actualResult = this.execute(`${functionObject.code} ${testCase.testCaseCode}`);
-      // if (Array.isArray(testCase.result)) {
-      //   testCase.pass = testCase.expectedResult.join('') === testCase.actualResult.join('');
-      // } else {
-      //   testCase.pass = testCase.expectedResult === testCase.actualResult;
-      // }
-      testCase.pass = true;
+      testCase.actualResult = this.execute(`${functionObject.code} ${testCase.testCaseCode}`);
+      if (Array.isArray(testCase.result)) {
+        testCase.pass = testCase.expectedResult.join('') === testCase.actualResult.join('');
+      } else {
+        testCase.pass = testCase.expectedResult === testCase.actualResult;
+      }
     }
   }
 
