@@ -114,7 +114,7 @@ describe('the behavior of test module regarding executing test cases ', () => {
       event.subscribe('onTestReady', localObj => {
         expect(localObj.testCases[0].paramsName.length).toBe(1);
         expect(localObj.testCases[0].testCaseCode).toContain(localObj.name);
-        expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0].map(x => x.slice(1, 1)));
+        expect(localObj.testCases[0].expectedResult).toEqual(localObj.testCases[0].paramsValue[0].map(x => x.slice(1, -1)));
         done();
       });
       event.publish('onTestCreateRequest', functionObject);
