@@ -35,7 +35,7 @@ describe('the behavior of traverse module', ()=>{
         firstTime = false;
         event.publish('astReady', {code, tree});
       }      else {
-        expect(map.get('helloWorld').testCases[0].status).toBe('this is a test');
+        expect(map.get('helloWorld').testCases[0].status).toBe('this is  test');
         done();
       }
     });
