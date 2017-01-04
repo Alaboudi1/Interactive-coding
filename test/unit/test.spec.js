@@ -71,11 +71,12 @@ describe('the behavior of test module regarding executing test cases ', () => {
       let localObj = mainMap.get('helloWorld');
       localObj.testCases[0].testCaseCode = 'helloWorld("this is a test");';
       localObj.testCases[0].expectedResult = 'this is a test';
-      // event.subscribe('onTestEnsureEnds', map => {
-      //   expect(map.get('helloWorld').testCases[0].pass).toBe(true);
-      // });
+      event.subscribe('onTestEnsureEnds', map => {
+        expect(map.get('helloWorld').testCases[0].pass).toBe(true);
+                      done();
+
+      });
       event.publish('onTraverseEnds', mainMap);
-              done();
 
     }, 1000);
 
