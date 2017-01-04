@@ -30,7 +30,7 @@ gulp.task('cover', function(done) {
     reporters: ['coverage'],
     preprocessors: {
       'test/**/*.js': ['babel'],
-      'src/**/*.js': ['babel', 'coverage']
+      'src/services/*.js': ['babel', 'coverage']
     },
     coverageReporter: {
       includeAllSources: true,
@@ -38,7 +38,7 @@ gulp.task('cover', function(done) {
         isparta: require('isparta')
       },
       instrumenter: {
-        'src/**/*.js': 'isparta'
+        'src/services/*.js': 'isparta'
       },
       reporters: [
         { type: 'html', dir: 'coverage' },
