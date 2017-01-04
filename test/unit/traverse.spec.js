@@ -23,7 +23,7 @@ describe('the behavior of traverse module', ()=>{
       done();
     });
     event.publish('astReady', {code, tree});
-  });
+  }, 5000);
 
   it('should keep the test cases added for the tracked function', done =>{
     let firstTime = true;
@@ -40,7 +40,7 @@ describe('the behavior of traverse module', ()=>{
       }
     });
     event.publish('astReady', {code, tree});
-  });
+  }, 5000);
 
   it('should remove the test cases for the untracked function', done =>{
     let firstTime = true;
@@ -56,5 +56,5 @@ describe('the behavior of traverse module', ()=>{
       }
     });
     event.publish('astReady', {code, tree});
-  });
+  }, 5000);
 });

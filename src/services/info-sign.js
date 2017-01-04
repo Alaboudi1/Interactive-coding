@@ -42,7 +42,7 @@ export class InfoSign {
   }
 
   createTestStatus(mainMap) {
-    for (let [_, functionObject] of mainMap) {
+    for (let functionObject of mainMap.values()) {
       if (functionObject.track) {
         this.createTestIndicator(functionObject);
       }

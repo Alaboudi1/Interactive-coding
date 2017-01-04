@@ -1,0 +1,21 @@
+addons:
+  firefox: 'latest-beta'
+language: node_js
+node_js:
+  - 'v7.2.1'
+before_install:
+  - npm install -g jspm
+  - npm install -g gulp
+  - jspm config registries.github.auth 0c4c76221cc881fb63a35698db12700e0b4e4a47
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+before_script:
+  - jspm -v
+  - npm install
+  - jspm install
+script: 
+  - npm run test
+notifications:
+  email:
+    on_success: change
+    on_failure: change

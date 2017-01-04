@@ -20,7 +20,9 @@
   },
   "scripts": {
     "test": "gulp test",
-    "e2e": "gulp serve webdriver-standalone e2e"
+    "e2e": "gulp serve webdriver-standalone e2e",
+    "tdd": "gulp tdd",
+    "test-coverage": "gulp cover"
   },
   "devDependencies": {
     "aurelia-bundler": "^0.4.0",
@@ -57,6 +59,7 @@
     "karma-babel-preprocessor": "^6.0.1",
     "karma-chrome-launcher": "^1.0.1",
     "karma-coverage": "^1.1.1",
+    "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",
     "karma-jspm": "2.2.0",
     "object.assign": "^4.0.4",

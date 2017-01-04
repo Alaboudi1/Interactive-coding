@@ -20,5 +20,5 @@ describe('the parser of traverse module', ()=>{
       done();
     });
     event.publish('onEditorChanged', code);
-  });
+  }, 5000);
 });
