@@ -92,7 +92,7 @@ export class Test {
   executeEnsureTest(functionObject) {
     for (let testCase of functionObject.testCases) {
       testCase.actualResult = this.execute(`${functionObject.code} ${testCase.testCaseCode}`);
-      if (Array.isArray(testCase.result)) {
+      if (Object.prototype.toString.call(testCase.result) === '[object Array]') {
         testCase.pass = testCase.expectedResult.join('') === testCase.actualResult.join('');
       } else {
         testCase.pass = testCase.expectedResult === testCase.actualResult;

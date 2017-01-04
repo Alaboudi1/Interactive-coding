@@ -47,48 +47,48 @@ import { Schema } from '../../src/resources/schema';
 import { code } from '../../test/unit/mockModule';
 
 describe('the behavior of test module regarding executing test cases ', () => {
-  // describe('regarding executing test cases ', () => {
-  //   let event;
-  //   let test;
-  //   let mainMap;
-  //   let schema;
-  //   let functionObject;
+  describe('regarding executing test cases ', () => {
+    let event;
+    let test;
+    let mainMap;
+    let schema;
+    let functionObject;
 
-  //   beforeEach(() => {
-  //     event = new EventAggregator();
-  //     test = new Test(event);
-  //     schema = new Schema();
-  //     mainMap = schema.getMainMap();
-  //     functionObject = schema.getFunctionObject();
-  //     functionObject.code = code;
-  //     functionObject.testCases.push(schema.getTestCaseObject());
-  //     functionObject.track = true;
-  //     mainMap.set('helloWorld', functionObject);
-  //     test.subscribe();
-  //   });
+    beforeEach(() => {
+      event = new EventAggregator();
+      test = new Test(event);
+      schema = new Schema();
+      mainMap = schema.getMainMap();
+      functionObject = schema.getFunctionObject();
+      functionObject.code = code;
+      functionObject.testCases.push(schema.getTestCaseObject());
+      functionObject.track = true;
+      mainMap.set('helloWorld', functionObject);
+      test.subscribe();
+    });
 
-  //   it('should execute the test and passes it if the expectedResult === actualResult', done => {
-  //     let localObj = mainMap.get('helloWorld');
-  //     localObj.testCases[0].testCaseCode = 'helloWorld("this is a test");';
-  //     localObj.testCases[0].expectedResult = 'this is a test';
-  //     event.subscribe('onTestEnsureEnds', map => {
-  //       expect(map.get('helloWorld').testCases[0].pass).toBe(true);
-  //       done();
-  //     });
-  //     event.publish('onTraverseEnds', mainMap);
-  //   }, 1000);
+    it('should execute the test and passes it if the expectedResult === actualResult', done => {
+      let localObj = mainMap.get('helloWorld');
+      localObj.testCases[0].testCaseCode = 'helloWorld("this is a test");';
+      localObj.testCases[0].expectedResult = 'this is a test';
+      event.subscribe('onTestEnsureEnds', map => {
+        expect(map.get('helloWorld').testCases[0].pass).toBe(true);
+        done();
+      });
+      event.publish('onTraverseEnds', mainMap);
+    }, 1000);
 
-  //   it('should execute the test and faills it if the expectedResult != actualResult', done => {
-  //     let localObj = mainMap.get('helloWorld');
-  //     localObj.testCases[0].testCaseCode = 'helloWorld("this is not a test");';
-  //     localObj.testCases[0].expectedResult = 'this is a test';
-  //     event.subscribe('onTestEnsureEnds', map => {
-  //       expect(map.get('helloWorld').testCases[0].pass).toBe(false);
-  //       done();
-  //     });
-  //     event.publish('onTraverseEnds', mainMap);
-  //   });
-  // }, 1000);
+    it('should execute the test and faills it if the expectedResult != actualResult', done => {
+      let localObj = mainMap.get('helloWorld');
+      localObj.testCases[0].testCaseCode = 'helloWorld("this is not a test");';
+      localObj.testCases[0].expectedResult = 'this is a test';
+      event.subscribe('onTestEnsureEnds', map => {
+        expect(map.get('helloWorld').testCases[0].pass).toBe(false);
+        done();
+      });
+      event.publish('onTraverseEnds', mainMap);
+    });
+  }, 1000);
   describe('regarding creating test cases', () => {
     let event;
     let test;
