@@ -1,5 +1,5 @@
-import {inject} from 'aurelia-framework';
-import {EventAggregator} from 'aurelia-event-aggregator';
+import { inject } from 'aurelia-framework';
+import { EventAggregator } from 'aurelia-event-aggregator';
 @inject(EventAggregator)
 export class InfoSign {
 
@@ -10,27 +10,21 @@ export class InfoSign {
   attachTestSign(mainMap) {
     let annotstions = [];
     let newAnno = {};
+    let text;
+    const column = 1;
+    let row;
+    let type;
     for (let [functionName, functionObject] of mainMap) {
+      row = functionObject.location;
       if (functionObject.track) {
-        let message;
-        message = functionObject.sign.errorCount ? `${functionObject.sign.errorCount} out of ${functionObject.sign.testCasesCount} test cases Fail` :
-                    `All the ${functionObject.sign.testCasesCount} test cases Pass`;
-        newAnno = {
-          row: functionObject.location,
-          column: 1,
-          text: message,
-          type: 'info' // also warning and information
-        };
+        text = functionObject.sign.errorCount ? `${functionObject.sign.errorCount} out of ${functionObject.sign.testCasesCount} test cases Fail` :
+          `All the ${functionObject.sign.testCasesCount} test cases Pass`;
+        type = 'info'; // also warning and information
       } else {
-        let message;
-        message = `Function ${functionName} has not been exercised yet`;
-        newAnno = {
-          row: functionObject.location,
-          column: 1,
-          text: message,
-          type: 'warning' // also warning and information
-        };
+        text = `Function ${functionName} has not been exercised yet`;
+        type = 'warning'; // also warning and information
       }
+      newAnno = {row, column, text, type};
       annotstions.push(newAnno);
     }
     this.publish('setAnnotations', annotstions);
@@ -38,7 +32,7 @@ export class InfoSign {
   onTestEnsureEnds(mainMap) {
     this.createTestStatus(mainMap);
     this.attachTestSign(mainMap);
-    this.publish('setBreakpointRequest', mainMap);
+    this.publish('onsetBreakpointRequest', mainMap);
   }
 
   createTestStatus(mainMap) {
@@ -51,23 +45,23 @@ export class InfoSign {
 
   createTestIndicator(functionObject) {
     for (let testcase of functionObject.testCases) {
-      functionObject.sign.testCasesCount++;
       if (!testcase.pass) {
         functionObject.sign.cssClass = 'error';
         functionObject.sign.errorCount++;
       }
     }
+    functionObject.sign.testCasesCount = functionObject.testCases.length;
   }
 
   subscribe() {
-    this.event.subscribe('onTestEnsureEnds', mainMap=>{this.onTestEnsureEnds(mainMap);});
+    this.event.subscribe('onTestEnsureEnds', mainMap => { this.onTestEnsureEnds(mainMap); });
   }
   publish(event, payload) {
     switch (event) {
     case 'setAnnotations':
       this.event.publish('setAnnotations', payload);
       break;
-    case 'setBreakpointRequest':
+    case 'onsetBreakpointRequest':
       this.event.publish('onSetBreakpointRequest', payload);
       break;
     default:
