@@ -1,6 +1,6 @@
 import { Traverse } from '../../src/services/traverse';
 import { EventAggregator } from 'aurelia-event-aggregator';
-import { code, tree } from '../../test/unit/mockModule';
+import { code, tree } from '../../test/unit/mockModule.spec';
 import { Schema } from '../../src/resources/schema';
 describe('the behavior of traverse module', () => {
   let event;

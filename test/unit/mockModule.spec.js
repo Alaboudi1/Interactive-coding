@@ -137,25 +137,31 @@ const tree =
   };
 
 const annotstionWarning = {
-  row: '0',
+  row: 0,
   column: 1,
   text: 'Function helloWorld has not been exercised yet',
   type: 'warning'
 };
 
 const annotstionPassing = {
-  row: '0',
+  row: 0,
   column: 1,
-  text: 'All the 1 test cases Pass',
+  text: 'All the 2 test cases Pass',
   type: 'info'
+};
+
+const annotstionSomeFailling = {
+  text: '1 out of 2 test cases Fail',
+  type: 'info',
+  column: 1,
+  row: 0
 };
 
 const annotstionFailling = {
-  row: '0',
+  text: '2 out of 2 test cases Fail',
+  type: 'info',
   column: 1,
-  text: '10 out of 10 test cases Fail',
-  type: 'info'
+  row: 0
 };
 
-
-export { code, tree, annotstionWarning, annotstionPassing, annotstionFailling};
+export { code, tree, annotstionWarning, annotstionPassing, annotstionFailling, annotstionSomeFailling};

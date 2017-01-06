@@ -1,6 +1,6 @@
 import {Parser} from '../../src/services/parser';
 import  {EventAggregator} from 'aurelia-event-aggregator';
-import {code, tree} from '../../test/unit/mockModule';
+import {code, tree} from '../../test/unit/mockModule.spec';
 describe('the parser of traverse module', ()=>{
   let event;
   let parser;
