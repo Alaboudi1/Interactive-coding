@@ -30,7 +30,7 @@ export class Schema {
       testCasesCount//'count how many test cases for a function'
     };
   }
-  getTestCaseObject(status = '', expectedResult = [], pass = false, paramsName = [], paramsValue = [], actualResult = [], testCaseCode = '') {
+  getTestCaseObject(status = '', expectedResult = [], pass = false, paramsName = [], paramsValue = [], actualResult = [], testCaseCode = '', id = 0) {
     return {
       status,   // 'ok, wrong or irrelevant',
       expectedResult, // 'the expected result from running the test case --> String or []',
@@ -38,7 +38,8 @@ export class Schema {
       paramsName, // 'the name of the  paramters for the test case',
       paramsValue, //'Array contains the value of the paramters for the test case',
       actualResult, // 'the actual result of running the test case',
-      testCaseCode // 'the code that going to execute to run the test case',
+      testCaseCode, // 'the code that going to execute to run the test case',
+      id
     };
   }
 }
