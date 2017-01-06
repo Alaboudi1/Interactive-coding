@@ -18,21 +18,23 @@ export class Traverse {
     this.mainMap = this.traverse(tree, code, this);
     this.publish('onTraverseEnds', this.mainMap);
   }
-  traverse(tree, code, _) {
-    const localMap = _.schema.getMainMap();
+  traverse(tree, code, _this ) {
+    const localMap = _this.schema.getMainMap();
     this.est.traverse(tree, {
       enter: (node, parent) => {
         if (node.type === 'FunctionDeclaration') {
-          let newSign = _.schema.getSignObject();
-          let localFunctionObject = _.mainMap.get(node.id.name) ||  _.schema.getFunctionObject();
-          localFunctionObject.code = code;
-          localFunctionObject.location = node.loc.start.line - 1;
-          localFunctionObject.sign = newSign;
+          let newSign = _this.schema.getSignObject();
+          let localFunctionObject = _this.mainMap.get(node.id.name);
 
-          if (!localFunctionObject.track) {
-            localFunctionObject.testCases = _.testCasesFactory(_.NumberOfTestCases);
-            localFunctionObject.params =  _.paramFactory(node.params);
-            localFunctionObject.name = node.id.name;
+          if (!localFunctionObject || !localFunctionObject.track) {
+            let location = node.loc.start.line - 1;
+            let testCases = _this.testCasesFactory(_this.NumberOfTestCases);
+            let params = _this.paramFactory(node.params);
+            localFunctionObject = _this.schema.getFunctionObject(code, location, node.id.name, params, newSign, testCases);
+          } else {
+            localFunctionObject.code = code;
+            localFunctionObject.location = node.loc.start.line - 1;
+            localFunctionObject.sign = newSign;
           }
           localMap.set(node.id.name, localFunctionObject);
         }
@@ -42,7 +44,7 @@ export class Traverse {
   }
 
   paramFactory(newParams) {
-    return  newParams.map( param => {
+    return newParams.map(param => {
       return this.schema.getParamObject(param.name, param.selectedType);
     });
   }
@@ -56,7 +58,7 @@ export class Traverse {
   subscribe(schema) {
     this.schema = schema;
     this.mainMap = this.schema.getMainMap();
-    this.event.subscribe('astReady', (payload) => {this.astReady(payload); });
+    this.event.subscribe('astReady', (payload) => { this.astReady(payload); });
   }
   publish(event, payload) {
     switch (event) {

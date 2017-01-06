@@ -135,4 +135,27 @@ const tree =
     ],
     'sourceType': 'script'
   };
-export { code, tree };
+
+const annotstionWarning = {
+  row: '0',
+  column: 1,
+  text: 'Function helloWorld has not been exercised yet',
+  type: 'warning'
+};
+
+const annotstionPassing = {
+  row: '0',
+  column: 1,
+  text: 'All the 1 test cases Pass',
+  type: 'info'
+};
+
+const annotstionFailling = {
+  row: '0',
+  column: 1,
+  text: '10 out of 10 test cases Fail',
+  type: 'info'
+};
+
+
+export { code, tree, annotstionWarning, annotstionPassing, annotstionFailling};
