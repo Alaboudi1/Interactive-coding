@@ -1,5 +1,3 @@
-import 'bootstrap';
-import $ from 'bootstrap';
 
 export function configure(aurelia) {
   aurelia.use
