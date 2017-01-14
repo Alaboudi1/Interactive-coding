@@ -138,7 +138,7 @@ export class Test {
   executeEnsureTest(functionObject) {
     for (let testCase of functionObject.testCases) {
       testCase.actualResult = this.evals(`${functionObject.code} ${testCase.testCaseCode}`);
-      if (Array.isArray(testCase.result)) {
+      if (Array.isArray(testCase.actualResult) && Array.isArray(testCase.expectedResult)) {
         testCase.pass = testCase.expectedResult.join('') === testCase.actualResult.join('');
       } else {
         testCase.pass = testCase.expectedResult === testCase.actualResult;

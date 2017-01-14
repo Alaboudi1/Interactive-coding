@@ -24,7 +24,7 @@ describe('the behavior of test module ', () => {
       test.subscribe();
     });
 
-    it('should execute the test and passes it if the expectedResult === actualResult', done => {
+    it('should execute the test and passes it if the expectedResult === actualResult and the type is primitive', done => {
       let localObj = mainMap.get('helloWorld');
       localObj.testCases[0] = {testCaseCode: 'helloWorld("this is a test");', expectedResult: 'this is a test'};
       event.subscribe('onTestEnsureEnds', map => {
@@ -34,9 +34,28 @@ describe('the behavior of test module ', () => {
       event.publish('onTraverseEnds', mainMap);
     });
 
-    it('should execute the test and faills it if the expectedResult != actualResult', done => {
+    it('should execute the test and passes it if the expectedResult === actualResult and the type is array', done => {
+      let localObj = mainMap.get('helloWorld');
+      localObj.testCases[0] = {testCaseCode: 'helloWorld([1,2,3]);', expectedResult: [1, 2, 3] };
+      event.subscribe('onTestEnsureEnds', map => {
+        expect(map.get('helloWorld').testCases[0].pass).toBe(true);
+        done();
+      });
+      event.publish('onTraverseEnds', mainMap);
+    });
+
+    it('should execute the test and faills it if the expectedResult != actualResult when type is primitive', done => {
       let localObj = mainMap.get('helloWorld');
       localObj.testCases[0] = {testCaseCode: 'helloWorld("this is not a test");', expectedResult: 'this is a test'};
+      event.subscribe('onTestEnsureEnds', map => {
+        expect(map.get('helloWorld').testCases[0].pass).toBe(false);
+        done();
+      });
+      event.publish('onTraverseEnds', mainMap);
+    }, );
+    it('should execute the test and faills it if the expectedResult != actualResult when type is array', done => {
+      let localObj = mainMap.get('helloWorld');
+      localObj.testCases[0] = {testCaseCode: 'helloWorld([1,3,2]);', expectedResult: [1, 2, 3]};
       event.subscribe('onTestEnsureEnds', map => {
         expect(map.get('helloWorld').testCases[0].pass).toBe(false);
         done();
