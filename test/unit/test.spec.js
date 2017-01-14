@@ -1,7 +1,7 @@
 import { Test } from '../../src/services/test';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { Schema } from '../../src/resources/schema';
-import { code } from '../../test/unit/mockModule';
+import { code } from '../../test/unit/mockModule.spec';
 
 describe('the behavior of test module ', () => {
   describe('regarding executing test cases ', () => {
