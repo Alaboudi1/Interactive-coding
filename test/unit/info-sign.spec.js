@@ -19,8 +19,8 @@ describe('the behavior of info-sign module', () => {
   });
 
 
-  it('should should papulate sign object properties {cssClass, errorCount, and testCasesCount} with propel values when the test cases pass', done => {
-    let passingTestCase = schema.getTestCaseObject('', '', true);
+  it('should should papulate sign object properties {cssClass, errorCount, and testCasesCount} with propel values when the test cases pass #1', done => {
+    let passingTestCase = schema.getTestCaseObject(0, '', '', true);
     let sign = schema.getSignObject();
     let PassingfunctionObject = schema.getFunctionObject('', 0, '', '', sign, [passingTestCase, passingTestCase], true);
     mainMap.set('passing', PassingfunctionObject);
@@ -32,8 +32,8 @@ describe('the behavior of info-sign module', () => {
     });
     event.publish('onTestEnsureEnds', mainMap);
   });
-  it('should should papulate sign object properties {cssClass, errorCount, and testCasesCount}  with propel values when the test cases fail', done => {
-    let faillTestCase = schema.getTestCaseObject('', '', false);
+  it('should should papulate sign object properties {cssClass, errorCount, and testCasesCount}  with propel values when the test cases fail #2', done => {
+    let faillTestCase = schema.getTestCaseObject(0, '', '', false);
     let sign = schema.getSignObject();
     let functionObjectFaiiling = schema.getFunctionObject('', 0, '', '', sign, [faillTestCase, faillTestCase], true);
     mainMap.set('passing', functionObjectFaiiling);
@@ -45,7 +45,7 @@ describe('the behavior of info-sign module', () => {
     });
     event.publish('onTestEnsureEnds', mainMap);
   });
-  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of warning when the function is not tracked', done => {
+  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of warning when the function is not tracked #3', done => {
     let sign = schema.getSignObject();
     let functionObject = schema.getFunctionObject('', 0, '', '', sign, [], false);
 
@@ -56,8 +56,8 @@ describe('the behavior of info-sign module', () => {
     });
     event.publish('onTestEnsureEnds', mainMap);
   });
-  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of info when all test cases pass', done => {
-    let passingTestCase = schema.getTestCaseObject('', '', true);
+  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of info when all test cases pass #4', done => {
+    let passingTestCase = schema.getTestCaseObject(0, '', '', true);
     let sign = schema.getSignObject();
     let PassingfunctionObject = schema.getFunctionObject('', 0, '', '', sign, [passingTestCase, passingTestCase], true);
 
@@ -68,8 +68,8 @@ describe('the behavior of info-sign module', () => {
     });
     event.publish('onTestEnsureEnds', mainMap);
   });
-  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of info when all test cases faill', done => {
-    let faillTestCase = schema.getTestCaseObject('', '', false);
+  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of info when all test cases faill #5', done => {
+    let faillTestCase = schema.getTestCaseObject(0, '', '', false);
     let sign = schema.getSignObject();
     let functionObjectFaiiling = schema.getFunctionObject('', 0, '', '', sign, [faillTestCase, faillTestCase], true);
 
@@ -80,9 +80,9 @@ describe('the behavior of info-sign module', () => {
     });
     event.publish('onTestEnsureEnds', mainMap);
   });
-  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of info when some test cases faill', done => {
-    let faillTestCase = schema.getTestCaseObject('', '', false);
-    let passingTestCase = schema.getTestCaseObject('', '', true);
+  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of info when some test cases faill #6', done => {
+    let faillTestCase = schema.getTestCaseObject(0, '', '', false);
+    let passingTestCase = schema.getTestCaseObject(0, '', '', true);
     let sign = schema.getSignObject();
     let functionObjectFaiiling = schema.getFunctionObject('', 0, '', '', sign, [faillTestCase, passingTestCase], true);
 
@@ -93,4 +93,4 @@ describe('the behavior of info-sign module', () => {
     });
     event.publish('onTestEnsureEnds', mainMap);
   });
-});
+}); 

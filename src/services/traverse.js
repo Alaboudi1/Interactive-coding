@@ -28,8 +28,8 @@ export class Traverse {
 
           if (!localFunctionObject || !localFunctionObject.track) {
             let location = node.loc.start.line - 1;
-            let testCases = _this.testCasesFactory(_this.NumberOfTestCases);
-            let params = _this.paramFactory(node.params);
+            let testCases = _this.schema.testCasesFactory(_this.NumberOfTestCases);
+            let params = _this.schema.paramFactory(node.params);
             localFunctionObject = _this.schema.getFunctionObject(code, location, node.id.name, params, newSign, testCases);
           } else {
             localFunctionObject.code = code;
@@ -43,18 +43,6 @@ export class Traverse {
     return localMap;
   }
 
-  paramFactory(newParams) {
-    return newParams.map(param => {
-      return this.schema.getParamObject(param.name, param.selectedType);
-    });
-  }
-  testCasesFactory(number) {
-    const localTestCases = [];
-    for (let i = 0; i < number; i++) {
-      localTestCases.push(this.schema.getTestCaseObject(i));
-    }
-    return localTestCases;
-  }
   subscribe(schema) {
     this.schema = schema;
     this.mainMap = this.schema.getMainMap();

@@ -1,14 +1,11 @@
 import { inject } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
-import { DialogService } from 'aurelia-dialog';
-import { Dialog } from '../dialog/dialog';
 import faker from 'faker/locale/en';
-@inject(EventAggregator, DialogService)
+@inject(EventAggregator)
 export class Test {
 
-  constructor(event, dialogService) {
+  constructor(event) {
     this.event = event;
-    this.dialogService = dialogService;
     this.mainMap;
     this.evaluators = [];
     this.reported = false;
@@ -18,16 +15,7 @@ export class Test {
 
   onDialogRequest(functionName) {
     let functionObject = this.mainMap.get(functionName);
-    this.dialogService.openAndYieldController({ viewModel: Dialog, model: functionObject })
-      .then(controller => {
-        controller.result
-          .then((response) => {
-            if (!response.wasCancelled) {
-              response.output.track = true;
-              this.ensureTest(this.mainMap);
-            }
-          });
-      });
+    this.publish('onDialoginit', functionObject);
   }
 
   createParamsValue(functionObject) {
@@ -71,20 +59,20 @@ export class Test {
   generateValueForParamters(type) {
     let param;
     switch (type) {
-      case 'Number': {
-        param = this.fakeNumber();
-        break;
-      }
-      case 'String': {
-        param = `"${this.fakeString()}"`;
-        break;
-      }
-      case 'Boolean': {
-        param = this.fakeBoolean();
-        break;
-      }
-      default:
-        param = this.fakeArray(type, 5);
+    case 'Number': {
+      param = this.fakeNumber();
+      break;
+    }
+    case 'String': {
+      param = `"${this.fakeString()}"`;
+      break;
+    }
+    case 'Boolean': {
+      param = this.fakeBoolean();
+      break;
+    }
+    default:
+      param = this.fakeArray(type, 5);
     }
     return param;
   }
@@ -165,41 +153,50 @@ export class Test {
     let fakeArray = [];
     for (let i = 0; i < index; i++) {
       switch (type) {
-        case 'Array of Numbers': {
-          fakeArray.push(this.fakeNumber());
-          break;
-        }
-        case 'Array of Strings': {
-          fakeArray.push(`"${this.fakeString()}"`);
-          break;
-        }
-        case 'Array of Booleans': {
-          fakeArray.push(this.fakeBoolean());
-          break;
-        }
-        default:
-          break;
+      case 'Array of Numbers': {
+        fakeArray.push(this.fakeNumber());
+        break;
+      }
+      case 'Array of Strings': {
+        fakeArray.push(`"${this.fakeString()}"`);
+        break;
+      }
+      case 'Array of Booleans': {
+        fakeArray.push(this.fakeBoolean());
+        break;
+      }
+      default:
+        break;
       }
     }
     return fakeArray;
   }
 
+  saveTestCases(functionObject) {
+    functionObject.track = true;
+    this.ensureTest(this.mainMap);
+  }
+
   subscribe() {
-    this.event.subscribe('onTraverseEnds', mainMap => { this.ensureTest(mainMap); });
-    this.event.subscribe('onDialogRequest', functionName => { this.onDialogRequest(functionName); });
-    this.event.subscribe('onTestCreateRequest', functionObject => { this.createParamsValue(functionObject); });
+    this.event.subscribe('onTraverseEnds', mainMap => this.ensureTest(mainMap));
+    this.event.subscribe('onDialogRequest', functionName => this.onDialogRequest(functionName));
+    this.event.subscribe('onTestCreateRequest', functionObject =>  this.createParamsValue(functionObject));
+    this.event.subscribe('onSaveTestCases', functionObject => this.saveTestCases(functionObject));
   }
 
   publish(event, payload) {
     switch (event) {
-      case 'onTestEnsureEnds':
-        this.event.publish('onTestEnsureEnds', payload);
-        break;
-      case 'onTestReady':
-        this.event.publish('onTestReady', payload);
-        break;
-      default:
-        break;
+    case 'onTestEnsureEnds':
+      this.event.publish('onTestEnsureEnds', payload);
+      break;
+    case 'onTestReady':
+      this.event.publish('onTestReady', payload);
+      break;
+    case 'onDialoginit':
+      this.event.publish('onDialoginit', payload);
+      break;
+    default:
+      break;
     }
   }
 }

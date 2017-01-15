@@ -27,6 +27,7 @@ export class InfoSign {
       newAnno = {row, column, text, type};
       annotstions.push(newAnno);
     }
+
     this.publish('setAnnotations', annotstions);
   }
   onTestEnsureEnds(mainMap) {
