@@ -28,15 +28,7 @@ export class Test {
       }
     }
     this.createTestCases(functionObject);
-
-    setTimeout(_ => {
-      if (!this.reported) {
-        this.publish('onTestReady', this.functionObject);
-      }
-      this.evaluators.forEach(ev => ev.terminate());
-      this.reported = false;
-      this.reportsCount = 0;
-    }, 1000);
+    this.publish('onExpectedResultRequest', functionObject);
   }
   createTestCases(functionObject) {
     let id = 0;
@@ -52,7 +44,6 @@ export class Test {
       }
       testCase.testCaseCode += `${functionObject.name}(${testCase.paramsName.toString()})`;
       testCase.id = id++;
-      this.execute(`${functionObject.code} ${testCase.testCaseCode}`, testCase.id);
     }
   }
 
@@ -75,40 +66,6 @@ export class Test {
       param = this.fakeArray(type, 5);
     }
     return param;
-  }
-
-  execute(code, id, name = this.functionObject.name) {
-    let bb = new Blob([`
-        onmessage = message =>{
-          let result;let name = message.data.name;
-          let id = message.data.id;
-          try {result = eval(message.data.code);}
-          catch (exception) {result = exception.message;}
-          postMessage({result, name, id});}`],
-      {
-        type: 'text/javascript'
-      });
-
-    // convert the blob into a pseudo URL
-    let bbURL = URL.createObjectURL(bb);
-    let evaluator = new Worker(bbURL);
-    evaluator.postMessage({ code, name, id }
-
-    );
-    evaluator.onmessage = message => {
-      const result = message.data;
-      URL.revokeObjectURL(bbURL);
-      this.setResult(result);
-    };
-    this.evaluators.push(evaluator);
-  }
-  setResult(result) {
-    this.functionObject.testCases[result.id].expectedResult = result.result;
-    this.reportsCount++;
-    if (this.reportsCount === this.functionObject.testCases.length) {
-      this.reported = true;
-      this.publish('onTestReady', this.functionObject);
-    }
   }
   ensureTest(mainMap) {
     for (let functionObject of mainMap.values()) {
@@ -189,14 +146,19 @@ export class Test {
     case 'onTestEnsureEnds':
       this.event.publish('onTestEnsureEnds', payload);
       break;
-    case 'onTestReady':
-      this.event.publish('onTestReady', payload);
-      break;
     case 'onDialoginit':
       this.event.publish('onDialoginit', payload);
+      break;
+       case 'onExpectedResultRequest':
+      this.event.publish('onExpectedResultRequest', payload);
       break;
     default:
       break;
     }
   }
+
+  // webWorker
+
+
+  //
 }

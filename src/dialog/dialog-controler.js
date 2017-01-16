@@ -16,7 +16,7 @@ export class DialogControler {
       .then(controller => {
         controller.result
           .then((response) => {
-            if (!response.wasCancelled){ 
+            if (!response.wasCancelled) {
               this.publish('onSaveTestCases', response.output);
             }
           });
@@ -30,9 +30,6 @@ export class DialogControler {
     switch (event) {
     case 'onSaveTestCases':
       this.event.publish('onSaveTestCases', payload);
-      break;
-    case 'onCancleTestCases':
-      this.event.publish('onCancleTestCases', payload);
       break;
     default:
       break;
