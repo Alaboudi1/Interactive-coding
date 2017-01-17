@@ -12,21 +12,24 @@ export class Dialog {
     this.functionObject;
     this.page = 1;
     this.mainMap;
+    this.subscribe();
   }
-  activate(functionName) {
-    this.functionObject = this.mainMap.get(functionName);
+  activate(payload) {
+    this.mainMap = payload.mainMap;
+    this.functionObject = this.mainMap.get(payload.functionName);
     if (this.functionObject.status === 'tracked') {
       this.page = 3;
     }
-    this.testCases = functionObject.testCases;
+    this.testCases = this.functionObject.testCases;
   }
   createTests() {
     this.functionObject.status = 'underTesting';
-    this.event.publish('onTestCreateRequest', {mainMap: this.mainMap, functinName: this.functionObject.name});
+    this.event.publish('onTestCreateRequest', {mainMap: this.mainMap, functionName: this.functionObject.name});
   }
   saveTests() {
     this.functionObject.status = 'tracked';
-    this.event.publish('onTestCreateRequest', {mainMap: this.mainMap, functinName: this.functionObject.name});
+    this.event.publish('onTraverseEnds', this.mainMap);
+    this.controller.cancel();
   }
   reset() {
     this.functionObject.status = 'untracked';
@@ -42,11 +45,13 @@ export class Dialog {
   warning(index) {
     this.testCases[index].status = 'warning';
   }
+  setMainMap(mainMap) {
+    this.mainMap = 'mainMap';
+  }
   subscribe() {
-    this.event.subscribe('onTestReady', functinName => {
-      this.functionObject = this.mainMap(functinName);
+    this.event.subscribe('onTestReady', payload => {
+      this.functionObject = payload.mainMap.get(payload.functionName);
       this.page = 2;
     });
-    this.event.subscribe('onTraverseEnds', mainMap => {this.mainMap = mainMap;});
   }
 }

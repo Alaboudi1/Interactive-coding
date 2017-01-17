@@ -35,6 +35,7 @@ export class Traverse {
             localFunctionObject.code = code;
             localFunctionObject.location = node.loc.start.line - 1;
             localFunctionObject.sign = newSign;
+            localFunctionObject.testCases = _this.schema.restingActualResult(localFunctionObject.testCases);
           }
           localMap.set(node.id.name, localFunctionObject);
         }

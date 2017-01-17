@@ -30,7 +30,7 @@ export class Schema {
       testCasesCount//'count how many test cases for a function'
     };
   }
-  getTestCaseObject( id = 0, status = '', expectedResult = 'infinity loop', pass = false, paramsName = [], paramsValue = [], actualResult = [], testCaseCode = '') {
+  getTestCaseObject( id = 0, status = '', expectedResult = 'infinity loop', pass = false, paramsName = [], paramsValue = [], actualResult = 'infinity loop', testCaseCode = '') {
     return {
       id,
       status,   // 'ok, wrong or irrelevant',
@@ -53,5 +53,9 @@ export class Schema {
     return newParams.map(param => {
       return this.getParamObject(param.name, param.selectedType);
     });
+  }
+  restingActualResult(testCases) {
+    testCases.forEach(testCase => testCase.actualResult = 'infinity loop');
+    return testCases;
   }
 }

@@ -15,7 +15,6 @@ export class Evaluator {
     this.mainMap;
     this.currentTestTarget;
     this.exectionEnded = false;
-
   }
 
   getResult(mainMap) {
@@ -29,7 +28,11 @@ export class Evaluator {
       }
     }
     this.exectionEnded = true;
-    this.reset();
+    if (this.testCount === 0) {
+      this.publish('onActualResultDone', {mainMap});
+    } else {
+      this.reset();
+    }
   }
 
   createWorker(id, code, name) {
@@ -49,12 +52,12 @@ export class Evaluator {
     if (this.currentTestTarget === 'underTesting') {
       this.mainMap.get(message.name).testCases[message.id].expectedResult = message.result;
     } else {
-      this.mainMap.get(message.name).testCases[message.id].expectedResult = message.result;
+      this.mainMap.get(message.name).testCases[message.id].actualResult = message.result;
     }
     this.reportsCount++;
     if (this.reportsCount === this.testCount && this.exectionEnded) {
       this.reported = true;
-      this.publish(this.nextEvent, this.functionObject);
+      this.publish(this.nextEvent, {mainMap: this.mainMap, functionName: message.name});
     }
   }
   webWorkerInit() {
@@ -82,7 +85,7 @@ export class Evaluator {
   reset() {
     setTimeout(_ => {
       if (!this.reported) {
-        this.publish(this.nextEvent, this.mainMap);
+        this.publish(this.nextEvent, {mainMap: this.mainMap});
       }
       this.workers.forEach(ev => { ev.worker.terminate(); URL.revokeObjectURL(ev.bbURL); });
       this.reported = false;

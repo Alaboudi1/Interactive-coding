@@ -12,13 +12,14 @@ export class DialogControler {
   }
 
   dialogInit(functionName) {
-    this.dialogService.openAndYieldController({ viewModel: Dialog, model: functionName })
+    this.dialogService.openAndYieldController({ viewModel: Dialog, model: {functionName, mainMap: this.mainMap} })
       .then(controller => {controller.result.then((response) => {});});
   }
 
 
   subscribe() {
     this.event.subscribe('onDialogRequest', functionName => this.dialogInit(functionName));
+    this.event.subscribe('onTraverseEnds', mainMap => this.mainMap = mainMap);
   }
   publish(event, payload) {
     switch (event) {

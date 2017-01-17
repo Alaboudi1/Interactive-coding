@@ -65,11 +65,13 @@ export class Test {
   }
   ensureResult(mainMap) {
     for (let functionObject of mainMap.values()) {
-      for (let testCase of functionObject.testCases) {
-        if (Array.isArray(testCase.actualResult) && Array.isArray(testCase.expectedResult)) {
-          testCase.pass = testCase.expectedResult.join('') === testCase.actualResult.join('');
-        } else {
-          testCase.pass = testCase.expectedResult === testCase.actualResult;
+      if ( functionObject.status === 'tracked') {
+        for (let testCase of functionObject.testCases) {
+          if (Array.isArray(testCase.actualResult) && Array.isArray(testCase.expectedResult)) {
+            testCase.pass = testCase.expectedResult.join('') === testCase.actualResult.join('');
+          } else {
+            testCase.pass = testCase.expectedResult === testCase.actualResult;
+          }
         }
       }
     }
@@ -115,9 +117,8 @@ export class Test {
   }
 
   subscribe() {
-    this.event.subscribe('onActualResultDone', mainMap => this.ensureResult(mainMap));
+    this.event.subscribe('onActualResultDone', payload => this.ensureResult(payload.mainMap));
     this.event.subscribe('onTestCreateRequest', payload =>  this.createParamsValue(payload));
-    this.event.subscribe('onEnsureTests', functionObject => this.ensureResult(functionObject));
   }
 
   publish(event, payload) {
