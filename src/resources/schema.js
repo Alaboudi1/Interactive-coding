@@ -6,7 +6,7 @@ export class Schema {
   getMainMap() {
     return new Map();
   }
-  getFunctionObject(code = '', location = '', name = '', params = [], sign = this.getSignObject, testCases = [], track = false ) {
+  getFunctionObject(code = '', location = '', name = '', params = [], sign = this.getSignObject, testCases = [], status = 'untracked' ) {
     return {
       code, //'code written in the editor',
       location, // 'line number in which the function starts',
@@ -14,7 +14,7 @@ export class Schema {
       params, //'array of paramters for the function -->getParamObject',
       sign, //'object contains all the sign properties -->getsignObject',
       testCases, //'array of test cases -->getTestCaseObject'
-      track // 'if this function needs to be tracked with tests'
+      status // 'untracked, tracked, underTesting'
     };
   }
   getParamObject(name = '', selectedType = '' ) {

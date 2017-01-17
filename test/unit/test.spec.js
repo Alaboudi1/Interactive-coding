@@ -112,7 +112,7 @@ describe('the behavior of test module ', () => {
       functionObject = schema.getFunctionObject();
       functionObject.code = code;
       functionObject.testCases.push(schema.getTestCaseObject());
-      functionObject.track = true;
+      functionObject.status = 'tracked';
       mainMap.set('helloWorld', functionObject);
       test.subscribe();
     });

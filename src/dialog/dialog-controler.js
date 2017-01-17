@@ -11,20 +11,14 @@ export class DialogControler {
     this.dialogService = dialogService;
   }
 
-  dialogInit(functionObject) {
-    this.dialogService.openAndYieldController({ viewModel: Dialog, model: functionObject })
-      .then(controller => {
-        controller.result
-          .then((response) => {
-            if (!response.wasCancelled) {
-              this.publish('onSaveTestCases', response.output);
-            }
-          });
-      });
+  dialogInit(functionName) {
+    this.dialogService.openAndYieldController({ viewModel: Dialog, model: functionName })
+      .then(controller => {controller.result.then((response) => {});});
   }
 
+
   subscribe() {
-    this.event.subscribe('onDialoginit', functionObject => this.dialogInit(functionObject));
+    this.event.subscribe('onDialogRequest', functionName => this.dialogInit(functionName));
   }
   publish(event, payload) {
     switch (event) {

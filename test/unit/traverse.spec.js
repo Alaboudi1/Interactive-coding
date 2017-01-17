@@ -32,7 +32,7 @@ describe('the behavior of traverse module', () => {
     let firstTime = true;
     let localObject = {
       testCases: [{ status: 'OK', expectedResult: ['helloWorld'], pass: false, paramsName: [], paramsValue: [], actualResult: '', testCaseCode: '' }],
-      track: true
+      status: 'tracked'
     };
     let localObjectCopy = {
       testCases: [{ status: 'OK', expectedResult: ['helloWorld'], pass: false, paramsName: [], paramsValue: [], actualResult: '', testCaseCode: '' }]
@@ -54,7 +54,7 @@ describe('the behavior of traverse module', () => {
     let firstTime = true;
     let localObject = {
       testCases: [{ status: 'OK', expectedResult: ['helloWorld'], pass: false, paramsName: [], paramsValue: [], actualResult: '', testCaseCode: '' }],
-      track: false
+      status: 'untracked'
     };
     let localObjectCopy = {
       testCases: [{ status: 'OK', expectedResult: ['helloWorld'], pass: false, paramsName: [], paramsValue: [], actualResult: '', testCaseCode: '' }]

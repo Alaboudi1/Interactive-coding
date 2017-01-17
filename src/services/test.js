@@ -7,19 +7,11 @@ export class Test {
   constructor(event) {
     this.event = event;
     this.mainMap;
-    this.evaluators = [];
-    this.reported = false;
-    this.reportsCount = 0;
     this.functionObject;
   }
 
-  onDialogRequest(functionName) {
-    let functionObject = this.mainMap.get(functionName);
-    this.publish('onDialoginit', functionObject);
-  }
-
-  createParamsValue(functionObject) {
-    this.functionObject = functionObject;
+  createParamsValue(payload) {
+    const functionObject = payload.mainMap.get(payload.functionName);
     let paramValue;
     for (let testCase of functionObject.testCases) {
       for (let param of functionObject.params) {
@@ -28,7 +20,7 @@ export class Test {
       }
     }
     this.createTestCases(functionObject);
-    this.publish('onExpectedResultRequest', functionObject);
+    this.publish('onExpectedResultRequest', payload.mainMap);
   }
   createTestCases(functionObject) {
     let id = 0;
@@ -45,6 +37,7 @@ export class Test {
       testCase.testCaseCode += `${functionObject.name}(${testCase.paramsName.toString()})`;
       testCase.id = id++;
     }
+    functionObject.status = 'underTesting';
   }
 
   generateValueForParamters(type) {
@@ -67,28 +60,20 @@ export class Test {
     }
     return param;
   }
-  ensureTest(mainMap) {
-    for (let functionObject of mainMap.values()) {
-      if (functionObject.track) {
-        this.executeEnsureTest(functionObject);
-      }
-    }
-    this.mainMap = mainMap;
-    this.publish('onTestEnsureEnds', mainMap);
-  }
-
   evals(code) {
     return eval(code);
   }
-  executeEnsureTest(functionObject) {
-    for (let testCase of functionObject.testCases) {
-      testCase.actualResult = this.evals(`${functionObject.code} ${testCase.testCaseCode}`);
-      if (Array.isArray(testCase.actualResult) && Array.isArray(testCase.expectedResult)) {
-        testCase.pass = testCase.expectedResult.join('') === testCase.actualResult.join('');
-      } else {
-        testCase.pass = testCase.expectedResult === testCase.actualResult;
+  ensureResult(mainMap) {
+    for (let functionObject of mainMap.values()) {
+      for (let testCase of functionObject.testCases) {
+        if (Array.isArray(testCase.actualResult) && Array.isArray(testCase.expectedResult)) {
+          testCase.pass = testCase.expectedResult.join('') === testCase.actualResult.join('');
+        } else {
+          testCase.pass = testCase.expectedResult === testCase.actualResult;
+        }
       }
     }
+    this.publish('onTestEnsureEnds', mainMap);
   }
 
   fakeNumber() {
@@ -129,16 +114,10 @@ export class Test {
     return fakeArray;
   }
 
-  saveTestCases(functionObject) {
-    functionObject.track = true;
-    this.ensureTest(this.mainMap);
-  }
-
   subscribe() {
-    this.event.subscribe('onTraverseEnds', mainMap => this.ensureTest(mainMap));
-    this.event.subscribe('onDialogRequest', functionName => this.onDialogRequest(functionName));
-    this.event.subscribe('onTestCreateRequest', functionObject =>  this.createParamsValue(functionObject));
-    this.event.subscribe('onSaveTestCases', functionObject => this.saveTestCases(functionObject));
+    this.event.subscribe('onActualResultDone', mainMap => this.ensureResult(mainMap));
+    this.event.subscribe('onTestCreateRequest', payload =>  this.createParamsValue(payload));
+    this.event.subscribe('onEnsureTests', functionObject => this.ensureResult(functionObject));
   }
 
   publish(event, payload) {
@@ -146,10 +125,7 @@ export class Test {
     case 'onTestEnsureEnds':
       this.event.publish('onTestEnsureEnds', payload);
       break;
-    case 'onDialoginit':
-      this.event.publish('onDialoginit', payload);
-      break;
-       case 'onExpectedResultRequest':
+    case 'onExpectedResultRequest':
       this.event.publish('onExpectedResultRequest', payload);
       break;
     default:

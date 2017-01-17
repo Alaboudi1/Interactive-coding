@@ -26,7 +26,7 @@ export class Traverse {
           let newSign = _this.schema.getSignObject();
           let localFunctionObject = _this.mainMap.get(node.id.name);
 
-          if (!localFunctionObject || !localFunctionObject.track) {
+          if (!localFunctionObject || localFunctionObject.status === 'untracked') {
             let location = node.loc.start.line - 1;
             let testCases = _this.schema.testCasesFactory(_this.NumberOfTestCases);
             let params = _this.schema.paramFactory(node.params);
