@@ -6,12 +6,10 @@ export class Test {
 
   constructor(event) {
     this.event = event;
-    this.mainMap;
-    this.functionObject;
   }
 
-  createParamsValue(payload) {
-    const functionObject = payload.mainMap.get(payload.functionName);
+  createParamsValue(mainMap, functionName) {
+    const functionObject = mainMap.get(functionName);
     let paramValue;
     for (let testCase of functionObject.testCases) {
       for (let param of functionObject.params) {
@@ -20,7 +18,7 @@ export class Test {
       }
     }
     this.createTestCases(functionObject);
-    this.publish('onExpectedResultRequest', payload.mainMap);
+    this.publish('onExpectedResultRequest', {mainMap});
   }
   createTestCases(functionObject) {
     let id = 0;
@@ -35,7 +33,7 @@ export class Test {
         }
       }
       testCase.testCaseCode += `${functionObject.name}(${testCase.paramsName.toString()})`;
-      testCase.id = id++;
+      testCase.id = ++id;
     }
     functionObject.status = 'underTesting';
   }
@@ -60,9 +58,6 @@ export class Test {
     }
     return param;
   }
-  evals(code) {
-    return eval(code);
-  }
   ensureResult(mainMap) {
     for (let functionObject of mainMap.values()) {
       if ( functionObject.status === 'tracked') {
@@ -75,7 +70,7 @@ export class Test {
         }
       }
     }
-    this.publish('onTestEnsureEnds', mainMap);
+    this.publish('onTestEnsureEnds', {mainMap});
   }
 
   fakeNumber() {
@@ -118,7 +113,7 @@ export class Test {
 
   subscribe() {
     this.event.subscribe('onActualResultDone', payload => this.ensureResult(payload.mainMap));
-    this.event.subscribe('onTestCreateRequest', payload =>  this.createParamsValue(payload));
+    this.event.subscribe('onTestCreateRequest', payload =>  this.createParamsValue(payload.mainMap, payload.functionName));
   }
 
   publish(event, payload) {
@@ -133,9 +128,4 @@ export class Test {
       break;
     }
   }
-
-  // webWorker
-
-
-  //
 }

@@ -19,7 +19,7 @@ export class DialogControler {
 
   subscribe() {
     this.event.subscribe('onDialogRequest', functionName => this.dialogInit(functionName));
-    this.event.subscribe('onTraverseEnds', mainMap => this.mainMap = mainMap);
+    this.event.subscribe('onTraverseEnds', payload => this.mainMap = payload.mainMap);
   }
   publish(event, payload) {
     switch (event) {

@@ -55,7 +55,7 @@ export class InfoSign {
   }
 
   subscribe() {
-    this.event.subscribe('onTestEnsureEnds', mainMap => { this.onTestEnsureEnds(mainMap); });
+    this.event.subscribe('onTestEnsureEnds', payload => this.onTestEnsureEnds(payload.mainMap));
   }
   publish(event, payload) {
     switch (event) {

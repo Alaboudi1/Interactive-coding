@@ -16,7 +16,7 @@ export class Traverse {
     const code = payload.code;
     const tree = payload.tree;
     this.mainMap = this.traverse(tree, code, this);
-    this.publish('onTraverseEnds', this.mainMap);
+    this.publish('onTraverseEnds', {mainMap: this.mainMap});
   }
   traverse(tree, code, _this ) {
     const localMap = _this.schema.getMainMap();
@@ -47,7 +47,7 @@ export class Traverse {
   subscribe(schema) {
     this.schema = schema;
     this.mainMap = this.schema.getMainMap();
-    this.event.subscribe('astReady', (payload) => { this.astReady(payload); });
+    this.event.subscribe('astReady', payload => this.astReady(payload));
   }
   publish(event, payload) {
     switch (event) {

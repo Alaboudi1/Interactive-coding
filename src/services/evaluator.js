@@ -96,15 +96,15 @@ export class Evaluator {
     }, 1000);
   }
   subscribe() {
-    this.event.subscribe('onExpectedResultRequest', mainMap => {
+    this.event.subscribe('onExpectedResultRequest', payload => {
       this.nextEvent = 'onTestReady';
       this.currentTestTarget = 'underTesting';
-      this.getResult(mainMap);
+      this.getResult(payload.mainMap);
     });
-    this.event.subscribe('onTraverseEnds', mainMap => {
+    this.event.subscribe('onTraverseEnds', payload => {
       this.nextEvent = 'onActualResultDone';
       this.currentTestTarget = 'tracked';
-      this.getResult(mainMap);
+      this.getResult(payload.mainMap);
     });
   }
   publish(event, payload) {

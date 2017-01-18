@@ -4,7 +4,7 @@ import { annotstionWarning, annotstionPassing, annotstionFailling, annotstionSom
 import { Schema } from '../../src/resources/schema';
 
 
-describe('the behavior of info-sign module', () => {
+describe('the behavior of info-sign module (6 Tests)', () => {
   let event;
   let infoSign;
   let schema;
@@ -19,7 +19,7 @@ describe('the behavior of info-sign module', () => {
   });
 
 
-  it('should should papulate sign object properties {cssClass, errorCount, and testCasesCount} with propel values when the test cases pass #1', done => {
+  it('should should papulate sign object properties {cssClass, errorCount, and testCasesCount} with propel values when the test cases pass 1/6', done => {
     let passingTestCase = schema.getTestCaseObject(0, '', '', true);
     let sign = schema.getSignObject();
     let PassingfunctionObject = schema.getFunctionObject('', 0, '', '', sign, [passingTestCase, passingTestCase], 'tracked');
@@ -30,9 +30,9 @@ describe('the behavior of info-sign module', () => {
       expect(map.get('passing').sign).toEqual(jasmine.objectContaining(expectedSign));
       done();
     });
-    event.publish('onTestEnsureEnds', mainMap);
+    event.publish('onTestEnsureEnds', {mainMap});
   });
-  it('should should papulate sign object properties {cssClass, errorCount, and testCasesCount}  with propel values when the test cases fail #2', done => {
+  it('should should papulate sign object properties {cssClass, errorCount, and testCasesCount}  with propel values when the test cases fail 2/6', done => {
     let faillTestCase = schema.getTestCaseObject(0, '', '', false);
     let sign = schema.getSignObject();
     let functionObjectFaiiling = schema.getFunctionObject('', 0, '', '', sign, [faillTestCase, faillTestCase], 'tracked');
@@ -43,9 +43,9 @@ describe('the behavior of info-sign module', () => {
       expect(map.get('passing').sign).toEqual(jasmine.objectContaining(expectedSign));
       done();
     });
-    event.publish('onTestEnsureEnds', mainMap);
+    event.publish('onTestEnsureEnds', {mainMap});
   });
-  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of warning when the function is not tracked #3', done => {
+  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of warning when the function is not tracked 3/6', done => {
     let sign = schema.getSignObject();
     let functionObject = schema.getFunctionObject('', 0, '', '', sign, [], 'untracked');
 
@@ -54,9 +54,9 @@ describe('the behavior of info-sign module', () => {
       expect(array).toContain(annotstionWarning);
       done();
     });
-    event.publish('onTestEnsureEnds', mainMap);
+    event.publish('onTestEnsureEnds', {mainMap});
   });
-  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of info when all test cases pass #4', done => {
+  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of info when all test cases pass 4/6', done => {
     let passingTestCase = schema.getTestCaseObject(0, '', '', true);
     let sign = schema.getSignObject();
     let PassingfunctionObject = schema.getFunctionObject('', 0, '', '', sign, [passingTestCase, passingTestCase], 'tracked');
@@ -66,9 +66,9 @@ describe('the behavior of info-sign module', () => {
       expect(array).toContain(annotstionPassing);
       done();
     });
-    event.publish('onTestEnsureEnds', mainMap);
+    event.publish('onTestEnsureEnds', {mainMap});
   });
-  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of info when all test cases faill #5', done => {
+  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of info when all test cases faill 5/6', done => {
     let faillTestCase = schema.getTestCaseObject(0, '', '', false);
     let sign = schema.getSignObject();
     let functionObjectFaiiling = schema.getFunctionObject('', 0, '', '', sign, [faillTestCase, faillTestCase], 'tracked');
@@ -78,9 +78,9 @@ describe('the behavior of info-sign module', () => {
       expect(array).toContain(annotstionFailling);
       done();
     });
-    event.publish('onTestEnsureEnds', mainMap);
+    event.publish('onTestEnsureEnds', {mainMap});
   });
-  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of info when some test cases faill #6', done => {
+  it('should should create annotation arrays with objects {row, column, text, type} in which type has a value of info when some test cases faill 6/6', done => {
     let faillTestCase = schema.getTestCaseObject(0, '', '', false);
     let passingTestCase = schema.getTestCaseObject(0, '', '', true);
     let sign = schema.getSignObject();
@@ -91,6 +91,6 @@ describe('the behavior of info-sign module', () => {
       expect(array).toContain(annotstionSomeFailling);
       done();
     });
-    event.publish('onTestEnsureEnds', mainMap);
+    event.publish('onTestEnsureEnds', {mainMap});
   });
-}); 
+});

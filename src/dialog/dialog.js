@@ -28,7 +28,7 @@ export class Dialog {
   }
   saveTests() {
     this.functionObject.status = 'tracked';
-    this.event.publish('onTraverseEnds', this.mainMap);
+    this.event.publish('onTraverseEnds', {mainMap: this.mainMap});
     this.controller.cancel();
   }
   reset() {
