@@ -94,11 +94,11 @@ export class Editor {
     }
   }
   subscribe() {
-    this.session.on('changeAnnotation', _ => { this.checkError(); });
-    this.event.subscribe('onSetBreakpointRequest', signs => { this.onSetBreakpointRequest(signs); });
-    this.event.subscribe('setAnnotations', annot => {this.session.setAnnotations(annot);});
-    this.event.subscribe('onRefershRequest', _ => {this.publishCode();});
-    this.editor.session.on('change', _ => {this.onEditorChange();});
-    this.editor.on('gutterclick', click => {this.onGutterclick(click);});
+    this.session.on('changeAnnotation', _ => this.checkError());
+    this.event.subscribe('onSetBreakpointRequest', signs => this.onSetBreakpointRequest(signs));
+    this.event.subscribe('setAnnotations', annot => this.session.setAnnotations(annot));
+    this.event.subscribe('onRefershRequest', _ => this.publishCode());
+    this.editor.session.on('change', _ => this.onEditorChange());
+    this.editor.on('gutterclick', click => this.onGutterclick(click));
   }
 }

@@ -16,7 +16,7 @@ export class Traverse {
     const code = payload.code;
     const tree = payload.tree;
     this.mainMap = this.traverse(tree, code, this);
-    this.publish('onTraverseEnds', this.mainMap);
+    this.publish('onTraverseEnds', {mainMap: this.mainMap});
   }
   traverse(tree, code, _this ) {
     const localMap = _this.schema.getMainMap();
@@ -26,15 +26,16 @@ export class Traverse {
           let newSign = _this.schema.getSignObject();
           let localFunctionObject = _this.mainMap.get(node.id.name);
 
-          if (!localFunctionObject || !localFunctionObject.track) {
+          if (!localFunctionObject || localFunctionObject.status === 'untracked') {
             let location = node.loc.start.line - 1;
-            let testCases = _this.testCasesFactory(_this.NumberOfTestCases);
-            let params = _this.paramFactory(node.params);
+            let testCases = _this.schema.testCasesFactory(_this.NumberOfTestCases);
+            let params = _this.schema.paramFactory(node.params);
             localFunctionObject = _this.schema.getFunctionObject(code, location, node.id.name, params, newSign, testCases);
           } else {
             localFunctionObject.code = code;
             localFunctionObject.location = node.loc.start.line - 1;
             localFunctionObject.sign = newSign;
+            localFunctionObject.testCases = _this.schema.restingActualResult(localFunctionObject.testCases);
           }
           localMap.set(node.id.name, localFunctionObject);
         }
@@ -43,22 +44,10 @@ export class Traverse {
     return localMap;
   }
 
-  paramFactory(newParams) {
-    return newParams.map(param => {
-      return this.schema.getParamObject(param.name, param.selectedType);
-    });
-  }
-  testCasesFactory(number) {
-    const localTestCases = [];
-    for (let i = 0; i < number; i++) {
-      localTestCases.push(this.schema.getTestCaseObject(i));
-    }
-    return localTestCases;
-  }
   subscribe(schema) {
     this.schema = schema;
     this.mainMap = this.schema.getMainMap();
-    this.event.subscribe('astReady', (payload) => { this.astReady(payload); });
+    this.event.subscribe('astReady', payload => this.astReady(payload));
   }
   publish(event, payload) {
     switch (event) {

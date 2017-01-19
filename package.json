@@ -19,10 +19,10 @@
     "url": "http://github.com/aurelia/skeleton-navigation"
   },
   "scripts": {
-    "test": "gulp test",
+    "t": "gulp test",
     "e2e": "gulp serve webdriver-standalone e2e",
     "tdd": "gulp tdd",
-    "test-coverage": "gulp cover"
+    "tc": "gulp cover"
   },
   "devDependencies": {
     "aurelia-bundler": "^0.4.0",

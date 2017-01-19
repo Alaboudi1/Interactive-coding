@@ -1,5 +1,8 @@
 
 const code = 'function helloWorld(message){return message;}';
+const infiniteCode = 'function loop(number){while(number != 5) number++; return number;}';
+const ErrorCode = 'function helloWorld(message){return message++;}';
+const undefinedCode = 'function helloWorld(message){return message.mess;}';
 const tree =
   {
     'range': [
@@ -164,4 +167,4 @@ const annotstionFailling = {
   row: 0
 };
 
-export { code, tree, annotstionWarning, annotstionPassing, annotstionFailling, annotstionSomeFailling};
+export { code, tree, annotstionWarning, annotstionPassing, annotstionFailling, annotstionSomeFailling, infiniteCode, ErrorCode, undefinedCode};

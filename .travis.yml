@@ -14,7 +14,7 @@ before_script:
   - npm install
   - jspm install
 script: 
-  - npm run test
+  - npm run t
 notifications:
   email:
     on_success: change

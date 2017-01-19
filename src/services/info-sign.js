@@ -16,7 +16,7 @@ export class InfoSign {
     let type;
     for (let [functionName, functionObject] of mainMap) {
       row = functionObject.location;
-      if (functionObject.track) {
+      if (functionObject.status === 'tracked') {
         text = functionObject.sign.errorCount ? `${functionObject.sign.errorCount} out of ${functionObject.sign.testCasesCount} test cases Fail` :
           `All the ${functionObject.sign.testCasesCount} test cases Pass`;
         type = 'info'; // also warning and information
@@ -27,6 +27,7 @@ export class InfoSign {
       newAnno = {row, column, text, type};
       annotstions.push(newAnno);
     }
+
     this.publish('setAnnotations', annotstions);
   }
   onTestEnsureEnds(mainMap) {
@@ -37,7 +38,7 @@ export class InfoSign {
 
   createTestStatus(mainMap) {
     for (let functionObject of mainMap.values()) {
-      if (functionObject.track) {
+      if (functionObject.status === 'tracked') {
         this.createTestIndicator(functionObject);
       }
     }
@@ -54,7 +55,7 @@ export class InfoSign {
   }
 
   subscribe() {
-    this.event.subscribe('onTestEnsureEnds', mainMap => { this.onTestEnsureEnds(mainMap); });
+    this.event.subscribe('onCreateIndicatorsRequest', payload => this.onTestEnsureEnds(payload.mainMap));
   }
   publish(event, payload) {
     switch (event) {

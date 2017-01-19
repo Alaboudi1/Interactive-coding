@@ -11,24 +11,30 @@ export class Dialog {
     this.controller = controller;
     this.functionObject;
     this.page = 1;
+    this.mainMap;
     this.subscribe();
   }
-  submit() {
-    this.event.publish('onTestCreateRequest', this.functionObject);
-  }
-  activate(functionObject) {
-    if (functionObject.track) {
+  activate(payload) {
+    this.mainMap = payload.mainMap;
+    this.functionObject = this.mainMap.get(payload.functionName);
+    if (this.functionObject.status === 'tracked') {
       this.page = 3;
     }
-    this.functionObject = functionObject;
-    this.testCases = functionObject.testCases;
+    this.testCases = this.functionObject.testCases;
   }
-
-  subscribe() {
-    this.event.subscribe('onTestReady', functionObject => {
-      this.functionObject = functionObject;
-      this.page = 2;
-    });
+  createTests() {
+    this.functionObject.status = 'underTesting';
+    this.event.publish('onTestCreateRequest', {mainMap: this.mainMap, functionName: this.functionObject.name});
+  }
+  saveTests() {
+    this.functionObject.status = 'tracked';
+    this.event.publish('onTraverseEnds', {mainMap: this.mainMap});
+    this.controller.cancel();
+  }
+  reset() {
+    this.functionObject.status = 'untracked';
+    this.event.publish('onRefershRequest');
+    this.controller.cancel();
   }
   ok(index) {
     this.testCases[index].status = 'success';
@@ -39,9 +45,13 @@ export class Dialog {
   warning(index) {
     this.testCases[index].status = 'warning';
   }
-  reset() {
-    this.functionObject.track = false;
-    this.event.publish('onRefershRequest');
-    this.controller.cancel();
+  setMainMap(mainMap) {
+    this.mainMap = 'mainMap';
+  }
+  subscribe() {
+    this.event.subscribe('onTestReady', payload => {
+      this.functionObject = payload.mainMap.get(payload.functionName);
+      this.page = 2;
+    });
   }
 }
