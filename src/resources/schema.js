@@ -30,7 +30,7 @@ export class Schema {
       testCasesCount//'count how many test cases for a function'
     };
   }
-  getTestCaseObject( id = 0, status = '', expectedResult = 'infinity loop', pass = false, paramsName = [], paramsValue = [], actualResult = 'infinity loop', testCaseCode = '') {
+  getTestCaseObject( id = 0, status = '', expectedResult = 'infinite loop', pass = false, paramsName = [], paramsValue = [], actualResult = 'infinite loop', testCaseCode = '') {
     return {
       id,
       status,   // 'ok, wrong or irrelevant',

@@ -33,7 +33,7 @@ export class Test {
         }
       }
       testCase.testCaseCode += `${functionObject.name}(${testCase.paramsName.toString()})`;
-      testCase.id = ++id;
+      testCase.id = id++;
     }
     functionObject.status = 'underTesting';
   }
@@ -70,7 +70,7 @@ export class Test {
         }
       }
     }
-    this.publish('onTestEnsureEnds', {mainMap});
+    this.publish('onCreateIndicatorsRequest', {mainMap});
   }
 
   fakeNumber() {
@@ -118,8 +118,8 @@ export class Test {
 
   publish(event, payload) {
     switch (event) {
-    case 'onTestEnsureEnds':
-      this.event.publish('onTestEnsureEnds', payload);
+    case 'onCreateIndicatorsRequest':
+      this.event.publish('onCreateIndicatorsRequest', payload);
       break;
     case 'onExpectedResultRequest':
       this.event.publish('onExpectedResultRequest', payload);

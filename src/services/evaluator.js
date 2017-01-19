@@ -29,7 +29,7 @@ export class Evaluator {
     }
     this.exectionEnded = true;
     if (this.testCount === 0) {
-      this.publish('onActualResultDone', {mainMap});
+      this.publish('onCreateIndicatorsRequest', {mainMap});
     } else {
       this.reset();
     }
@@ -114,6 +114,9 @@ export class Evaluator {
       break;
     case 'onTestReady':
       this.event.publish('onTestReady', payload);
+      break;
+    case 'onCreateIndicatorsRequest':
+      this.event.publish('onCreateIndicatorsRequest', payload);
       break;
     default:
       break;

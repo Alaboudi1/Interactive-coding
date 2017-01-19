@@ -37,7 +37,7 @@ describe('the behavior of test module (10 Test) ', () => {
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
         expect(testCase.paramsName).toContain(jasmine.any(String));
         expect(testCase.testCaseCode).toContain('helloWorld');
-        expect(testCase.id).toBe(1);
+        expect(testCase.id).toBe(0);
         expect(testCase.paramsValue.pop()).toContain(jasmine.any(String));
         done();
       });
@@ -51,7 +51,7 @@ describe('the behavior of test module (10 Test) ', () => {
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
         expect(testCase.paramsName).toContain(jasmine.any(String));
         expect(testCase.testCaseCode).toContain('helloWorld');
-        expect(testCase.id).toBe(1);
+        expect(testCase.id).toBe(0);
         expect(testCase.paramsValue.pop()).toContain(jasmine.any(Number));
         done();
       });
@@ -65,7 +65,7 @@ describe('the behavior of test module (10 Test) ', () => {
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
         expect(testCase.paramsName).toContain(jasmine.any(String));
         expect(testCase.testCaseCode).toContain('helloWorld');
-        expect(testCase.id).toBe(1);
+        expect(testCase.id).toBe(0);
         expect(testCase.paramsValue.pop()).toContain(jasmine.any(Boolean));
         done();
       });
@@ -79,7 +79,7 @@ describe('the behavior of test module (10 Test) ', () => {
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
         expect(testCase.paramsName).toContain(jasmine.any(String));
         expect(testCase.testCaseCode).toContain('helloWorld');
-        expect(testCase.id).toBe(1);
+        expect(testCase.id).toBe(0);
         expect(testCase.paramsValue).toContain(jasmine.any(String));
         done();
       });
@@ -93,7 +93,7 @@ describe('the behavior of test module (10 Test) ', () => {
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
         expect(testCase.paramsName).toContain(jasmine.any(String));
         expect(testCase.testCaseCode).toContain('helloWorld');
-        expect(testCase.id).toBe(1);
+        expect(testCase.id).toBe(0);
         expect(testCase.paramsValue).toContain(jasmine.any(Number));
         done();
       });
@@ -106,7 +106,7 @@ describe('the behavior of test module (10 Test) ', () => {
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
         expect(testCase.paramsName).toContain(jasmine.any(String));
         expect(testCase.testCaseCode).toContain('helloWorld');
-        expect(testCase.id).toBe(1);
+        expect(testCase.id).toBe(0);
         expect(testCase.paramsValue).toContain(jasmine.any(Boolean));
         done();
       });
@@ -145,7 +145,7 @@ describe('the behavior of test module (10 Test) ', () => {
     it('should execute the test and passes it if the expectedResult === actualResult and the type is primitive #1', done => {
       let localObj = mainMap.get('helloWorld');
       localObj.testCases[0] = { testCaseCode: 'helloWorld("this is a test");', expectedResult: 'this is a test', actualResult: 'this is a test' };
-      event.subscribe('onTestEnsureEnds', payload => {
+      event.subscribe('onCreateIndicatorsRequest', payload => {
         expect(payload.mainMap.get('helloWorld').testCases[0].pass).toBe(true);
         done();
       });
@@ -155,7 +155,7 @@ describe('the behavior of test module (10 Test) ', () => {
     it('should execute the test and passes it if the expectedResult === actualResult and the type is array #2', done => {
       let localObj = mainMap.get('helloWorld');
       localObj.testCases[0] = { testCaseCode: 'helloWorld([1,2,3]);', expectedResult: [1, 2, 3], actualResult: [1, 2, 3] };
-      event.subscribe('onTestEnsureEnds', payload => {
+      event.subscribe('onCreateIndicatorsRequest', payload => {
         expect(payload.mainMap.get('helloWorld').testCases[0].pass).toBe(true);
         done();
       });
@@ -165,7 +165,7 @@ describe('the behavior of test module (10 Test) ', () => {
     it('should execute the test and faills it if the expectedResult != actualResult when type is primitive #3', done => {
       let localObj = mainMap.get('helloWorld');
       localObj.testCases[0] = { testCaseCode: 'helloWorld("this is not a test");', expectedResult: 'this is a test', actualResult: 'this is not a test' };
-      event.subscribe('onTestEnsureEnds', payload => {
+      event.subscribe('onCreateIndicatorsRequest', payload => {
         expect(payload.mainMap.get('helloWorld').testCases[0].pass).toBe(false);
         done();
       });
@@ -174,7 +174,7 @@ describe('the behavior of test module (10 Test) ', () => {
     it('should execute the test and faills it if the expectedResult != actualResult when type is array #4', done => {
       let localObj = mainMap.get('helloWorld');
       localObj.testCases[0] = { testCaseCode: 'helloWorld([1,3,2]);', expectedResult: [1, 2, 3] };
-      event.subscribe('onTestEnsureEnds', payload => {
+      event.subscribe('onCreateIndicatorsRequest', payload => {
         expect(payload.mainMap.get('helloWorld').testCases[0].pass).toBe(false);
         done();
       });
