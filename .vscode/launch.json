@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Launch",
             "type": "node",
@@ -25,12 +26,12 @@
             "name": "Attach",
             "type": "node",
             "request": "attach",
-            "port": 5858,
+            "port": 8080,
             "address": "localhost",
             "restart": false,
             "sourceMaps": false,
             "outDir": null,
-            "localRoot": "${workspaceRoot}",
+            "localRoot": "${workspaceRoot}/src",
             "remoteRoot": null
         },
         {

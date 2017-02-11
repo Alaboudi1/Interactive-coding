@@ -1,7 +1,6 @@
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { inject } from 'aurelia-framework';
-import { Run } from '../servicesBootstrapper/run';
-@inject(EventAggregator, Run)
+@inject(EventAggregator)
 export class Editor {
 
   constructor(event) {
