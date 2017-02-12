@@ -63,7 +63,7 @@ export class Test {
       if ( functionObject.status === 'tracked') {
         for (let testCase of functionObject.testCases) {
           if (Array.isArray(testCase.actualResult) && Array.isArray(testCase.expectedResult)) {
-            testCase.pass = testCase.expectedResult.join('') === testCase.actualResult.join('');
+            testCase.pass = JSON.stringify(testCase.expectedResult) === JSON.stringify(testCase.actualResult);
           } else {
             testCase.pass = testCase.expectedResult === testCase.actualResult;
           }

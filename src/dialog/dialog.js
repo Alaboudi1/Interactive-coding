@@ -42,17 +42,15 @@ export class Dialog {
     this.event.publish('onRefershRequest');
     this.controller.cancel();
   }
-  ok(index) {
-    this.testCases[index].status = 'success';
+  saveObjectLiteral() {
+    this.page = 'functionParamters';
   }
-  danger(index) {
-    this.testCases[index].status = 'danger';
+  cancelObjectLiteral(index) {
+    this.param.properties = [];
+    this.page = 'functionParamters';
   }
   warning(index) {
     this.testCases[index].status = 'warning';
-  }
-  setMainMap(mainMap) {
-    this.mainMap = 'mainMap';
   }
   addProperty() {
     this.param.properties.push({name: '', selectedType: ''});

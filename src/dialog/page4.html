@@ -1,5 +1,5 @@
 <template>
-    <ai-dialog style="width: 433px">
+    <ai-dialog style="width: 440px">
         <ai-dalog-body>
             <div class="container-fluid">
                 <h2>Object Literal</h2>
@@ -18,10 +18,12 @@
                             <option>Number</option>
                             <option>String</option>
                             <option>Boolean</option> 
+                            <option>Object Literal</option>  
                             <option>Array of Numbers</option>
                             <option>Array of Strings</option>
-                            <option>Array of Booleans</option>
-                            <option>Object Literal</option>  
+                            <option>Array of Booleans</option>                                                        
+                            <option>Array of Object Literals</option>
+
                         </select>
                         </div>
                     </td>
@@ -36,8 +38,8 @@
         </ai-dalog-body>
         <ai-dialog-footer>
             <ai-dialog-footer>
-                <button class="btn btn-danger" click.delegate="reset()">Reset</button>
-                <button class="btn btn-success" attach-focus='true' click.trigger="controller.cancel()">Ok</button>
+                <button class="btn btn-danger" click.delegate="cancelObjectLiteral()">remove all</button>
+                <button class="btn btn-success" click.trigger="saveObjectLiteral()">save</button>
             </ai-dialog-footer>
         </ai-dialog-footer>
     </ai-dialog>
