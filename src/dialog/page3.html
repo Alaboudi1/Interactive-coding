@@ -1,4 +1,5 @@
 <template>
+  <require from = './displayResult'></require>
   <ai-dialog>
     <ai-dalog-body>
       <div class="container-fluid">
@@ -14,9 +15,9 @@
           </thead>
           <tbody>
             <tr repeat.for="test of testCases" class="${test.pass ? 'success': 'danger'}">
-              <td repeat.for="param of test.paramsValue">${param}</td>
-              <td>${test.actualResult}</td>
-              <td>${test.expectedResult}</td>
+              <td repeat.for="param of test.paramsValue">${param | result}</td>
+              <td>${test.actualResult | result}</td>
+              <td>${test.expectedResult | result}</td>
             </tr>
           </tbody>
         </table>

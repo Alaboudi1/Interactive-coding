@@ -59,13 +59,13 @@ describe('the behavior of evaluator module ', () => {
       event.publish('onExpectedResultRequest', {mainMap});
     });
 
-    it('should populate testCaseCode, paramsName, paramsValue properties when the selectedType is String 4/6', done => {
+    it('should populate the correct expectedResult when the selectedType is String 4/6', done => {
       functionObject.testCases.push(schema.getTestCaseObject(0, '', [], false, [], [], [], 'let array =`hello`; helloWorld(array);'));
       functionObject.status = 'underTesting';
       mainMap.set('helloWorld', functionObject);
       event.subscribe('onTestReady', payload => {
         let testCase = payload.mainMap.get('helloWorld').testCases;
-        expect(testCase.pop().expectedResult).toEqual('hello');
+        expect(testCase.pop().expectedResult).toBe('hello');
         done();
       });
       event.publish('onExpectedResultRequest', {mainMap});
