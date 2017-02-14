@@ -54,7 +54,7 @@ export class Test {
       break;
     }
     default:
-      param = this.fakeArray(type, 5);
+      param = this.fakeArray(type, 5, properties);
     }
     return param;
   }
@@ -88,7 +88,7 @@ export class Test {
     return faker.random.boolean();
   }
 
-  fakeArray(arryType, index) {
+  fakeArray(arryType, index, properties) {
     let fakeArray = [];
     let type;
     switch (arryType) {
@@ -104,11 +104,15 @@ export class Test {
       type = 'Boolean';
       break;
     }
+    case 'Array of Object Literals': {
+      type = 'Object Literal';
+      break;
+    }
     default:
       break;
     }
     for (let i = 0; i < index; i++) {
-      fakeArray.push(this.generateValueForParamters(type));
+      fakeArray.push(this.generateValueForParamters(type, properties));
     }
     return fakeArray;
   }
