@@ -18,7 +18,7 @@ export class Test {
       }
     }
     this.createTestCases(functionObject);
-    this.publish('onExpectedResultRequest', { mainMap });
+    this.publish('onExpectedResultRequest', {mainMap, functionName});
   }
   createTestCases(functionObject) {
     let id = 0;
@@ -62,7 +62,7 @@ export class Test {
     for (let functionObject of mainMap.values()) {
       if (functionObject.status === 'tracked') {
         for (let testCase of functionObject.testCases) {
-          if (Array.isArray(testCase.actualResult) && Array.isArray(testCase.expectedResult)) {
+          if (testCase.actualResult instanceof Object && testCase.expectedResult instanceof Object) {
             testCase.pass = JSON.stringify(testCase.expectedResult) === JSON.stringify(testCase.actualResult);
           } else {
             testCase.pass = testCase.expectedResult === testCase.actualResult;
@@ -129,13 +129,13 @@ export class Test {
     this.event.subscribe('onTestCreateRequest', payload => this.createParamsValue(payload.mainMap, payload.functionName));
   }
 
-  publish(event, payload) {
+  publish(event, publishPayload) {
     switch (event) {
     case 'onCreateIndicatorsRequest':
-      this.event.publish('onCreateIndicatorsRequest', payload);
+      this.event.publish('onCreateIndicatorsRequest', publishPayload);
       break;
     case 'onExpectedResultRequest':
-      this.event.publish('onExpectedResultRequest', payload);
+      this.event.publish('onExpectedResultRequest', publishPayload);
       break;
     default:
       break;

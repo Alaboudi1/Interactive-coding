@@ -24,7 +24,6 @@ export class Dialog {
     this.testCases = this.functionObject.testCases;
   }
   createTests() {
-    this.constructObjectLiteral();
     this.functionObject.status = 'underTesting';
     this.event.publish('onTestCreateRequest', {mainMap: this.mainMap, functionName: this.functionObject.name});
   }
