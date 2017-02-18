@@ -17,10 +17,11 @@ export class Schema {
       status // 'untracked, tracked, underTesting'
     };
   }
-  getParamObject(name = '', selectedType = '' ) {
+  getParamObject(name = '', selectedType = '', properties = [] ) {
     return {
       name, //name of the paramter
-      selectedType  //' the type of the paramter'
+      selectedType,  //' the type of the paramter'
+      properties //in case of the selectedType is object literal
     };
   }
   getSignObject(cssClass = 'noError', errorCount = 0, testCasesCount = 0) {
@@ -50,9 +51,7 @@ export class Schema {
     return localTestCases;
   }
   paramFactory(newParams) {
-    return newParams.map(param => {
-      return this.getParamObject(param.name, param.selectedType);
-    });
+    return newParams.map(param => (this.getParamObject(param.name, param.selectedType)));
   }
   restingActualResult(testCases) {
     testCases.forEach(testCase => testCase.actualResult = 'infinity loop');

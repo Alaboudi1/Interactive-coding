@@ -1,9 +1,10 @@
 <template>
+  <require from = './displayResult'></require>
   <ai-dialog>
     <ai-dalog-body>
       <div class="container-fluid">
-        <h2>Basic Table</h2>
-        <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>
+        <h2>Test Cases Result</h2>
+        <p>The table below shows each test case with the expced and actual result:</p>
         <table class="table">
           <thead>
             <tr>
@@ -14,9 +15,9 @@
           </thead>
           <tbody>
             <tr repeat.for="test of testCases" class="${test.pass ? 'success': 'danger'}">
-              <td repeat.for="param of test.paramsValue">${param}</td>
-              <td>${test.actualResult}</td>
-              <td>${test.expectedResult}</td>
+              <td repeat.for="param of test.paramsValue">${param | result}</td>
+              <td>${test.actualResult | result}</td>
+              <td>${test.expectedResult | result}</td>
             </tr>
           </tbody>
         </table>
@@ -25,7 +26,7 @@
     <ai-dialog-footer>
       <ai-dialog-footer>
         <button class="btn btn-danger" click.delegate="reset()">Reset</button>
-        <button class="btn btn-success" click.trigger="controller.cancel()">Ok</button>
+        <button class="btn btn-success" attach-focus ='true' click.trigger="controller.cancel()">Ok</button>
       </ai-dialog-footer>
     </ai-dialog-footer>
   </ai-dialog>

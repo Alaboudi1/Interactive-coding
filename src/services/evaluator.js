@@ -85,7 +85,7 @@ export class Evaluator {
   reset() {
     setTimeout(_ => {
       if (!this.reported) {
-        this.publish(this.nextEvent, {mainMap: this.mainMap});
+        this.publish(this.nextEvent, {mainMap: this.mainMap, functionName: this.functionName});
       }
       this.workers.forEach(ev => { ev.worker.terminate(); URL.revokeObjectURL(ev.bbURL); });
       this.reported = false;
@@ -99,6 +99,7 @@ export class Evaluator {
     this.event.subscribe('onExpectedResultRequest', payload => {
       this.nextEvent = 'onTestReady';
       this.currentTestTarget = 'underTesting';
+      this.functionName = payload.functionName;
       this.getResult(payload.mainMap);
     });
     this.event.subscribe('onTraverseEnds', payload => {

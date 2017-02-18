@@ -1,6 +1,7 @@
 <template>
-  <require from="./dialog.css"></require>
-  <compose if.bind="page==1" view='./page1.html'></compose>
-  <compose if.bind="page==2" view='./page2.html'></compose>
-  <compose if.bind="page==3" view="./page3.html"></compose>
+  <require from='./dialog.css'></require>
+  <compose if.bind="page === 'functionParamters'" view='./page1.html'></compose>
+  <compose if.bind="page === 'ConfirmTestCases'" view='./page2.html'></compose>
+  <compose if.bind="page === 'testCasesResult'" view='./page3.html'></compose>
+  <compose if.bind="page=== 'ObjectLiteral'"  view='./page4.html'></compose>
 </template>

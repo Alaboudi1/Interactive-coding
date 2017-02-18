@@ -1,11 +1,11 @@
 import { Evaluator } from '../../src/services/evaluator';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { Schema } from '../../src/resources/schema';
-import { code, infiniteCode, undefinedCode, ErrorCode} from '../../test/unit/mockModule.spec';
+import {code, infiniteCode, undefinedCode, ErrorCode, objCode } from '../../test/unit/mockModule.spec';
 
 
 describe('the behavior of evaluator module ', () => {
-  describe('regarding evaluating code with finite result (6 Tests)', () => {
+  describe('regarding evaluating code with finite result (7 Tests)', () => {
     let event;
     let evaluator;
     let schema;
@@ -30,6 +30,20 @@ describe('the behavior of evaluator module ', () => {
       event.subscribe('onTestReady', payload => {
         let testCase = payload.mainMap.get('helloWorld').testCases;
         expect(testCase.pop().expectedResult).toContain(jasmine.any(String));
+        done();
+      });
+      event.publish('onExpectedResultRequest', {mainMap});
+    });
+    it('should populate expectedResult with Array of Object Literals when the selectedType is Array of Object Literals 1/6', done => {
+      functionObject.testCases.push(schema.getTestCaseObject(0, '', [], false, [], [], [], 'let array =[{age : 15}, {age : 10}]; getOldest(array);'));
+      functionObject.code = objCode;
+      functionObject.status = 'underTesting';
+      mainMap.set('helloWorld', functionObject);
+      event.subscribe('onTestReady', payload => {
+        let testCase = payload.mainMap.get('helloWorld').testCases;
+        expect(testCase[0].expectedResult).toEqual(jasmine.any(Object));
+        expect(testCase[0].expectedResult.age).toEqual(15);
+
         done();
       });
       event.publish('onExpectedResultRequest', {mainMap});
@@ -59,13 +73,13 @@ describe('the behavior of evaluator module ', () => {
       event.publish('onExpectedResultRequest', {mainMap});
     });
 
-    it('should populate testCaseCode, paramsName, paramsValue properties when the selectedType is String 4/6', done => {
+    it('should populate the correct expectedResult when the selectedType is String 4/6', done => {
       functionObject.testCases.push(schema.getTestCaseObject(0, '', [], false, [], [], [], 'let array =`hello`; helloWorld(array);'));
       functionObject.status = 'underTesting';
       mainMap.set('helloWorld', functionObject);
       event.subscribe('onTestReady', payload => {
         let testCase = payload.mainMap.get('helloWorld').testCases;
-        expect(testCase.pop().expectedResult).toEqual('hello');
+        expect(testCase.pop().expectedResult).toBe('hello');
         done();
       });
       event.publish('onExpectedResultRequest', {mainMap});

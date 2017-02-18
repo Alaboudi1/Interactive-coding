@@ -13,32 +13,28 @@ export class Test {
     let paramValue;
     for (let testCase of functionObject.testCases) {
       for (let param of functionObject.params) {
-        paramValue = this.generateValueForParamters(param.selectedType);
+        paramValue = this.generateValueForParamters(param.selectedType, param.properties);
         testCase.paramsValue.push(paramValue);
       }
     }
     this.createTestCases(functionObject);
-    this.publish('onExpectedResultRequest', {mainMap});
+    this.publish('onExpectedResultRequest', {mainMap, functionName});
   }
   createTestCases(functionObject) {
     let id = 0;
     for (let testCase of functionObject.testCases) {
       for (let paramsValue of testCase.paramsValue) {
-        if (Array.isArray(paramsValue)) {
-          const arrayName = this.fakeString();
-          testCase.testCaseCode += `var ${arrayName} = [ ${paramsValue.toString()} ];`;
-          testCase.paramsName.push(`${arrayName}`);
-        } else {
-          testCase.paramsName.push(`${paramsValue}`);
-        }
+        const varName = this.fakeString();
+        testCase.testCaseCode += `var ${varName} =  ${JSON.stringify(paramsValue)} ;`;
+        testCase.paramsName.push(`${varName}`);
       }
-      testCase.testCaseCode += `${functionObject.name}(${testCase.paramsName.toString()})`;
+      testCase.testCaseCode += `${functionObject.name}(${testCase.paramsName})`;
       testCase.id = id++;
     }
     functionObject.status = 'underTesting';
   }
 
-  generateValueForParamters(type) {
+  generateValueForParamters(type, properties) {
     let param;
     switch (type) {
     case 'Number': {
@@ -46,31 +42,35 @@ export class Test {
       break;
     }
     case 'String': {
-      param = `"${this.fakeString()}"`;
+      param = this.fakeString();
       break;
     }
     case 'Boolean': {
       param = this.fakeBoolean();
       break;
     }
+    case 'Object Literal': {
+      param = this.fakeObjectLiteral(properties);
+      break;
+    }
     default:
-      param = this.fakeArray(type, 5);
+      param = this.fakeArray(type, 5, properties);
     }
     return param;
   }
   ensureResult(mainMap) {
     for (let functionObject of mainMap.values()) {
-      if ( functionObject.status === 'tracked') {
+      if (functionObject.status === 'tracked') {
         for (let testCase of functionObject.testCases) {
-          if (Array.isArray(testCase.actualResult) && Array.isArray(testCase.expectedResult)) {
-            testCase.pass = testCase.expectedResult.join('') === testCase.actualResult.join('');
+          if (testCase.actualResult instanceof Object && testCase.expectedResult instanceof Object) {
+            testCase.pass = JSON.stringify(testCase.expectedResult) === JSON.stringify(testCase.actualResult);
           } else {
             testCase.pass = testCase.expectedResult === testCase.actualResult;
           }
         }
       }
     }
-    this.publish('onCreateIndicatorsRequest', {mainMap});
+    this.publish('onCreateIndicatorsRequest', { mainMap });
   }
 
   fakeNumber() {
@@ -88,41 +88,54 @@ export class Test {
     return faker.random.boolean();
   }
 
-  fakeArray(type, index) {
+  fakeArray(arryType, index, properties) {
     let fakeArray = [];
+    let type;
+    switch (arryType) {
+    case 'Array of Numbers': {
+      type = 'Number';
+      break;
+    }
+    case 'Array of Strings': {
+      type = 'String';
+      break;
+    }
+    case 'Array of Booleans': {
+      type = 'Boolean';
+      break;
+    }
+    case 'Array of Object Literals': {
+      type = 'Object Literal';
+      break;
+    }
+    default:
+      break;
+    }
     for (let i = 0; i < index; i++) {
-      switch (type) {
-      case 'Array of Numbers': {
-        fakeArray.push(this.fakeNumber());
-        break;
-      }
-      case 'Array of Strings': {
-        fakeArray.push(`"${this.fakeString()}"`);
-        break;
-      }
-      case 'Array of Booleans': {
-        fakeArray.push(this.fakeBoolean());
-        break;
-      }
-      default:
-        break;
-      }
+      fakeArray.push(this.generateValueForParamters(type, properties));
     }
     return fakeArray;
+  }
+  fakeObjectLiteral(properties) {
+    let obj = {};
+    for (let pro of properties) {
+      obj[pro.name] = this.generateValueForParamters(pro.selectedType);
+    }
+    return obj;
   }
 
   subscribe() {
     this.event.subscribe('onActualResultDone', payload => this.ensureResult(payload.mainMap));
-    this.event.subscribe('onTestCreateRequest', payload =>  this.createParamsValue(payload.mainMap, payload.functionName));
+    this.event.subscribe('onTestCreateRequest', payload => this.createParamsValue(payload.mainMap, payload.functionName));
   }
 
-  publish(event, payload) {
+  publish(event, publishPayload) {
     switch (event) {
     case 'onCreateIndicatorsRequest':
-      this.event.publish('onCreateIndicatorsRequest', payload);
+      this.event.publish('onCreateIndicatorsRequest', publishPayload);
       break;
     case 'onExpectedResultRequest':
-      this.event.publish('onExpectedResultRequest', payload);
+      this.event.publish('onExpectedResultRequest', publishPayload);
       break;
     default:
       break;

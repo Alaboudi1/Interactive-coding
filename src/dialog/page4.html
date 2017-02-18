@@ -1,0 +1,47 @@
+<template>
+    <ai-dialog style="width: 440px">
+        <ai-dalog-body>
+            <div class="container-fluid">
+                <h2>Object Literal</h2>
+                <table>
+                <tr repeat.for="property of param.properties">
+                    <td >
+                        <div class="form-group">
+                        <label for='name'> Property Name:</label> <input id='name' type="text"  class="form-control" value.bind="property.name">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                        <label for="type"> Property Type: </label>
+                        <select class="selectpicker form-control" value.bind="property.selectedType" id="type">
+                            <option  selected='true' disabled='true'></option>
+                            <option>Number</option>
+                            <option>String</option>
+                            <option>Boolean</option> 
+                            <option>Object Literal</option>  
+                            <option>Array of Numbers</option>
+                            <option>Array of Strings</option>
+                            <option>Array of Booleans</option>                                                        
+                            <option>Array of Object Literals</option>
+
+                        </select>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-ms" style="bottom: -5px; position: relative" click.delegate="removeProperty($index)">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                    </td>
+                </tr>
+                </table>
+                <button type="button" attach-focus='true' class="btn btn-primary btn-block" click.delegate="addProperty()">Add Property</button>
+        </ai-dalog-body>
+        <ai-dialog-footer>
+            <ai-dialog-footer>
+                <button class="btn btn-danger" click.delegate="cancelObjectLiteral()">remove all</button>
+                <button class="btn btn-success" click.trigger="saveObjectLiteral()">save</button>
+            </ai-dialog-footer>
+        </ai-dialog-footer>
+    </ai-dialog>
+
+</template>

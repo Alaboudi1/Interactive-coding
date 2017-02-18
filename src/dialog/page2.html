@@ -1,9 +1,10 @@
 <template>
+  <require from = './displayResult'></require>
   <ai-dialog>
     <ai-dalog-body>
       <div class="container-fluid">
-        <h2>Basic Table</h2>
-        <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>
+        <h2>Exercising ${functionObject.name} Function </h2>
+        <p>The table below shows the output of running ${functionObject.name} function with the selected input:</p>
         <table class="table">
           <thead>
             <tr>
@@ -14,8 +15,8 @@
           </thead>
           <tbody>
             <tr repeat.for="test of functionObject.testCases" class="${test.status}">
-              <td repeat.for="param of test.paramsValue">${param}</td>
-              <td>${test.expectedResult}</td>
+              <td repeat.for="param of test.paramsValue">${param | result}</td>
+              <td>${test.expectedResult  | result}</td>
               <td>
                 <button type="button" class="btn btn-success btn-xs" click.trigger="ok($index)">
           <span class="glyphicon glyphicon-ok-sign"></span> OK
@@ -33,7 +34,7 @@
     <ai-dialog-footer>
       <ai-dialog-footer>
         <button click.trigger="reset()" class="btn btn-danger">Cancel</button>
-        <button class="btn btn-success" disabled.bind='type.length' click.delegate="saveTests()">Save</button>
+        <button class="btn btn-success" attach-focus ='true' click.delegate="saveTests()">Save</button>
       </ai-dialog-footer>
     </ai-dialog-footer>
   </ai-dialog>

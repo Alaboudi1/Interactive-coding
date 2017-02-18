@@ -4,8 +4,8 @@ import { Schema } from '../../src/resources/schema';
 import { code } from '../../test/unit/mockModule.spec';
 
 
-describe('the behavior of test module (10 Test) ', () => {
-  describe('regarding creating test cases (7 Test)', () => {
+describe('the behavior of test module (12 Test) ', () => {
+  describe('regarding creating test cases (9 Test)', () => {
     let event;
     let test;
     let schema;
@@ -29,9 +29,22 @@ describe('the behavior of test module (10 Test) ', () => {
       mainMap.set('helloWorld', functionObject);
       test.subscribe();
     });
-
     it(`should populate testCaseCode, paramsName, paramsValue properties when the selectedType is
-      Array of String 1/7`, done => {
+      Array of Object Literals 1/7`, done => {
+      functionObject.params.push(schema.getParamObject('message', 'Array of Object Literals', [{name: 'age', selectedType: 'Number'}]));
+      event.subscribe('onExpectedResultRequest', payload => {
+        let testCase = payload.mainMap.get('helloWorld').testCases.pop();
+        expect(testCase.paramsName).toContain(jasmine.any(String));
+        expect(testCase.testCaseCode).toContain('helloWorld');
+        expect(testCase.id).toBe(0);
+        expect(testCase.paramsValue[0]).toContain(jasmine.any(Object));
+        expect(testCase.paramsValue[0].pop().age).toEqual(jasmine.any(Number));
+        done();
+      });
+      event.publish('onTestCreateRequest', {mainMap, functionName: 'helloWorld'});
+    });
+    it(`should populate testCaseCode, paramsName, paramsValue properties when the selectedType is
+      Array of String 1/9`, done => {
       functionObject.params.push(schema.getParamObject('message', 'Array of Strings'));
       event.subscribe('onExpectedResultRequest', payload => {
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
@@ -45,7 +58,7 @@ describe('the behavior of test module (10 Test) ', () => {
     });
 
     it(`should populate testCaseCode, paramsName, paramsValue properties when the selectedType is
-      Array of Numbers 2/7`, done => {
+      Array of Numbers 2/9`, done => {
       functionObject.params.push(schema.getParamObject('message', 'Array of Numbers'));
       event.subscribe('onExpectedResultRequest', payload => {
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
@@ -59,7 +72,7 @@ describe('the behavior of test module (10 Test) ', () => {
     });
 
     it(`should populate testCaseCode, paramsName, paramsValue properties when the selectedType is
-      Array of Boolean 3/7`, done => {
+      Array of Boolean 3/9`, done => {
       functionObject.params.push(schema.getParamObject('message', 'Array of Booleans'));
       event.subscribe('onExpectedResultRequest', payload => {
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
@@ -73,7 +86,7 @@ describe('the behavior of test module (10 Test) ', () => {
     });
 
     it(`should populate testCaseCode, paramsName, paramsValue properties when the selectedType is
-      String 4/7`, done => {
+      String 4/9`, done => {
       functionObject.params.push(schema.getParamObject('message', 'String'));
       event.subscribe('onExpectedResultRequest', payload => {
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
@@ -87,7 +100,7 @@ describe('the behavior of test module (10 Test) ', () => {
     });
 
     it(`should populate testCaseCode, paramsName, paramsValue properties when the selectedType is
-      Number 5/7`, done => {
+      Number 5/9`, done => {
       functionObject.params.push(schema.getParamObject('message', 'Number'));
       event.subscribe('onExpectedResultRequest', payload => {
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
@@ -100,7 +113,7 @@ describe('the behavior of test module (10 Test) ', () => {
       event.publish('onTestCreateRequest', {mainMap, functionName: 'helloWorld'});
     });
     it(`should populate testCaseCode, paramsName, paramsValue properties when the selectedType is
-      Boolean 6/7`, done => {
+      Boolean 6/9`, done => {
       functionObject.params.push(schema.getParamObject('message', 'Boolean'));
       event.subscribe('onExpectedResultRequest', payload => {
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
@@ -112,7 +125,7 @@ describe('the behavior of test module (10 Test) ', () => {
       });
       event.publish('onTestCreateRequest', {mainMap, functionName: 'helloWorld'});
     });
-    it('should populate the status with underTesting 7/7', done => {
+    it('should populate the status with underTesting 7/9', done => {
       functionObject.params.push(schema.getParamObject('message', 'Boolean'));
       event.subscribe('onExpectedResultRequest', payload => {
         let localFunctionObject = payload.mainMap.get('helloWorld');

@@ -1,4 +1,4 @@
-
+const objCode = 'function getOldest(array){ return array.sort((a,b) => a.age-b.age).pop();}';
 const code = 'function helloWorld(message){return message;}';
 const infiniteCode = 'function loop(number){while(number != 5) number++; return number;}';
 const ErrorCode = 'function helloWorld(message){return message++;}';
@@ -167,4 +167,15 @@ const annotstionFailling = {
   row: 0
 };
 
-export { code, tree, annotstionWarning, annotstionPassing, annotstionFailling, annotstionSomeFailling, infiniteCode, ErrorCode, undefinedCode};
+export {
+       code,
+       tree,
+       annotstionWarning,
+       annotstionPassing,
+       annotstionFailling,
+       annotstionSomeFailling,
+       infiniteCode,
+       ErrorCode,
+       undefinedCode,
+       objCode
+      };
