@@ -1,30 +1,25 @@
 <template>
-  <require from = './displayResult'></require>
+  <require from='./displayResult'></require>
   <ai-dialog>
     <ai-dalog-body>
       <div class="container-fluid">
         <h2>Exercising ${functionObject.name} Function </h2>
-        <p>The table below shows the output of running ${functionObject.name} function with the selected input:</p>
+        <p>The table below shows the output of running ${functionObject.name} function with the selected input,double click to change any value:</p>
+
         <table class="table">
           <thead>
             <tr>
               <th repeat.for="param of functionObject.params">${param.name}</th>
               <th>output</th>
-              <th>confirm</th>
             </tr>
           </thead>
           <tbody>
             <tr repeat.for="test of functionObject.testCases" class="${test.status}">
-              <td repeat.for="param of test.paramsValue">${param | result}</td>
-              <td>${test.expectedResult  | result}</td>
+              <td repeat.for="param of test.paramsValue">
+                <div contenteditable="true" textcontent.bind="param | result"></div>
+              </td>
               <td>
-                <button type="button" class="btn btn-success btn-xs" click.trigger="ok($index)">
-          <span class="glyphicon glyphicon-ok-sign"></span> OK
-        </button>
-                <button type="button" class="btn btn-danger btn-xs" click.trigger="danger($index)">
-          <span class="glyphicon glyphicon-remove-sign"></span> wrong</button>
-                <button type="button" class="btn btn-warning btn-xs" click.trigger="warning($index)">
-          <span class="glyphicon glyphicon-trash"></span> irrelevant</button>
+                <div contenteditable="true" textcontent.bind="test.expectedResult | result"></div>
               </td>
             </tr>
           </tbody>
@@ -32,10 +27,8 @@
       </div>
     </ai-dalog-body>
     <ai-dialog-footer>
-      <ai-dialog-footer>
-        <button click.trigger="reset()" class="btn btn-danger">Cancel</button>
-        <button class="btn btn-success" attach-focus ='true' click.delegate="saveTests()">Save</button>
-      </ai-dialog-footer>
+      <button click.trigger="reset()" class="btn btn-danger">Cancel</button>
+      <button class="btn btn-success" attach-focus='true' click.delegate="saveTests()">Save</button>
     </ai-dialog-footer>
   </ai-dialog>
 
