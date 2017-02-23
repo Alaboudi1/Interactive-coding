@@ -5,3 +5,6 @@ ai-dialog-overlay.active {
 table td {
   padding: 2px;
 }
+.table-hover tbody tr:hover {
+  border: .5px dimgray solid;
+}

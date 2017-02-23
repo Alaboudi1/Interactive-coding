@@ -1,4 +1,5 @@
 <template>
+<require from='./displayResult'></require>
   <ai-dialog>
     <ai-dialog-body>
       <div class="container-fluid">
@@ -23,18 +24,29 @@
             </select>
           </div>
           <div class="col-xs-2" style="height: 59px;" if.bind="param.selectedType ==='Object Literal' || param.selectedType === 'Array of Object Literals'">
-            <button type="button" if.bind = '!param.properties.length' click.trigger="constructObjectLiteral(param)" 
-              class="btn btn-xs btn-warning" style="position: absolute; bottom: 0;font-size:11px">
-             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-             Add Schema
-           </button>
-           <button if.bind = 'param.properties.length' type="button" click.trigger="constructObjectLiteral(param)" 
-              class="btn btn-xs btn-success" style="position: absolute; bottom: 0;font-size:11px">
-             <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
-              Schema Added
-           </button>
+            <button type="button" if.bind='!param.properties.length' click.trigger="constructObjectLiteral(param)" class="btn btn-xs btn-warning"
+              style="position: absolute; bottom: 0;font-size:11px">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Schema
+              </button>
+              <button if.bind='param.properties.length' type="button" click.trigger="constructObjectLiteral(param)" class="btn btn-xs btn-success"
+                style="position: absolute; bottom: 0;font-size:11px">
+                <span class="glyphicon glyphicon-check" aria-hidden="true"></span> Schema Added
+                </button>
           </div>
         </div>
+               <h4>How many test cases you needs?</h4>
+            <select class="selectpicker" value.bind="functionObject.numberOfTestCases | result">
+              <option  selected='true' disabled='true'>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option> 
+              <option>4</option> 
+              <option>5</option>
+              <option>10</option>
+              <option>15</option>
+              <option>20</option>
+              <option>50</option>     
+            </select>
       </div>
     </ai-dialog-body>
     <ai-dialog-footer>

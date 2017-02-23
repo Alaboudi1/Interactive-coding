@@ -1,7 +1,7 @@
 
-import {EventAggregator} from 'aurelia-event-aggregator';
-import {inject} from 'aurelia-framework';
-import {DialogController} from 'aurelia-dialog';
+import { EventAggregator } from 'aurelia-event-aggregator';
+import { inject } from 'aurelia-framework';
+import { DialogController } from 'aurelia-dialog';
 
 @inject(EventAggregator, DialogController)
 export class Dialog {
@@ -13,6 +13,8 @@ export class Dialog {
     this.param;
     this.page = 'functionParamters';
     this.mainMap;
+    this.testCases;
+    this.paramValueIsEdited = false;
     this.subscribe();
   }
   activate(payload) {
@@ -25,7 +27,7 @@ export class Dialog {
   }
   createTests() {
     this.functionObject.status = 'underTesting';
-    this.event.publish('onTestCreateRequest', {mainMap: this.mainMap, functionName: this.functionObject.name});
+    this.publish('onTestCreateRequest', { mainMap: this.mainMap, functionName: this.functionObject.name });
   }
   constructObjectLiteral(param) {
     this.param = param;
@@ -33,12 +35,16 @@ export class Dialog {
   }
   saveTests() {
     this.functionObject.status = 'tracked';
-    this.event.publish('onTraverseEnds', {mainMap: this.mainMap});
+    if (this.paramValueIsEdited) {
+      this.publish('onTestEditedRequest', { mainMap: this.mainMap, functionName: this.functionObject.name });
+    } else {
+      this.publish('onTraverseEnds', { mainMap: this.mainMap });
+    }
     this.controller.cancel();
   }
   reset() {
     this.functionObject.status = 'untracked';
-    this.event.publish('onRefershRequest');
+    this.publish('onRefershRequest');
     this.controller.cancel();
   }
   saveObjectLiteral() {
@@ -52,15 +58,39 @@ export class Dialog {
     this.testCases[index].status = 'warning';
   }
   addProperty() {
-    this.param.properties.push({name: '', selectedType: ''});
+    this.param.properties.push({ name: '', selectedType: '' });
   }
   removeProperty(index) {
     this.param.properties.splice(index, 1);
+  }
+  print(parentIndex, childIndex, newValue) {
+    this.testCases[parentIndex].paramsValue.splice(childIndex, 1, newValue);
+    this.testCases[parentIndex].status = 'edited';
+    this.paramValueIsEdited = true;
   }
   subscribe() {
     this.event.subscribe('onTestReady', payload => {
       this.functionObject = payload.mainMap.get(payload.functionName);
       this.page = 'ConfirmTestCases';
+      this.testCases = this.functionObject.testCases;
     });
+  }
+  publish(event, publishPayload) {
+    switch (event) {
+    case 'onTestCreateRequest':
+      this.event.publish('onTestCreateRequest', publishPayload);
+      break;
+    case 'onTestEditedRequest':
+      this.event.publish('onTestEditedRequest', publishPayload);
+      break;
+    case 'onTraverseEnds':
+      this.event.publish('onTraverseEnds', publishPayload);
+      break;
+    case 'onRefershRequest':
+      this.event.publish('onRefershRequest', publishPayload);
+      break;
+    default:
+      break;
+    }
   }
 }

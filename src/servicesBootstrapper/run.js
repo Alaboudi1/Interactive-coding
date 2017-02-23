@@ -11,12 +11,12 @@ import {Evaluator} from '../services/evaluator';
 export class Run {
 
   constructor(parser, traverse, infoSign, test, schema, dialogControler, evaluator) {
-    infoSign.subscribe();
-    test.subscribe();
-    dialogControler.subscribe();
-    evaluator.subscribe();
     parser.subscribe();
     traverse.subscribe(schema);
+    infoSign.subscribe();
+    test.subscribe(schema);
+    dialogControler.subscribe();
+    evaluator.subscribe();
   }
 
 }

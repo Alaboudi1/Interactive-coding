@@ -18,7 +18,7 @@ describe('the behavior of traverse module (3 Tests)', () => {
         'helloWorld',
         [schema.getParamObject('message', '')],
         schema.getSignObject(),
-        schema.testCasesFactory(10),
+        undefined,
         'untracked'
         );
   });
@@ -37,6 +37,7 @@ describe('the behavior of traverse module (3 Tests)', () => {
     event.subscribe('onTraverseEnds', payload => {
       if (firstTime) {
         let testedFunctionObject = payload.mainMap.get('helloWorld');
+        testedFunctionObject.testCases = schema.testCasesFactory(1);
         testedFunctionObject.testCases[0].expectedResult = 'Result';
         testedFunctionObject.status = 'tracked';
         firstTime = false;
@@ -54,6 +55,7 @@ describe('the behavior of traverse module (3 Tests)', () => {
     event.subscribe('onTraverseEnds', payload => {
       if (firstTime) {
         let testedFunctionObject = payload.mainMap.get('helloWorld');
+        testedFunctionObject.testCases = schema.testCasesFactory(1);
         testedFunctionObject.testCases[0].expectedResult = 'Result';
         testedFunctionObject.status = 'untracked';
         firstTime = false;

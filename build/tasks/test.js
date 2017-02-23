@@ -27,10 +27,10 @@ gulp.task('cover', function(done) {
   new Karma({
     configFile: __dirname + '/../../karma.conf.js',
     singleRun: true,
-    reporters: ['coverage'],
+    reporters: ['progress'],
     preprocessors: {
       'test/**/*.js': ['babel'],
-      'src/services/*.js': ['babel', 'coverage']
+      'src/services/*.js': ['babel', 'progress']
     },
     coverageReporter: {
       includeAllSources: true,
@@ -38,10 +38,10 @@ gulp.task('cover', function(done) {
         isparta: require('isparta')
       },
       instrumenter: {
-        'src/services/*.js': 'isparta'
+        'src/**/*.js': 'isparta'
       },
       reporters: [
-        { type: 'html', dir: 'coverage' },
+        { type: 'html', dir: 'progress' },
         { type: 'text' }
       ]
     }
