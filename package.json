@@ -22,7 +22,8 @@
     "t": "gulp test",
     "e2e": "gulp serve webdriver-standalone e2e",
     "tdd": "gulp tdd",
-    "tc": "gulp cover"
+    "tc": "gulp cover",
+    "deploy": "git subtree push --prefix subfolder-name-here origin gh-pages"
   },
   "devDependencies": {
     "aurelia-bundler": "^0.4.0",

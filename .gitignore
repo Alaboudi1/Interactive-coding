@@ -8,5 +8,4 @@ bower_components
 build/reports
 coverage
 test/e2e/dist
-/export
 /npm-debug.log
