@@ -10,6 +10,7 @@ export class Test {
 
   createParamsValue(mainMap, functionName) {
     const functionObject = mainMap.get(functionName);
+    functionObject.testCases = this.scheam.testCasesFactory(functionObject.numberOfTestCases);
     let paramValue;
     for (let testCase of functionObject.testCases) {
       for (let param of functionObject.params) {
@@ -32,6 +33,21 @@ export class Test {
       testCase.id = id++;
     }
     functionObject.status = 'underTesting';
+  }
+  editTestValue(mainMap, functionObjectName) {
+    const functionObject = mainMap.get(functionObjectName);
+    for (let testCase of functionObject.testCases) {
+      if (testCase.status !== 'edited') continue;
+      testCase.paramsName = [];
+      testCase.testCaseCode = '';
+      for (let paramsValue of testCase.paramsValue) {
+        const varName = this.fakeString();
+        testCase.testCaseCode += `var ${varName} =  ${JSON.stringify(paramsValue)} ;`;
+        testCase.paramsName.push(`${varName}`);
+      }
+      testCase.testCaseCode += `${functionObject.name}(${testCase.paramsName})`;
+    }
+    this.publish('onTraverseEnds', {mainMap});
   }
 
   generateValueForParamters(type, properties) {
@@ -124,9 +140,11 @@ export class Test {
     return obj;
   }
 
-  subscribe() {
+  subscribe(scheam) {
+    this.scheam = scheam;
     this.event.subscribe('onActualResultDone', payload => this.ensureResult(payload.mainMap));
     this.event.subscribe('onTestCreateRequest', payload => this.createParamsValue(payload.mainMap, payload.functionName));
+    this.event.subscribe('onTestEditedRequest', payload => this.editTestValue(payload.mainMap, payload.functionName));
   }
 
   publish(event, publishPayload) {
@@ -136,6 +154,9 @@ export class Test {
       break;
     case 'onExpectedResultRequest':
       this.event.publish('onExpectedResultRequest', publishPayload);
+      break;
+    case 'onTraverseEnds':
+      this.event.publish('onTraverseEnds', publishPayload);
       break;
     default:
       break;

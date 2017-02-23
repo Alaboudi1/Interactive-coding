@@ -6,7 +6,7 @@ export class Schema {
   getMainMap() {
     return new Map();
   }
-  getFunctionObject(code = '', location = '', name = '', params = [], sign = this.getSignObject, testCases = [], status = 'untracked' ) {
+  getFunctionObject(code = '', location = '', name = '', params = [], sign = this.getSignObject, testCases = [], status = 'untracked', numberOfTestCases = 0 ) {
     return {
       code, //'code written in the editor',
       location, // 'line number in which the function starts',
@@ -14,7 +14,8 @@ export class Schema {
       params, //'array of paramters for the function -->getParamObject',
       sign, //'object contains all the sign properties -->getsignObject',
       testCases, //'array of test cases -->getTestCaseObject'
-      status // 'untracked, tracked, underTesting'
+      status, // 'untracked, tracked, underTesting'
+      numberOfTestCases // the number of test cases this function has.
     };
   }
   getParamObject(name = '', selectedType = '', properties = [] ) {
@@ -34,7 +35,7 @@ export class Schema {
   getTestCaseObject( id = 0, status = '', expectedResult = 'infinite loop', pass = false, paramsName = [], paramsValue = [], actualResult = 'infinite loop', testCaseCode = '') {
     return {
       id,
-      status,   // 'ok, wrong or irrelevant',
+      status,   // 'edited,...',
       expectedResult, // 'the expected result from running the test case --> String or []',
       pass, //'true if the test cases pass the test',
       paramsName, // 'the name of the  paramters for the test case',
@@ -43,17 +44,16 @@ export class Schema {
       testCaseCode // 'the code that going to execute to run the test case',
     };
   }
-  testCasesFactory(number) {
-    const localTestCases = [];
+  testCasesFactory(number, testCase = []) {
     for (let i = 0; i < number; i++) {
-      localTestCases.push(this.getTestCaseObject(i));
+      testCase.push(this.getTestCaseObject(i));
     }
-    return localTestCases;
+    return testCase;
   }
   paramFactory(newParams) {
     return newParams.map(param => (this.getParamObject(param.name, param.selectedType)));
   }
-  restingActualResult(testCases) {
+  restingActualResult(testCases = []) {
     testCases.forEach(testCase => testCase.actualResult = 'infinity loop');
     return testCases;
   }

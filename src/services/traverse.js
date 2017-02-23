@@ -9,7 +9,6 @@ export class Traverse {
   constructor(eventAggregator) {
     this.event = eventAggregator;
     this.est = estraverse;
-    this.NumberOfTestCases = 10;
   }
 
   astReady(payload) {
@@ -28,9 +27,8 @@ export class Traverse {
 
           if (!localFunctionObject || localFunctionObject.status === 'untracked') {
             let location = node.loc.start.line - 1;
-            let testCases = _this.schema.testCasesFactory(_this.NumberOfTestCases);
             let params = _this.schema.paramFactory(node.params);
-            localFunctionObject = _this.schema.getFunctionObject(code, location, node.id.name, params, newSign, testCases);
+            localFunctionObject = _this.schema.getFunctionObject(code, location, node.id.name, params, newSign);
           } else {
             localFunctionObject.code = code;
             localFunctionObject.location = node.loc.start.line - 1;

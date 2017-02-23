@@ -4,19 +4,21 @@
     <ai-dalog-body>
       <div class="container-fluid">
         <h2>Exercising ${functionObject.name} Function </h2>
-        <p>The table below shows the output of running ${functionObject.name} function with the selected input,double click to change any value:</p>
+        <p>The table below shows the output of running ${functionObject.name} function with the selected input,  double click to change any value:</p>
 
-        <table class="table">
+        <table  class="table table-striped table-hover">
           <thead>
             <tr>
+              <th>#</th>
               <th repeat.for="param of functionObject.params">${param.name}</th>
               <th>output</th>
             </tr>
           </thead>
           <tbody>
-            <tr repeat.for="test of functionObject.testCases" class="${test.status}">
+            <tr repeat.for="test of testCases">
+              <td> <b>${$index+1} </b></td>
               <td repeat.for="param of test.paramsValue">
-                <div contenteditable="true" textcontent.bind="param | result"></div>
+                <div contenteditable="true" textcontent.bind="param | result" blur.trigger="print($parent.$index,$index, $this.param)"></div>
               </td>
               <td>
                 <div contenteditable="true" textcontent.bind="test.expectedResult | result"></div>

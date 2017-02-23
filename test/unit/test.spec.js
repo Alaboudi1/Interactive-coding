@@ -22,21 +22,23 @@ describe('the behavior of test module (12 Test) ', () => {
         'helloWorld',
         [],
         '',
-        schema.testCasesFactory(1),
-        'tracked'
+        [],
+        'tracked',
+        3
          );
       mainMap = schema.getMainMap();
       mainMap.set('helloWorld', functionObject);
-      test.subscribe();
+      test.subscribe(schema);
     });
     it(`should populate testCaseCode, paramsName, paramsValue properties when the selectedType is
       Array of Object Literals 1/7`, done => {
       functionObject.params.push(schema.getParamObject('message', 'Array of Object Literals', [{name: 'age', selectedType: 'Number'}]));
       event.subscribe('onExpectedResultRequest', payload => {
+        expect(payload.mainMap.get('helloWorld').testCases.length).toBe(3);
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
         expect(testCase.paramsName).toContain(jasmine.any(String));
         expect(testCase.testCaseCode).toContain('helloWorld');
-        expect(testCase.id).toBe(0);
+        expect(testCase.id).toBe(2);
         expect(testCase.paramsValue[0]).toContain(jasmine.any(Object));
         expect(testCase.paramsValue[0].pop().age).toEqual(jasmine.any(Number));
         done();
@@ -47,10 +49,11 @@ describe('the behavior of test module (12 Test) ', () => {
       Array of String 1/9`, done => {
       functionObject.params.push(schema.getParamObject('message', 'Array of Strings'));
       event.subscribe('onExpectedResultRequest', payload => {
+        expect(payload.mainMap.get('helloWorld').testCases.length).toBe(3);
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
         expect(testCase.paramsName).toContain(jasmine.any(String));
         expect(testCase.testCaseCode).toContain('helloWorld');
-        expect(testCase.id).toBe(0);
+        expect(testCase.id).toBe(2);
         expect(testCase.paramsValue.pop()).toContain(jasmine.any(String));
         done();
       });
@@ -61,10 +64,11 @@ describe('the behavior of test module (12 Test) ', () => {
       Array of Numbers 2/9`, done => {
       functionObject.params.push(schema.getParamObject('message', 'Array of Numbers'));
       event.subscribe('onExpectedResultRequest', payload => {
+        expect(payload.mainMap.get('helloWorld').testCases.length).toBe(3);
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
         expect(testCase.paramsName).toContain(jasmine.any(String));
         expect(testCase.testCaseCode).toContain('helloWorld');
-        expect(testCase.id).toBe(0);
+        expect(testCase.id).toBe(2);
         expect(testCase.paramsValue.pop()).toContain(jasmine.any(Number));
         done();
       });
@@ -75,10 +79,11 @@ describe('the behavior of test module (12 Test) ', () => {
       Array of Boolean 3/9`, done => {
       functionObject.params.push(schema.getParamObject('message', 'Array of Booleans'));
       event.subscribe('onExpectedResultRequest', payload => {
+        expect(payload.mainMap.get('helloWorld').testCases.length).toBe(3);
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
         expect(testCase.paramsName).toContain(jasmine.any(String));
         expect(testCase.testCaseCode).toContain('helloWorld');
-        expect(testCase.id).toBe(0);
+        expect(testCase.id).toBe(2);
         expect(testCase.paramsValue.pop()).toContain(jasmine.any(Boolean));
         done();
       });
@@ -89,10 +94,11 @@ describe('the behavior of test module (12 Test) ', () => {
       String 4/9`, done => {
       functionObject.params.push(schema.getParamObject('message', 'String'));
       event.subscribe('onExpectedResultRequest', payload => {
+        expect(payload.mainMap.get('helloWorld').testCases.length).toBe(3);
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
         expect(testCase.paramsName).toContain(jasmine.any(String));
         expect(testCase.testCaseCode).toContain('helloWorld');
-        expect(testCase.id).toBe(0);
+        expect(testCase.id).toBe(2);
         expect(testCase.paramsValue).toContain(jasmine.any(String));
         done();
       });
@@ -103,10 +109,11 @@ describe('the behavior of test module (12 Test) ', () => {
       Number 5/9`, done => {
       functionObject.params.push(schema.getParamObject('message', 'Number'));
       event.subscribe('onExpectedResultRequest', payload => {
+        expect(payload.mainMap.get('helloWorld').testCases.length).toBe(3);
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
         expect(testCase.paramsName).toContain(jasmine.any(String));
         expect(testCase.testCaseCode).toContain('helloWorld');
-        expect(testCase.id).toBe(0);
+        expect(testCase.id).toBe(2);
         expect(testCase.paramsValue).toContain(jasmine.any(Number));
         done();
       });
@@ -116,10 +123,11 @@ describe('the behavior of test module (12 Test) ', () => {
       Boolean 6/9`, done => {
       functionObject.params.push(schema.getParamObject('message', 'Boolean'));
       event.subscribe('onExpectedResultRequest', payload => {
+        expect(payload.mainMap.get('helloWorld').testCases.length).toBe(3);
         let testCase = payload.mainMap.get('helloWorld').testCases.pop();
         expect(testCase.paramsName).toContain(jasmine.any(String));
         expect(testCase.testCaseCode).toContain('helloWorld');
-        expect(testCase.id).toBe(0);
+        expect(testCase.id).toBe(2);
         expect(testCase.paramsValue).toContain(jasmine.any(Boolean));
         done();
       });
@@ -130,6 +138,23 @@ describe('the behavior of test module (12 Test) ', () => {
       event.subscribe('onExpectedResultRequest', payload => {
         let localFunctionObject = payload.mainMap.get('helloWorld');
         expect(localFunctionObject.status).toBe('underTesting');
+        done();
+      });
+      event.publish('onTestCreateRequest', {mainMap, functionName: 'helloWorld'});
+    });
+    it('should populate testCaseCode, paramsName, paramsValue properties when tthe testcase is edited 8/9', done => {
+      functionObject.params.push(schema.getParamObject('message', 'Boolean'));
+      let secondValue;
+      event.subscribe('onExpectedResultRequest', payload => {
+        let testCase = payload.mainMap.get('helloWorld').testCases[0];
+        secondValue = !testCase.paramsValue[0];
+        testCase.paramsValue[0] = secondValue;
+        testCase.status = 'edited';
+        event.publish('onTestEditedRequest', {mainMap, functionName: 'helloWorld'});
+      });
+      event.subscribe('onTraverseEnds', payload =>{
+        let testCase = payload.mainMap.get('helloWorld').testCases[0];
+        expect(testCase.testCaseCode).toContain(`${secondValue}`);
         done();
       });
       event.publish('onTestCreateRequest', {mainMap, functionName: 'helloWorld'});
