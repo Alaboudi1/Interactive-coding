@@ -1,6 +1,6 @@
 {
   "name": "aurelia-skeleton-navigation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A starter kit for building a standard navigation-style app with Aurelia.",
   "keywords": [
     "aurelia",
@@ -23,7 +23,9 @@
     "e2e": "gulp serve webdriver-standalone e2e",
     "tdd": "gulp tdd",
     "tc": "gulp cover",
-    "deploy": "git subtree push --prefix subfolder-name-here origin gh-pages"
+    "deLocal": "git branch -D gh-pages",
+    "deRemote":" git push origin --delete gh-pages",
+    "deploy": "npm run deLocal && npm run deRemote && git subtree push --prefix export origin gh-pages"
   },
   "devDependencies": {
     "aurelia-bundler": "^0.4.0",

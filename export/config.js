@@ -914,6 +914,13 @@ System.config({
       "aurelia-path",
       "aurelia-metadata"
     ],
+    "npm:aurelia-templating-router@1.0.1/route-href.js": [
+      "aurelia-templating",
+      "aurelia-dependency-injection",
+      "aurelia-router",
+      "aurelia-pal",
+      "aurelia-logging"
+    ],
     "npm:aurelia-templating-router@1.0.1/router-view.js": [
       "aurelia-dependency-injection",
       "aurelia-binding",
@@ -921,13 +928,6 @@ System.config({
       "aurelia-router",
       "aurelia-metadata",
       "aurelia-pal"
-    ],
-    "npm:aurelia-templating-router@1.0.1/route-href.js": [
-      "aurelia-templating",
-      "aurelia-dependency-injection",
-      "aurelia-router",
-      "aurelia-pal",
-      "aurelia-logging"
     ],
     "npm:aurelia-templating-resources@1.2.0.js": [
       "npm:aurelia-templating-resources@1.2.0/aurelia-templating-resources"
@@ -1002,21 +1002,16 @@ System.config({
       "./analyze-view-factory",
       "./abstract-repeater"
     ],
-    "npm:aurelia-templating-resources@1.2.0/show.js": [
-      "aurelia-dependency-injection",
-      "aurelia-templating",
-      "aurelia-pal",
-      "./aurelia-hide-style"
-    ],
     "npm:aurelia-templating-resources@1.2.0/with.js": [
       "aurelia-dependency-injection",
       "aurelia-templating",
       "aurelia-binding"
     ],
-    "npm:aurelia-templating-resources@1.2.0/sanitize-html.js": [
-      "aurelia-binding",
+    "npm:aurelia-templating-resources@1.2.0/show.js": [
       "aurelia-dependency-injection",
-      "./html-sanitizer"
+      "aurelia-templating",
+      "aurelia-pal",
+      "./aurelia-hide-style"
     ],
     "npm:aurelia-templating-resources@1.2.0/hide.js": [
       "aurelia-dependency-injection",
@@ -1024,22 +1019,27 @@ System.config({
       "aurelia-pal",
       "./aurelia-hide-style"
     ],
+    "npm:aurelia-templating-resources@1.2.0/sanitize-html.js": [
+      "aurelia-binding",
+      "aurelia-dependency-injection",
+      "./html-sanitizer"
+    ],
     "npm:aurelia-templating-resources@1.2.0/replaceable.js": [
       "aurelia-dependency-injection",
       "aurelia-templating"
-    ],
-    "npm:aurelia-templating-resources@1.2.0/css-resource.js": [
-      "aurelia-templating",
-      "aurelia-loader",
-      "aurelia-dependency-injection",
-      "aurelia-path",
-      "aurelia-pal"
     ],
     "npm:aurelia-templating-resources@1.2.0/focus.js": [
       "aurelia-templating",
       "aurelia-binding",
       "aurelia-dependency-injection",
       "aurelia-task-queue",
+      "aurelia-pal"
+    ],
+    "npm:aurelia-templating-resources@1.2.0/css-resource.js": [
+      "aurelia-templating",
+      "aurelia-loader",
+      "aurelia-dependency-injection",
+      "aurelia-path",
       "aurelia-pal"
     ],
     "npm:aurelia-templating-resources@1.2.0/attr-binding-behavior.js": [
@@ -1049,10 +1049,10 @@ System.config({
       "aurelia-binding",
       "aurelia-metadata"
     ],
-    "npm:aurelia-templating-resources@1.2.0/throttle-binding-behavior.js": [
+    "npm:aurelia-templating-resources@1.2.0/debounce-binding-behavior.js": [
       "aurelia-binding"
     ],
-    "npm:aurelia-templating-resources@1.2.0/debounce-binding-behavior.js": [
+    "npm:aurelia-templating-resources@1.2.0/throttle-binding-behavior.js": [
       "aurelia-binding"
     ],
     "npm:aurelia-templating-resources@1.2.0/binding-signaler.js": [
