@@ -12,8 +12,8 @@ export class Doc {
     }`;
     this.function = `
 
-    function add (x,y) {
-        return x+y
+    function mult (x,y) {
+        return x*y;
     }`;
   }
 
