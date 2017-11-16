@@ -12,38 +12,6 @@ export class Editor {
     this.editor.setTheme('ace/theme/chrome');
     this.editor.getSession().setMode('ace/mode/javascript');
     this.session = this.editor.getSession();
-    this.session.setValue(
-      ` 
-         
-     function add (numberX,numberY){
-            return numberX+numberY;
-        }
-        
-      function bubbleSort(a){
-        var swapped;
-        do {
-            swapped = false;
-            for (var i=0; i < a.length-1; i++) {
-                if (a[i] > a[i+1]) {
-                    var temp = a[i];
-                    a[i] = a[i+1];
-                    a[i+1] = temp;
-                    swapped = true;
-                }
-            }
-        }while (swapped);
-         return a;
-       }
-
-     function getSmallestElement (arrayOfNumbers){
-        var small = arrayOfNumbers[0];
-        for(var i=1; i< arrayOfNumbers.length; i++){
-            if(small > arrayOfNumbers[i])
-              small = arrayOfNumbers[i];
-        }
-            return small; 
-        }  
-   `);
     this.flag = true;
     this.subscribe();
     setTimeout(_ => {this.publishCode();}, 2000);
@@ -72,6 +40,10 @@ export class Editor {
       }
     }
   }
+  changeEditorValue(code) {
+    this.session.setValue(code);
+    console.log
+  }
   onSetBreakpointRequest(signs) {
     this.session.clearBreakpoints();
     for (let [_, status] of signs) {
@@ -97,6 +69,7 @@ export class Editor {
     this.event.subscribe('onSetBreakpointRequest', signs => this.onSetBreakpointRequest(signs));
     this.event.subscribe('setAnnotations', annot => this.session.setAnnotations(annot));
     this.event.subscribe('onRefershRequest', _ => this.publishCode());
+    this.event.subscribe('onCodeChangeRequest', payload => this.changeEditorValue(payload.code));
     this.editor.session.on('change', _ => this.onEditorChange());
     this.editor.on('gutterclick', click => this.onGutterclick(click));
   }

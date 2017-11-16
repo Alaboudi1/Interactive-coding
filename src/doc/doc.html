@@ -1,0 +1,96 @@
+<template>
+
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4>Frequently Asked Questions:</h4>
+    </div>
+    <div class="panel-body">
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+              <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                What is the purpose of the tool?
+              </a>
+            </h4>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+              The interactive coding tool introduces a new concept that blends the testing and development processes. Developers no longer
+              need to think about testing and development as two separate phases.The interactive coding tool helps developers
+              to write and test code as one process or task.
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingTwo">
+            <h4 class="panel-title">
+              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false"
+                aria-controls="collapseTwo">
+                Can we do TDD with this tool?
+              </a>
+            </h4>
+          </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+              Even though the tool does not think about testing as a stand-alone phase, you can do something like TDD with this tool:
+              <ol>
+                <li> Click on this button to generate an empty function, or you can write your own.
+                  <button class="btn btn-info btn-xs" click.trigger="generateTDD()">generate</button>
+                </li>
+                <li> Click on the warning sign next to the function signature.
+                  <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                </li>
+                <li> Select the type for each parameter in the function signature.</li>
+                <li> Select the desired number of test cases. One test case is preferred for TDD. </li>
+                <li> Click Test.</li>
+                <li> Change the value of the output from
+                  <mark>"undefined"</mark> to the expected output. </li>
+                <li> Click Save. </li>
+                <li> A red sign will show up indicating that the test case failed. Click on the red sign for more information.</li>
+                <li> Implement the body of the function to make the test case passes. </li>
+                <li> There will be a green sign if you have written a piece of code that returns the expected result. </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingThree">
+            <h4 class="panel-title">
+              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false"
+                aria-controls="collapseThree">
+                How can I test existing code?
+              </a>
+            </h4>
+          </div>
+          <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+            <div class="panel-body">
+              <ol>
+                <li> There should be a function that returns a value. Please click on this button to generate one.
+                  <button class="btn btn-info btn-xs" click.trigger="generateFunction()">generate</button>
+                </li>
+                <li> Click on the warning sign next to the function signature.
+                  <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                </li>
+                <li> Select the type for each parameter in the function signature.</li>
+                <li> Select the desired number of test cases. </li>
+                <li> Click Test.</li>
+                <li> Check if all the output is what you expect from the function. If not, please feel free to change the value
+                  of the output to the expected output.</li>
+                <li> You could also change the input value for each parameter. </li>
+                <li> Click Save. </li>
+                <li> There will be a test cases status indicator next to the function signature. It is green if all test cases
+                  passed, otherwise red.</li>
+                <li> Click on the test cases status indicator for more information. </li>
+                <li> If there are some failing test cases, correct your code until they pass. </li>
+                <li> You can always reset the test cases by clicking reset button on the information dialog. </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+</template>
